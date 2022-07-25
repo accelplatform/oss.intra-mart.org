@@ -1,0 +1,26 @@
+﻿<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="loop"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>&lt;IMART type="loop"&gt; を利用した表示制御</H1>
+
+			<HR>
+
+			<IMART type   = "loop"
+			       count  = "5"
+			       index  = "loopNumber"
+			       action = "loopFunction"
+			       arg1   = "value1">
+			       
+				<IMART type="string" value=loopNumber></IMART> 回目<BR>
+				
+			</IMART>
+
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

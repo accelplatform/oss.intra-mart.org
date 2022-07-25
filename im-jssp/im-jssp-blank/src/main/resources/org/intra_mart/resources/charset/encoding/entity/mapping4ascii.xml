@@ -1,0 +1,215 @@
+<!-- Charset encoding mapping for ASCII -->
+<encoding>
+	<mapping>
+		<source radix="16">3000</source>	// Ideographic Space
+		<revise radix="16">0020</revise>	// Space
+	</mapping>
+	<mapping>
+		<source radix="16">FF21</source>	// Fullwidth Latin Capital Letter A
+		<revise radix="16">0041</revise>	// Latin Capital Letter A
+	</mapping>
+	<mapping>
+		<source radix="16">FF22</source>	// Fullwidth Latin Capital Letter B
+		<revise radix="16">0042</revise>	// Latin Capital Letter B
+	</mapping>
+	<mapping>
+		<source radix="16">FF23</source>	// Fullwidth Latin Capital Letter C
+		<revise radix="16">0043</revise>	// Latin Capital Letter C
+	</mapping>
+	<mapping>
+		<source radix="16">FF24</source>	// Fullwidth Latin Capital Letter D
+		<revise radix="16">0044</revise>	// Latin Capital Letter D
+	</mapping>
+	<mapping>
+		<source radix="16">FF25</source>	// Fullwidth Latin Capital Letter E
+		<revise radix="16">0045</revise>	// Latin Capital Letter E
+	</mapping>
+	<mapping>
+		<source radix="16">FF26</source>	// Fullwidth Latin Capital Letter F
+		<revise radix="16">0046</revise>	// Latin Capital Letter F
+	</mapping>
+	<mapping>
+		<source radix="16">FF27</source>	// Fullwidth Latin Capital Letter G
+		<revise radix="16">0047</revise>	// Latin Capital Letter G
+	</mapping>
+	<mapping>
+		<source radix="16">FF28</source>	// Fullwidth Latin Capital Letter H
+		<revise radix="16">0048</revise>	// Latin Capital Letter H
+	</mapping>
+	<mapping>
+		<source radix="16">FF29</source>	// Fullwidth Latin Capital Letter I
+		<revise radix="16">0049</revise>	// Latin Capital Letter I
+	</mapping>
+	<mapping>
+		<source radix="16">FF2A</source>	// Fullwidth Latin Capital Letter J
+		<revise radix="16">004A</revise>	// Latin Capital Letter J
+	</mapping>
+	<mapping>
+		<source radix="16">FF2B</source>	// Fullwidth Latin Capital Letter K
+		<revise radix="16">004B</revise>	// Latin Capital Letter K
+	</mapping>
+	<mapping>
+		<source radix="16">FF2C</source>	// Fullwidth Latin Capital Letter L
+		<revise radix="16">004C</revise>	// Latin Capital Letter L
+	</mapping>
+	<mapping>
+		<source radix="16">FF2D</source>	// Fullwidth Latin Capital Letter M
+		<revise radix="16">004D</revise>	// Latin Capital Letter M
+	</mapping>
+	<mapping>
+		<source radix="16">FF2E</source>	// Fullwidth Latin Capital Letter N
+		<revise radix="16">004E</revise>	// Latin Capital Letter N
+	</mapping>
+	<mapping>
+		<source radix="16">FF2F</source>	// Fullwidth Latin Capital Letter O
+		<revise radix="16">004F</revise>	// Latin Capital Letter O
+	</mapping>
+	<mapping>
+		<source radix="16">FF30</source>	// Fullwidth Latin Capital Letter P
+		<revise radix="16">0050</revise>	// Latin Capital Letter P
+	</mapping>
+	<mapping>
+		<source radix="16">FF31</source>	// Fullwidth Latin Capital Letter Q
+		<revise radix="16">0051</revise>	// Latin Capital Letter Q
+	</mapping>
+	<mapping>
+		<source radix="16">FF32</source>	// Fullwidth Latin Capital Letter R
+		<revise radix="16">0052</revise>	// Latin Capital Letter R
+	</mapping>
+	<mapping>
+		<source radix="16">FF33</source>	// Fullwidth Latin Capital Letter S
+		<revise radix="16">0053</revise>	// Latin Capital Letter S
+	</mapping>
+	<mapping>
+		<source radix="16">FF34</source>	// Fullwidth Latin Capital Letter T
+		<revise radix="16">0054</revise>	// Latin Capital Letter T
+	</mapping>
+	<mapping>
+		<source radix="16">FF35</source>	// Fullwidth Latin Capital Letter U
+		<revise radix="16">0055</revise>	// Latin Capital Letter U
+	</mapping>
+	<mapping>
+		<source radix="16">FF36</source>	// Fullwidth Latin Capital Letter V
+		<revise radix="16">0056</revise>	// Latin Capital Letter V
+	</mapping>
+	<mapping>
+		<source radix="16">FF37</source>	// Fullwidth Latin Capital Letter W
+		<revise radix="16">0057</revise>	// Latin Capital Letter W
+	</mapping>
+	<mapping>
+		<source radix="16">FF38</source>	// Fullwidth Latin Capital Letter X
+		<revise radix="16">0058</revise>	// Latin Capital Letter X
+	</mapping>
+	<mapping>
+		<source radix="16">FF39</source>	// Fullwidth Latin Capital Letter Y
+		<revise radix="16">0059</revise>	// Latin Capital Letter Y
+	</mapping>
+	<mapping>
+		<source radix="16">FF3A</source>	// Fullwidth Latin Capital Letter Z
+		<revise radix="16">005A</revise>	// Latin Capital Letter Z
+	</mapping>
+	<mapping>
+		<source radix="16">FF41</source>	// Fullwidth Latin Small Letter A
+		<revise radix="16">0061</revise>	// Latin Small Letter A
+	</mapping>
+	<mapping>
+		<source radix="16">FF42</source>	// Fullwidth Latin Small Letter B
+		<revise radix="16">0062</revise>	// Latin Small Letter B
+	</mapping>
+	<mapping>
+		<source radix="16">FF43</source>	// Fullwidth Latin Small Letter C
+		<revise radix="16">0063</revise>	// Latin Small Letter C
+	</mapping>
+	<mapping>
+		<source radix="16">FF44</source>	// Fullwidth Latin Small Letter D
+		<revise radix="16">0064</revise>	// Latin Small Letter D
+	</mapping>
+	<mapping>
+		<source radix="16">FF45</source>	// Fullwidth Latin Small Letter E
+		<revise radix="16">0065</revise>	// Latin Small Letter E
+	</mapping>
+	<mapping>
+		<source radix="16">FF46</source>	// Fullwidth Latin Small Letter F
+		<revise radix="16">0066</revise>	// Latin Small Letter F
+	</mapping>
+	<mapping>
+		<source radix="16">FF47</source>	// Fullwidth Latin Small Letter G
+		<revise radix="16">0067</revise>	// Latin Small Letter G
+	</mapping>
+	<mapping>
+		<source radix="16">FF48</source>	// Fullwidth Latin Small Letter H
+		<revise radix="16">0068</revise>	// Latin Small Letter H
+	</mapping>
+	<mapping>
+		<source radix="16">FF49</source>	// Fullwidth Latin Small Letter I
+		<revise radix="16">0069</revise>	// Latin Small Letter I
+	</mapping>
+	<mapping>
+		<source radix="16">FF4A</source>	// Fullwidth Latin Small Letter J
+		<revise radix="16">006A</revise>	// Latin Small Letter J
+	</mapping>
+	<mapping>
+		<source radix="16">FF4B</source>	// Fullwidth Latin Small Letter K
+		<revise radix="16">006B</revise>	// Latin Small Letter K
+	</mapping>
+	<mapping>
+		<source radix="16">FF4C</source>	// Fullwidth Latin Small Letter L
+		<revise radix="16">006C</revise>	// Latin Small Letter L
+	</mapping>
+	<mapping>
+		<source radix="16">FF4D</source>	// Fullwidth Latin Small Letter M
+		<revise radix="16">006D</revise>	// Latin Small Letter M
+	</mapping>
+	<mapping>
+		<source radix="16">FF4E</source>	// Fullwidth Latin Small Letter N
+		<revise radix="16">006E</revise>	// Latin Small Letter N
+	</mapping>
+	<mapping>
+		<source radix="16">FF4F</source>	// Fullwidth Latin Small Letter O
+		<revise radix="16">006F</revise>	// Latin Small Letter O
+	</mapping>
+	<mapping>
+		<source radix="16">FF50</source>	// Fullwidth Latin Small Letter P
+		<revise radix="16">0070</revise>	// Latin Small Letter P
+	</mapping>
+	<mapping>
+		<source radix="16">FF51</source>	// Fullwidth Latin Small Letter Q
+		<revise radix="16">0071</revise>	// Latin Small Letter Q
+	</mapping>
+	<mapping>
+		<source radix="16">FF52</source>	// Fullwidth Latin Small Letter R
+		<revise radix="16">0072</revise>	// Latin Small Letter R
+	</mapping>
+	<mapping>
+		<source radix="16">FF53</source>	// Fullwidth Latin Small Letter S
+		<revise radix="16">0073</revise>	// Latin Small Letter S
+	</mapping>
+	<mapping>
+		<source radix="16">FF54</source>	// Fullwidth Latin Small Letter T
+		<revise radix="16">0074</revise>	// Latin Small Letter T
+	</mapping>
+	<mapping>
+		<source radix="16">FF55</source>	// Fullwidth Latin Small Letter U
+		<revise radix="16">0075</revise>	// Latin Small Letter U
+	</mapping>
+	<mapping>
+		<source radix="16">FF56</source>	// Fullwidth Latin Small Letter V
+		<revise radix="16">0076</revise>	// Latin Small Letter V
+	</mapping>
+	<mapping>
+		<source radix="16">FF57</source>	// Fullwidth Latin Small Letter W
+		<revise radix="16">0077</revise>	// Latin Small Letter W
+	</mapping>
+	<mapping>
+		<source radix="16">FF58</source>	// Fullwidth Latin Small Letter X
+		<revise radix="16">0078</revise>	// Latin Small Letter X
+	</mapping>
+	<mapping>
+		<source radix="16">FF59</source>	// Fullwidth Latin Small Letter Y
+		<revise radix="16">0079</revise>	// Latin Small Letter Y
+	</mapping>
+	<mapping>
+		<source radix="16">FF5A</source>	// Fullwidth Latin Small Letter Z
+		<revise radix="16">007A</revise>	// Latin Small Letter Z
+	</mapping>
+</encoding>

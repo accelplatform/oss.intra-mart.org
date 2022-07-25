@@ -1,0 +1,27 @@
+<!ELEMENT im-jspackman (
+  class-loader
+)>
+<!ATTLIST im-jspackman version CDATA #REQUIRED>
+
+<!ELEMENT class-loader (
+  classpaths |
+  available-classes
+)>
+
+<!ELEMENT classpaths (
+  classpath*
+)>
+
+<!ELEMENT classpath (#PCDATA)>
+<!ATTLIST classpath 
+  class-name-pattern CDATA #REQUIRED
+  ignore-case (true | false) "false"
+  charset CDATA #IMPLIED
+>
+
+<!ELEMENT available-classes (
+  class*
+)>
+
+<!ELEMENT class EMPTY>
+<!ATTLIST class name CDATA #REQUIRED>

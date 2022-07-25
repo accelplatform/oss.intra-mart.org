@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="copy">
+	
+	<target name="copy">
+		
+		<property name="context.root" value="C:/im/resin/resin-pro-3.1.6/webapps/im-jssp-sample-0.1.2" />
+		<property name="src.dir"      value="C:/eclipse/workplaces/im-ossc/im-jssp-projects/im-jssp"/>
+
+		<copy todir = "${context.root}" verbose="true">
+			<fileset dir="${src.dir}/src/main/webapp">
+				<exclude name=".svn" />
+				<include name="**/*" />
+			</fileset>
+
+			<fileset dir="${src.dir}/src/test/webapp">
+				<exclude name=".svn" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<!--
+		<copy todir = "${context.root}/WEB-INF/classes" verbose="true">
+			<fileset dir="${src.dir}/src/main/java">
+				<exclude name=".svn" />
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${src.dir}/src/main/resources">
+				<exclude name=".svn" />
+				<include name="**/*" />
+			</fileset>
+			
+			<fileset dir="${src.dir}/src/test/java">
+				<exclude name=".svn" />
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${src.dir}/src/test/resources">
+				<exclude name=".svn" />
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		-->
+
+	</target>
+	
+</project>

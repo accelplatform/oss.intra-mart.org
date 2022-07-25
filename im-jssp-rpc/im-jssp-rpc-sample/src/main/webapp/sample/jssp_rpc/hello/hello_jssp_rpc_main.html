@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<title>Hello, jssp-rpc</title>
+
+		<script language="JavaScript" src="csjs/im_jssp_rpc.js"></script>
+		<script language="JavaScript" src="csjs/json.js"></script>
+	
+		<IMART type="jsspRpc" name="sample1" page="sample/jssp_rpc/hello/server_side_logic/hello"></IMART>
+	
+		<script language="JavaScript">
+			/**	
+			 * 「sample/jssp_rpc/hello/server_side_logic/hello.js」の「sayHello()」関数を実行します。
+			 */
+			function execute(){
+				// 実行
+				var result = sample1.sayHello( document.form1.hello_word.value );
+				
+				// サーバロジック実行結果を表示
+				alert(result);
+			}
+		</script>
+		
+	</head>
+	<body>
+		<center>
+			<h1>&lt;IMART type="jsspRpc"&gt; のサンプル</h1>
+
+			<hr>
+			
+			サーバで実行した結果を、アラート表示します。<br>
+			<br>
+			<form name="form1" onSubmit="return false;">
+				<input type="text" name="hello_word" value="im-jssp-rpc">
+				<input type="button" value="実行" onclick="execute();">
+			</form>
+
+			<hr>
+			
+			<br>
+			<br>
+			
+			<table border="1">
+				<tr>
+					<th>
+						クライアント側ソース
+					</th>
+				</tr>
+				<tr>
+					<td>
+<pre>
+&lt;IMART type = "jsspRpc"
+       name = "<b><font color="blue">sample1</font></b>" 
+       page = "<b><font color="green">sample/jssp_rpc/hello/server_side_logic/hello</font></b>"&gt;
+&lt;/IMART&gt;
+
+&lt;script language="JavaScript"&gt;
+	function execute(){
+	    // 実行
+	    var result = <b><font color="blue">sample1</font></b>.<b><font color="red">sayHello</font></b>( document.form1.hello_word.value );
+	
+	    // サーバロジック実行結果を表示
+	    alert(result);
+	}
+&lt;/script&gt;
+</pre>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<br>
+						↓↑<br>
+						<br>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						サーバ側ソース<br>
+						<b><font color="green">sample/jssp_rpc/hello/server_side_logic/hello.js</font></b>
+					</th>
+				</tr>
+				<tr>
+					<td>
+<pre>
+function <b><font color="red">sayHello</font></b>( helloWord ) {
+
+    return "こんにちは、" + helloWord;
+	
+}
+</pre>
+					</td>
+				</tr>
+			</table>
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</center>
+	</body>
+</html>

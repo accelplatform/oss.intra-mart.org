@@ -1,0 +1,98 @@
+<HTML>
+	<HEAD>
+		<TITLE>XML形式データの受信方法</TITLE>
+		<SCRIPT type="text/javascript">
+		
+			var urlArray = new Array();
+			urlArray["ReceiveByRequest"] = "<IMART type="string" value=nextUrl4ReceiveByRequest></IMART>";
+			urlArray["ReceiveByParser"]  = "<IMART type="string" value=nextUrl4ReceiveByParser></IMART>";
+		
+			function sendRequest(urlKey){
+				var request;
+				var msxmlNames =
+						new Array("MSXML2.XMLHTTP.5.0", "MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP");
+
+				/* Mozilla XMLHttpRequest */
+				try {
+					request = new XMLHttpRequest();
+				} catch(e) {}
+
+				/* Microsoft MSXML ActiveX */
+				for (var i=0;i < msxmlNames.length; i++) {
+					try {
+						request = new ActiveXObject(msxmlNames[i]);
+					} catch (e) {}
+				}
+
+				request.open("post", urlArray[urlKey], false);
+				request.setRequestHeader("Content-Type", "text/xml; charset=UTF-8");
+				request.send(document.form1.xml_data.value);
+
+				document.getElementById('debug').innerHTML = request.responseText;
+			}
+			
+		</SCRIPT>
+
+
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>XML形式データの受信方法</H1>
+
+			<HR>
+
+			<IMART type="form" name="form1">
+			
+				<TABLE>
+					<TR>
+						<TH>
+							XML形式データを入力してください
+						</TH>
+					</TR>
+					<TR>
+						<TD>
+							<IMART type  = "textarea"
+							       name  = "xml_data" 
+							       value = xml_data
+							       rows  = "10"
+							       cols  = "60"></IMART>
+						</TD>
+					</TR>
+				</TABLE>
+				<BR>
+								
+				Requestオブジェクトを使用したXML形式データの受信方法<BR>
+				<INPUT type    = "button" 
+				       value   = "実行（その１）"
+				       onclick = "sendRequest('ReceiveByRequest')" >
+				
+				<BR>
+				<BR>
+				
+				XMLParserオブジェクトを使用したXML形式データの受信方法<BR>
+				<INPUT type    = "button" 
+				       value   = "実行（その２）"
+				       onclick = "sendRequest('ReceiveByParser')" >
+				       
+			</IMART>
+			
+			<HR>
+			<BR>
+			ボタンを押下すると、各ページで処理されたXML形式データの受信結果を表示します。
+			<BR>
+			<HR>
+			
+			<TABLE width="90%">
+				<TR>
+					<TD>
+						<DIV id="debug"><DIV>
+					</TD>
+				</TR>
+			</TABLE>
+			
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

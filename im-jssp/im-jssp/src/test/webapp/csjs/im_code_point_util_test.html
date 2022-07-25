@@ -1,0 +1,3820 @@
+<html>
+<head>
+	<!-- 
+		【テストケースを実行する簡単な方法】
+		(1) im-jssp-sample をダウンロード＆デプロイ＆サーバ起動。
+		
+		(2) Antのビルドファイル「im-jssp/src/test/assembly/copy.xml」の「context.root」と「src.dir」を設定し、
+		Antを実行
+		
+		(3) 以下にアクセス！
+		http://localhost:8080/im-jssp-sample-x.x.x/jsunit/testRunner.html?testpage=localhost:8080/im-jssp-sample-x.x.x/csjs/im_code_point_util_test.html
+	-->
+	 
+	<title>ImCodePointUtil Test Page</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	
+	<script type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
+
+	<!-- テスト対象ソース -->
+	<script type="text/javascript" src="./im_code_point_util.js"></script>
+
+	<!-- テストケース -->
+	<script type="text/javascript">
+	
+	/**
+	 * @fileoverview ImCodePointUtilのテストケース
+	 * ほぼ同様のテストケース=jp.co.intra_mart.common.aid.jdk.util.CodePointUtilTest
+	 */
+
+	 // ================================================================================
+	// containsSurrogatePair()
+	// ================================================================================
+	function test_containsSurrogatePair_サロゲートペア文字のみ(){
+		var targetString = "𠀋𡈽𠮟";
+
+		var actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いる」と判定されること", true, actual);
+
+	}
+
+	function test_containsSurrogatePair_ASCIIのみ(){
+		var targetString = "abcABC123`*?";	
+		var actual;
+
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いない」と判定されること", false, actual);
+	}
+
+	function test_containsSurrogatePair_今までの2バイト文字のみ(){
+		var targetString = "あいうアイウ亜意卯";	
+		var actual;
+
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いない」と判定されること", false, actual);
+	}
+
+	function test_containsSurrogatePair_ASCII_と_今までの2バイト文字(){
+		var targetString = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		var actual;
+
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いない」と判定されること", false, actual);
+	}
+
+	function test_containsSurrogatePair_字形変更文字(){
+		var targetString = "逢餅祁";
+		var actual;
+
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いない」と判定されること", false, actual);
+	}
+
+	function test_containsSurrogatePair_Vista追加文字(){
+		var targetString = "瘦俱剝吞";
+		var actual;
+
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いない」と判定されること", false, actual);
+	}
+
+	function test_containsSurrogatePair_サロゲートペア文字とそのほかの文字の複合パターン(){
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+		var string4surrogate   = "𠀋𡈽𠮟";
+
+		
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		assertEquals("サロゲートペア文字が含まれて「いる」と判定されること", true, actual);
+	}
+
+	function test_containsSurrogatePair_負荷テスト(){
+		// Logger logger = Logger.getLogger(this.getClass().getName() + ".test_containsSurrogatePair_負荷テスト");
+
+		var targetString;
+		var actual;
+		
+
+		var sb = ""; // StringBuilder sb = new StringBuilder();
+		var string4surrogate   = "𠀋𡈽𠮟";
+		var append = "abcABC123`*?/$あいうアイウ亜意卯逢餅祁瘦俱剝吞"; // 30文字
+
+		var ary = [];
+		var max = 300000;
+		for(var counter = 0; counter < max; counter++){
+			ary.push(append); // sb.append(append);
+		}
+
+		sb = ary.join(""); // sb.append(string4surrogate);
+
+		targetString = sb.toString();
+		debug("targetString.length(): {} 文字", targetString.length); // targetString.length());
+		
+		var start;
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		debug("LAP 1: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("サロゲートペア文字が含まれて「いない」と判定されること", false, actual);
+
+		// サロゲートペア文字追加
+		sb = sb.concat(string4surrogate); // sb.append(string4surrogate);
+		targetString = sb.toString();
+		debug("targetString.length(): {} 文字", targetString.length); // targetString.length());
+		
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.containsSurrogatePair(targetString);
+		debug("LAP 2: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("サロゲートペア文字が含まれて「いる」と判定されること", true, actual);
+
+	}
+
+	// ================================================================================
+	// getLength()
+	// ================================================================================
+	function test_getLength_サロゲートペア文字のみ(){
+		var targetString = "𠀋𡈽𠮟";
+		var actual;
+
+		actual = ImCodePointUtil.getLength(targetString);
+		assertEquals("サロゲートペア文字が正しくカウントされていること", 3, actual);
+	}
+
+	function test_getLength_ASCIIのみ() {
+		var targetString = "abcABC123`*?";	
+		var actual;
+
+		actual = ImCodePointUtil.getLength(targetString);
+		assertEquals("ASCII文字が正しくカウントされていること", 12, actual);
+	}
+
+	function test_getLength_今までの2バイト文字のみ(){
+		var targetString = "あいうアイウ亜意卯";	
+		var actual;
+
+		actual = ImCodePointUtil.getLength(targetString);
+		assertEquals("今までの2バイト文字が正しくカウントされていること", 9, actual);
+	}
+
+	function test_getLength_ASCII_と_今までの2バイト文字(){
+		var targetString = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		var actual;
+
+		actual = ImCodePointUtil.getLength(targetString);
+		assertEquals("ASCII_と_今までの2バイト文字が正しくカウントされていること", 21, actual);
+	}
+
+	function test_getLength_サロゲートペア文字とそのほかの文字の複合パターン(){
+		var targetString = "𠀋𡈽𠮟" + "abcABC123`*?" + "あいうアイウ亜意卯" + "逢餅祁" + "瘦俱剝吞" + "𠀋𡈽𠮟";	
+		var actual;
+
+		actual = ImCodePointUtil.getLength(targetString);
+		assertEquals("サロゲートペア文字とそのほかの文字の複合パターン文字が正しくカウントされていること", 34, actual);
+	}
+
+	function test_getLength_負荷テスト(){
+		// Logger logger = Logger.getLogger(this.getClass().getName() + ".test_length_負荷テスト");
+
+		var targetString;
+		var actual;
+		
+		var sb = ""; // StringBuilder sb = new StringBuilder();
+		var string4surrogate   = "𠀋𡈽𠮟";
+		var append = "abcABC123`*?/$あいうアイウ亜意卯逢餅祁瘦俱剝吞"; // 30文字
+		
+		var ary = [];
+		var max = 300000;
+		for(var counter = 0; counter < max; counter++){
+			ary.push(append); // sb.append(append);
+		}
+
+		sb = ary.join("");
+	
+		targetString = sb.toString();
+		debug("targetString.length(): {} 文字", targetString.length); // targetString.length());
+		
+		var start;
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.getLength(targetString);
+		debug("LAP 1: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("文字数が正しくカウントされていること", targetString.length, actual); // targetString.length(), actual);
+
+		// サロゲートペア文字追加
+		sb = sb.concat(string4surrogate); // sb.append(string4surrogate);
+		targetString = sb.toString();
+		debug("targetString.length(): {} 文字", targetString.length); // targetString.length());
+		
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.getLength(targetString);
+		debug("LAP 2: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("サロゲートペア文字がそれぞれ一文字としてカウントされていること", targetString.length - 3, actual); // targetString.length() - 3, actual);
+		
+	}
+
+	//TODO CSJSではcharAt()必要？
+
+	// ================================================================================
+	// charCodeAt()
+	// ================================================================================
+	function test_charCodeAt_サロゲートペア文字のみ(){
+		var targetString = "𠀋𡈽𠮟";
+
+		var actual = ImCodePointUtil.charCodeAt(targetString, 1);
+		var expected = 0x2123D; // Character.codePointAt("𡈽".toCharArray(), 0);
+		assertEquals("【𡈽】サロゲートペア文字が一文字としてカウントされていること", expected, actual);
+
+	}
+
+	function test_charCodeAt_ASCIIのみ(){
+		var targetString = "abcABC123`*?";	
+		var actual;
+		var expected;
+		
+		actual = ImCodePointUtil.charCodeAt(targetString, 1);
+		expected = 0x62; // Character.codePointAt("b".toCharArray(), 0);
+		assertEquals("【b】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 6);
+		expected = 0x31; // Character.codePointAt("1".toCharArray(), 0);
+		assertEquals("【1】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 10);
+		expected = 0x2A; // Character.codePointAt("*".toCharArray(), 0);
+		assertEquals("【*】文字が正しく取得できること", expected, actual);
+	}
+
+
+	function test_charCodeAt_今までの2バイト文字のみ(){
+		var targetString = "あいうアイウ亜意卯";	
+		var actual;
+		var expected;
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 1);
+		expected = 0x3044; // Character.codePointAt("い".toCharArray(), 0);
+		assertEquals("【い】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 5);
+		expected = 0x30A6; // Character.codePointAt("ウ".toCharArray(), 0);
+		assertEquals("【ウ】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 7);
+		expected = 0x610F; // Character.codePointAt("意".toCharArray(), 0);
+		assertEquals("【意】文字が正しく取得できること", expected, actual);
+	}
+
+	function test_charCodeAt_ASCII_と_今までの2バイト文字(){
+		var targetString = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		var actual;
+		var expected;
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 1);
+		expected = 0x62; // Character.codePointAt("b".toCharArray(), 0);
+		assertEquals("【b】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 6);
+		expected = 0x31; // Character.codePointAt("1".toCharArray(), 0);
+		assertEquals("【1】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 10);
+		expected = 0x2A; // Character.codePointAt("*".toCharArray(), 0);
+		assertEquals("【*】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 13);
+		expected = 0x3044; // Character.codePointAt("い".toCharArray(), 0);
+		assertEquals("【い】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 17);
+		expected = 0x30A6; // Character.codePointAt("ウ".toCharArray(), 0);
+		assertEquals("【ウ】文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 19);
+		expected = 0x610F; // Character.codePointAt("意".toCharArray(), 0);
+		assertEquals("【意】文字が正しく取得できること", expected, actual);
+	}
+
+
+	function test_charCodeAt_サロゲートペア文字とそのほかの文字の複合パターン(){
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+		var string4surrogate   = "𠀋𡈽𠮟";
+
+		
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+		var expected;
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 1);
+		expected = 0x2123D; // Character.codePointAt("𡈽".toCharArray(), 0);
+		assertEquals("【𡈽】サロゲートペア文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 6);
+		expected = 0x41; // Character.codePointAt("A".toCharArray(), 0);
+		assertEquals("【A】ASCIIバイト文字が正しく取得できること", expected, actual);
+
+		actual = ImCodePointUtil.charCodeAt(targetString, 21);
+		expected = 0x4E9C; // Character.codePointAt("亜".toCharArray(), 0);
+		assertEquals("【亜】2バイト文字が正しく取得できること", expected, actual);
+		
+		actual = ImCodePointUtil.charCodeAt(targetString, 25);
+		expected = 0x9905; // Character.codePointAt("餅".toCharArray(), 0);
+		assertEquals("【餅】字形変形文字が正しく取得できること", expected, actual);
+		
+		actual = ImCodePointUtil.charCodeAt(targetString, 29);
+		expected = 0x525D; // Character.codePointAt("剝".toCharArray(), 0);
+		assertEquals("【剝】Vista追加文字が正しく取得できること", expected, actual);
+		
+		actual = ImCodePointUtil.charCodeAt(targetString, 31);
+		expected = 0x2000B; // Character.codePointAt("𠀋".toCharArray(), 0);
+		assertEquals("【𠀋】(再登場)サロゲートペア文字が正しく取得できること", expected, actual);
+	}
+
+
+
+	// ================================================================================
+	// indexOf()
+	// ================================================================================
+	function test_indexOf_サロゲートペア文字のみ(){
+		var targetString = "𠀋𡈽𠮟";
+		var actual;
+		
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽");
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", 1, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽", 1);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり)", 1, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽", 2);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象から外れること", -1, actual);
+	}
+
+	function test_indexOf_ASCIIのみ(){
+		var targetString = "abcABC123`*?";	
+		var actual;
+
+		actual= ImCodePointUtil.indexOf(targetString, "C");
+		assertEquals("【C】文字が検索対象になること", 5, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "C", 3);
+		assertEquals("【C】文字が検索対象になること(from指定あり)", 5, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "C", 6);
+		assertEquals("【C】文字が検索対象から外れること", -1, actual);
+
+	}
+
+
+	function test_indexOf_今までの2バイト文字のみ(){
+		var targetString = "あいうアイウ亜意卯";	
+		var actual;
+
+		actual= ImCodePointUtil.indexOf(targetString, "亜");
+		assertEquals("【亜】文字が検索対象になること", 6, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "亜", 3);
+		assertEquals("【亜】文字が検索対象になること(from指定あり)", 6, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "亜", 7);
+		assertEquals("【亜】文字が検索対象から外れること", -1, actual);
+	}
+
+	function test_indexOf_ASCII_と_今までの2バイト文字(){
+		var targetString = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		var actual;
+
+		actual= ImCodePointUtil.indexOf(targetString, "C");
+		assertEquals("【C】文字が検索対象になること", 5, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "C", 3);
+		assertEquals("【C】文字が検索対象になること(from指定あり)", 5, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "C", 6);
+		assertEquals("【C】文字が検索対象から外れること", -1, actual);
+
+		
+		actual= ImCodePointUtil.indexOf(targetString, "亜");
+		assertEquals("【亜】文字が検索対象になること", 18, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "亜", 13);
+		assertEquals("【亜】文字が検索対象になること(from指定あり)", 18, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "亜", 19);
+		assertEquals("【亜】文字が検索対象から外れること", -1, actual);
+		
+	}
+
+
+	function test_indexOf_サロゲートペア文字とそのほかの文字の複合パターン(){
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+		var string4surrogate   = "𠀋𡈽𠮟";
+
+		// "𠀋𡈽𠮟" + "abcABC123`*?" + "あいうアイウ亜意卯" + "逢餅祁" + "瘦俱剝吞" + "𠀋𡈽𠮟"
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽");
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", 1, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽", 1);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり)", 1, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽", 2);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり,二つ目がヒット)", 32, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "𡈽", 33);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象から外れること", -1, actual);
+		
+		
+		actual= ImCodePointUtil.indexOf(targetString, "*");
+		assertEquals("【*】ASCII文字が検索対象になること", 13, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "*", 3);
+		assertEquals("【*】ASCII文字が検索対象になること(from指定あり)", 13, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "*", 14);
+		assertEquals("【*】ASCII文字が検索対象から外れること", -1, actual);
+
+		
+		actual= ImCodePointUtil.indexOf(targetString, "イ");
+		assertEquals("【イ】今までの2バイト文字が検索対象になること", 19, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "イ", 13);
+		assertEquals("【イ】今までの2バイト文字が検索対象になること(from指定あり)", 19, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "イ", 20);
+		assertEquals("【イ】今までの2バイト文字が検索対象から外れること", -1, actual);
+
+
+		actual= ImCodePointUtil.indexOf(targetString, "餅");
+		assertEquals("【餅】字形変更文字が検索対象になること", 25, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "餅", 13);
+		assertEquals("【餅】字形変更文字が検索対象になること(from指定あり)", 25, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "餅", 26);
+		assertEquals("【餅】字形変更文字が検索対象から外れること", -1, actual);
+
+
+		actual= ImCodePointUtil.indexOf(targetString, "剝");
+		assertEquals("【剝】Vista追加文字が検索対象になること", 29, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "剝", 13);
+		assertEquals("【剝】Vista追加文字が検索対象になること(from指定あり)", 29, actual);
+
+		actual= ImCodePointUtil.indexOf(targetString, "剝", 30);
+		assertEquals("【剝】Vista追加文字が検索対象から外れること", -1, actual);
+
+	}
+
+
+	// ================================================================================
+	// lastIndexOf()
+	// ================================================================================
+	function test_lastIndexOf_サロゲートペア文字のみ(){
+		var targetString = "𠀋𡈽𠮟";
+		var actual;
+		
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽");
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", 1, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽", 1);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり)", 1, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽", 0);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象から外れること", -1, actual);
+	}
+
+	function test_lastIndexOf_ASCIIのみ(){
+		var targetString = "abcABC123`*?";	
+		var actual;
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "C");
+		assertEquals("【C】文字が検索対象になること", 5, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "C", 5);
+		assertEquals("【C】文字が検索対象になること(from指定あり)", 5, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "C", 4);
+		assertEquals("【C】文字が検索対象から外れること", -1, actual);
+
+	}
+
+
+	function test_lastIndexOf_今までの2バイト文字のみ(){
+		var targetString = "あいうアイウ亜意卯";	
+		var actual;
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "亜");
+		assertEquals("【亜】文字が検索対象になること", 6, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "亜", 6);
+		assertEquals("【亜】文字が検索対象になること(from指定あり)", 6, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "亜", 5);
+		assertEquals("【亜】文字が検索対象から外れること", -1, actual);
+	}
+
+	function test_lastIndexOf_ASCII_と_今までの2バイト文字(){
+		var targetString = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		var actual;
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "C");
+		assertEquals("【C】文字が検索対象になること", 5, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "C", 5);
+		assertEquals("【C】文字が検索対象になること(from指定あり)", 5, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "C",4);
+		assertEquals("【C】文字が検索対象から外れること", -1, actual);
+
+		
+		actual= ImCodePointUtil.lastIndexOf(targetString, "亜");
+		assertEquals("【亜】文字が検索対象になること", 18, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "亜", 18);
+		assertEquals("【亜】文字が検索対象になること(from指定あり)", 18, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "亜", 17);
+		assertEquals("【亜】文字が検索対象から外れること", -1, actual);
+		
+	}
+
+
+	function test_lastIndexOf_サロゲートペア文字とそのほかの文字の複合パターン(){
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+		var string4surrogate   = "𠀋𡈽𠮟";
+		// "𠀋𡈽𠮟" + "abcABC123`*?" + "あいうアイウ亜意卯" + "逢餅祁" + "瘦俱剝吞" + "𠀋𡈽𠮟"
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽");
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", 32, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽", 32);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり)", 32, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽", 31);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり,二つ目がヒット)", 1, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽", 1);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること(from指定あり,二つ目がヒット)", 1, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "𡈽", 0);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象から外れること", -1, actual);
+		
+		
+		actual= ImCodePointUtil.lastIndexOf(targetString, "*");
+		assertEquals("【*】ASCII文字が検索対象になること", 13, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "*", 13);
+		assertEquals("【*】ASCII文字が検索対象になること(from指定あり)", 13, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "*", 12);
+		assertEquals("【*】ASCII文字が検索対象から外れること", -1, actual);
+
+		
+		actual= ImCodePointUtil.lastIndexOf(targetString, "イ");
+		assertEquals("【イ】今までの2バイト文字が検索対象になること", 19, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "イ", 19);
+		assertEquals("【イ】今までの2バイト文字が検索対象になること(from指定あり)", 19, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "イ", 18);
+		assertEquals("【イ】今までの2バイト文字が検索対象から外れること", -1, actual);
+
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "餅");
+		assertEquals("【餅】字形変更文字が検索対象になること", 25, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "餅", 25);
+		assertEquals("【餅】字形変更文字が検索対象になること(from指定あり)", 25, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "餅", 24);
+		assertEquals("【餅】字形変更文字が検索対象から外れること", -1, actual);
+
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "剝");
+		assertEquals("【剝】Vista追加文字が検索対象になること", 29, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "剝", 29);
+		assertEquals("【剝】Vista追加文字が検索対象になること(from指定あり)", 29, actual);
+
+		actual= ImCodePointUtil.lastIndexOf(targetString, "剝", 28);
+		assertEquals("【剝】Vista追加文字が検索対象から外れること", -1, actual);
+
+	}
+
+	// ================================================================================
+	// substring()
+	// TODO どうする？ → 注意：start が end より大きいならば、それらは交換される。
+	// ================================================================================
+	function test_substring_サロゲートペア文字のみ() {
+		var actual;
+		var targetString = "𠀋" + "𡈽" + "𠮟" + "𠀋" + "𡈽" + "𠮟";
+
+	//* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+	//var targetString = "あ" + "い" + "う" + "ア" + "イ" + "ウ";
+	//* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+
+		actual = ImCodePointUtil.substring(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2);
+			assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", targetString, actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 3, 0);
+			assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+	//
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -4);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -4, 2);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 0, 2);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -3);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -2);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -6);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -5);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -4);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 3);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 4);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟𠀋", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 5);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟𠀋𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 6);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟𠀋𡈽𠮟", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 7);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟𠀋𡈽𠮟", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 0);
+			assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -3);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -2);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -1);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+	}
+
+	function test_substring_ASCIIのみ() {
+		var actual;
+		var targetString = "abcABC";
+
+		actual = ImCodePointUtil.substring(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "ABC", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2);
+			assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", targetString, actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "A", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "AB", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 3, 0);
+			assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "abc", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -4);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "ab", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -3);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "ab", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -2);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "ab", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "a", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "ab", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -6);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -5);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -4);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 3);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "abc", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 4);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "abcA", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 5);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "abcAB", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 6);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "abcABC", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 7);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "abcABC", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 0);
+			assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -3);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -2);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -1);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+	}
+
+	function test_substring_今までの2バイト文字のみ() {
+		var actual;
+		var targetString = "あいうアイウ";
+
+		actual = ImCodePointUtil.substring(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "アイウ", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2);
+			assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", targetString, actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "ア", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "アイ", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 3, 0);
+			assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "あいう", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -4);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "あい", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -3);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "あい", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -2);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "あい", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "あ", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "あい", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -6);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -5);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -4);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 3);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "あいう", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 4);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "あいうア", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 5);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "あいうアイ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 6);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "あいうアイウ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 7);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "あいうアイウ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 0);
+			assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -3);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -2);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -1);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+	}
+
+	function test_substring_ASCII_と_今までの2バイト文字() {
+		var actual;
+		var targetString = "いあbcAう";
+
+		actual = ImCodePointUtil.substring(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "cAう", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2);
+			assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", targetString, actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "c", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "cA", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 3, 0);
+			assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "いあb", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -4);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "いあ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -3);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "いあ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -2);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "いあ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "い", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "いあ", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -6);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -5);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -4);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 3);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "いあb", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 4);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "いあbc", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 5);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "いあbcA", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 6);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "いあbcAう", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 7);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "いあbcAう", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 0);
+			assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -3);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -2);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -1);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+	}
+
+
+	function test_substring_サロゲートペア文字_と_そのほかの文字の複合パターン() {
+		var actual;
+		var targetString = "𠀋" + "a" + "あ" + "逢" + "瘦" + "𡈽";
+
+	//* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+	//var targetString = "あ" + "い"+ "う" + "ア" + "イ" + "ウ";
+	//* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+
+		actual = ImCodePointUtil.substring(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "逢瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2);
+			assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", targetString, actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "逢", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "逢瘦", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 3, 0);
+			assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "𠀋aあ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -4);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋a", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -3);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋a", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 2, -2);
+			assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋a", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+		actual = ImCodePointUtil.substring(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋a", actual);
+
+		actual = ImCodePointUtil.substring(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -6);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -5);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, 0, -4);
+			assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 3);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋aあ", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 4);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋aあ逢", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 5);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋aあ逢瘦", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 6);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋aあ逢瘦𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 7);
+			assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𠀋aあ逢瘦𡈽", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, 0);
+			assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -3);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -2);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+
+//		try {
+			actual = ImCodePointUtil.substring(targetString, -2, -1);
+			assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+//			fail("JavaのImCodePointUtil用のfail()です。CSJSでは不要です。");
+//		}
+//		catch (Throwable t) {
+//			// JavaのImCodePointUtil用のassertTrue()です。CSJSでは不要です。");
+//			assertTrue("IndexOutOfBoundsExceptionが発生すること", t instanceof IndexOutOfBoundsException);
+//		}
+	}
+
+
+	// ================================================================================
+	// convCodePointIndex2Index()
+	// ================================================================================
+	function test_convCodePointIndex2Index(){
+		var string4surrogate   = "𠀋𡈽𠮟";
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 0);
+		assertEquals("【𠀋】サロゲートペア文字が正しくカウントされていること", 0, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 1);
+		assertEquals("【𡈽】サロゲートペア文字が正しくカウントされていること", 2, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 2);
+		assertEquals("【𠮟】サロゲートペア文字が正しくカウントされていること", 4, actual);
+
+		
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 3);
+		assertEquals("【a】ASCII文字が正しくカウントされていること", 6, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 4);
+		assertEquals("【b】ASCII文字が正しくカウントされていること", 7, actual);
+		
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 14);
+		assertEquals("【?】ASCII文字が正しくカウントされていること", 17, actual);
+
+		
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 15); 
+		assertEquals("【あ】今までの2バイト文字が正しくカウントされていること", 18, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 16);
+		assertEquals("【い】今までの2バイト文字が正しくカウントされていること", 19, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 23);
+		assertEquals("【卯】今までの2バイト文字が正しくカウントされていること", 26, actual);
+
+		
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 24);
+		assertEquals("【逢】字形変更文字が正しくカウントされていること", 27, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 25);
+		assertEquals("【餅】字形変更文字が正しくカウントされていること", 28, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 26);
+		assertEquals("【祁】字形変更文字が正しくカウントされていること", 29, actual);
+
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 27);
+		assertEquals("【瘦】Vista追加文字が正しくカウントされていること", 30, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 28);
+		assertEquals("【俱】Vista追加文字が正しくカウントされていること", 31, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 29);
+		assertEquals("【剝】Vista追加文字が正しくカウントされていること", 32, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 30);
+		assertEquals("【吞】Vista追加文字が正しくカウントされていること", 33, actual);
+
+		
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 31);
+		assertEquals("【𠀋】サロゲートペア文字(二回目)が正しくカウントされていること", 34, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 32);
+		assertEquals("【𡈽】サロゲートペア文字(二回目)が正しくカウントされていること", 36, actual);
+
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, 33);
+		assertEquals("【𠮟】サロゲートペア文字(二回目)が正しくカウントされていること", 38, actual);
+
+	}
+
+	function test_convCodePointIndex2Index_負荷テスト(){
+		// Logger logger = Logger.getLogger(this.getClass().getName() + ".test_convCodePointIndex2Index_負荷テスト");
+
+		var targetString;	
+		var actual;
+		
+		var sb = ""; // StringBuilder sb = new StringBuilder();
+		var string4surrogate   = "𠀋𡈽𠮟";
+		var append = "abcABC123`*?/$あいうアイウ亜意卯逢餅祁瘦俱剝吞"; // 30文字
+
+		var ary = [];
+		var max = 300000;
+		for(var counter = 0; counter < max; counter++){
+			ary.push(append); // sb.append(append);
+		}
+
+		sb = ary.join("");
+		sb = sb.concat(string4surrogate); // sb.append(string4surrogate);
+		
+		targetString = sb.toString();
+
+		debug("targetString.length(): {} 文字", targetString.length); // targetString.length());
+		
+		
+		var start;
+		
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, (append.length * max)); // (append.length() * max));
+		debug("LAP 1: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max), actual); // (append.length() * max), actual);
+		
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, (append.length * max) + 1); // (append.length() * max) + 1);
+		debug("LAP 2: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max) + 2, actual); // (append.length() * max) + 2, actual);
+
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, (append.length * max) + 2); // (append.length() * max) + 2);
+		debug("LAP 3: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max) + 4, actual); // (append.length() * max) + 4, actual);
+
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convCodePointIndex2Index(targetString, (append.length * max) + 3); // (append.length() * max) + 3);
+		debug("LAP 4: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max) + 6, actual); // (append.length() * max) + 6, actual);
+	}
+
+
+
+	// ================================================================================
+	// convIndex2CodePointIndex()
+	// ================================================================================
+	function test_convIndex2CodePointIndex(){
+		var string4surrogate   = "𠀋𡈽𠮟";
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 0);
+		assertEquals("【𠀋】サロゲートペア文字が正しくカウントされていること", 0, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 2);
+		assertEquals("【𡈽】サロゲートペア文字が正しくカウントされていること", 1, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 4);
+		assertEquals("【𠮟】サロゲートペア文字が正しくカウントされていること", 2, actual);
+
+		
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 6);
+		assertEquals("【a】ASCII文字が正しくカウントされていること", 3, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 7);
+		assertEquals("【b】ASCII文字が正しくカウントされていること", 4, actual);
+		
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 17);
+		assertEquals("【?】ASCII文字が正しくカウントされていること", 14, actual);
+
+		
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 18); 
+		assertEquals("【あ】今までの2バイト文字が正しくカウントされていること", 15, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 19);
+		assertEquals("【い】今までの2バイト文字が正しくカウントされていること", 16, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 26);
+		assertEquals("【卯】今までの2バイト文字が正しくカウントされていること", 23, actual);
+
+		
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 27);
+		assertEquals("【逢】字形変更文字が正しくカウントされていること", 24, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 28);
+		assertEquals("【餅】字形変更文字が正しくカウントされていること", 25, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 29);
+		assertEquals("【祁】字形変更文字が正しくカウントされていること", 26, actual);
+
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 30);
+		assertEquals("【瘦】Vista追加文字が正しくカウントされていること", 27, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 31);
+		assertEquals("【俱】Vista追加文字が正しくカウントされていること", 28, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 32);
+		assertEquals("【剝】Vista追加文字が正しくカウントされていること", 29, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 33);
+		assertEquals("【吞】Vista追加文字が正しくカウントされていること", 30, actual);
+
+		
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 34);
+		assertEquals("【𠀋】サロゲートペア文字(二回目)が正しくカウントされていること", 31, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 36);
+		assertEquals("【𡈽】サロゲートペア文字(二回目)が正しくカウントされていること", 32, actual);
+
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, 38);
+		assertEquals("【𠮟】サロゲートペア文字(二回目)が正しくカウントされていること", 33, actual);
+
+	}
+
+	function test_convIndex2CodePointIndex_負荷テスト(){
+		// Logger logger = Logger.getLogger(this.getClass().getName() + ".test_convIndex2CodePointIndex_負荷テスト");
+
+		var targetString;	
+		var actual;
+		
+		var sb = ""; // StringBuilder sb = new StringBuilder();
+		var string4surrogate   = "𠀋𡈽𠮟";
+		var append = "abcABC123`*?/$あいうアイウ亜意卯逢餅祁瘦俱剝吞"; // 30文字
+		
+		var ary = [];
+		var max = 300000;
+		for(var counter = 0; counter < max; counter++){
+			ary.push(append); // sb.append(append);
+		}
+
+		sb = ary.join("");
+		sb = sb.concat(string4surrogate); // sb.append(string4surrogate);
+		
+		targetString = sb.toString();
+
+		debug("targetString.length(): {} 文字", targetString.length); // targetString.length());
+		
+		
+		var start;
+		
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, (append.length * max)); // (append.length() * max));
+		debug("LAP 1: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max), actual); // (append.length() * max), actual);
+		
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, (append.length * max) + 2); // (append.length() * max) + 2);
+		debug("LAP 2: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max) + 1, actual); // (append.length() * max) + 1, actual);
+
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, (append.length * max) + 4); // (append.length() * max) + 4);
+		debug("LAP 3: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max) + 2, actual); // (append.length() * max) + 2, actual);
+
+		start = (new Date()).getTime();
+		actual = ImCodePointUtil.convIndex2CodePointIndex(targetString, (append.length * max) + 6); // (append.length() * max) + 6);
+		debug("LAP 4: {}[ms]", (new Date()).getTime() - start);
+		assertEquals("大量文字列でもサロゲートペア文字が正しくカウントされていること", (append.length * max) + 3, actual); // (append.length() * max) + 3, actual);
+	}
+
+
+	//================================================================================
+	// substr()
+	//================================================================================
+	function test_substr_サロゲートペア文字のみ(){
+		var actual;
+		var targetString = "𠀋" + "𡈽" + "𠮟" + "𠀋" + "𡈽" + "𠮟"; 
+
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+//		var targetString = "あ" + "い" + "う" + "ア" + "イ" + "ウ"; 
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+		
+		actual = ImCodePointUtil.substr(targetString, 3);
+		assertEquals("fromのみ指定する場合、fromが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0);
+		assertEquals("fromのみ指定する場合、fromが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2);
+		assertEquals("fromのみ指定する場合、fromが負の場合、部分文字列が正しいこと", "𡈽𠮟", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, 3, 3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 5);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 0);
+		assertEquals("fromが正、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -2);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		
+		actual = ImCodePointUtil.substr(targetString, 0, 1);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 2);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 0);
+		assertEquals("fromが0、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -6);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -5);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -4);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 3);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 2);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 1);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -3, 3);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -3, 2);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -3, 1);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "𠀋", actual);
+		
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 0);
+		assertEquals("fromが負、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		
+		actual = ImCodePointUtil.substr(targetString, -2, -3);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, -2);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, -1);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+	}
+
+	function test_substr_ASCIIのみ(){
+		var actual;
+		var targetString = "abcABC"; 
+		
+		actual = ImCodePointUtil.substr(targetString, 3);
+		assertEquals("fromのみ指定する場合、fromが正の場合、部分文字列が正しいこと", "ABC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0);
+		assertEquals("fromのみ指定する場合、fromが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2);
+		assertEquals("fromのみ指定する場合、fromが負の場合、部分文字列が正しいこと", "BC", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, 3, 3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "ABC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "ABC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 5);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "ABC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 0);
+		assertEquals("fromが正、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -2);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, 0, 1);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "a", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 2);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "ab", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 0);
+		assertEquals("fromが0、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -6);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -5);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -4);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, -2, 3);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "BC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 4);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "BC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 5);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "BC", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 6);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "BC", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 7);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "BC", actual);
+
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 0);
+		assertEquals("fromが負、lenが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.substr(targetString, -2, -3);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, -2);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, -1);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+	}
+
+
+
+	function test_substr_今までの2バイト文字のみ(){
+		var actual;
+		var targetString = "あいうアイウ"; 
+		
+		actual = ImCodePointUtil.substr(targetString, 3);
+		assertEquals("fromのみ指定する場合、fromが正の場合、部分文字列が正しいこと", "アイウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0);
+		assertEquals("fromのみ指定する場合、fromが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2);
+		assertEquals("fromのみ指定する場合、fromが負の場合、部分文字列が正しいこと", "イウ", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, 3, 3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "アイウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "アイウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 5);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "アイウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 0);
+		assertEquals("fromが正、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -2);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, 0, 1);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "あ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 2);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "あい", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 0);
+		assertEquals("fromが0、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -6);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -5);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -4);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, -2, 3);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "イウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 4);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "イウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 5);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "イウ", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 6);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "イウ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 7);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "イウ", actual);
+
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 0);
+		assertEquals("fromが負、lenが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.substr(targetString, -2, -3);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, -2);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, -1);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+	}
+
+
+	function test_substr_ASCII_と_今までの2バイト文字(){
+		var actual;
+		var targetString = "いあbcAう";
+		
+		actual = ImCodePointUtil.substr(targetString, 3);
+		assertEquals("fromのみ指定する場合、fromが正の場合、部分文字列が正しいこと", "cAう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0);
+		assertEquals("fromのみ指定する場合、fromが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2);
+		assertEquals("fromのみ指定する場合、fromが負の場合、部分文字列が正しいこと", "Aう", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, 3, 3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "cAう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "cAう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 5);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "cAう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 0);
+		assertEquals("fromが正、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -2);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, 0, 1);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "い", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 2);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "いあ", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 0);
+		assertEquals("fromが0、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -6);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -5);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -4);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, -2, 3);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "Aう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 4);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "Aう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 5);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "Aう", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 6);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "Aう", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 7);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "Aう", actual);
+
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 0);
+		assertEquals("fromが負、lenが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.substr(targetString, -2, -3);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, -2);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, -1);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+	}
+
+
+	function test_substr_サロゲートペア文字_と_そのほかの文字の複合パターン(){
+		var actual;
+		var targetString = "𠀋" + "a" + "あ" + "逢" + "瘦" + "𡈽";
+
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+//		var targetString = "あ" + "い"+ "う" + "ア" + "イ" + "ウ";
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+
+		actual = ImCodePointUtil.substr(targetString, 3);
+		assertEquals("fromのみ指定する場合、fromが正の場合、部分文字列が正しいこと", "逢瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0);
+		assertEquals("fromのみ指定する場合、fromが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2);
+		assertEquals("fromのみ指定する場合、fromが負の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, 3, 3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "逢瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "逢瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 5);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "逢瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 3, 0);
+		assertEquals("fromが正、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -4);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -3);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 2, -2);
+		assertEquals("fromが正、lenが正の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, 0, 1);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 2);
+		assertEquals("fromが0、lenが正の場合、部分文字列が正しいこと", "𠀋a", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, 0);
+		assertEquals("fromが0、lenが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -6);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -5);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, 0, -4);
+		assertEquals("fromが0、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+
+		actual = ImCodePointUtil.substr(targetString, -2, 3);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 4);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 5);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 6);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, 7);
+		assertEquals("fromが負、lenが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+
+		
+		actual = ImCodePointUtil.substr(targetString, -2, 0);
+		assertEquals("fromが負、lenが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.substr(targetString, -2, -3);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.substr(targetString, -2, -2);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.substr(targetString, -2, -1);
+		assertEquals("fromが負、lenが負の場合、部分文字列が正しいこと", "", actual);
+	}
+
+
+	//================================================================================
+	// slice()
+	//================================================================================
+	function test_slice_サロゲートペア文字のみ(){
+		var actual;
+		var targetString = "𠀋" + "𡈽" + "𠮟" + "𠀋" + "𡈽" + "𠮟"; 
+
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+//		var targetString = "あ" + "い" + "う" + "ア" + "イ" + "ウ"; 
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+		
+		actual = ImCodePointUtil.slice(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "𠀋𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2);
+		assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", "𡈽𠮟", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 0);
+		assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠮟", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -2);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "𠮟𠀋", actual);
+
+		
+		actual = ImCodePointUtil.slice(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -6);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -5);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -4);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "𠀋𡈽", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, -2, 3);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 4);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 5);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𡈽", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 6);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𡈽𠮟", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 7);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "𡈽𠮟", actual);
+
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 0);
+		assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.slice(targetString, -2, -3);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, -2);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, -1);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "𡈽", actual);
+
+	}
+
+	function test_slice_ASCIIのみ(){
+		var actual;
+		var targetString = "abcABC"; 
+		
+		actual = ImCodePointUtil.slice(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "ABC", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2);
+		assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", "BC", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "A", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "AB", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 0);
+		assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "c", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -2);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "cA", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "a", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "ab", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -6);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -5);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "a", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -4);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "ab", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, -2, 3);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 4);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 5);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "B", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 6);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "BC", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 7);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "BC", actual);
+
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 0);
+		assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.slice(targetString, -2, -3);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, -2);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, -1);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "B", actual);
+
+	}
+
+
+
+	function test_slice_今までの2バイト文字のみ(){
+		var actual;
+		var targetString = "あいうアイウ"; 
+		
+		actual = ImCodePointUtil.slice(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "アイウ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2);
+		assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", "イウ", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "ア", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "アイ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 0);
+		assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "う", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -2);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "うア", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "あ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "あい", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -6);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -5);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "あ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -4);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "あい", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, -2, 3);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 4);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 5);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "イ", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 6);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "イウ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 7);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "イウ", actual);
+
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 0);
+		assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.slice(targetString, -2, -3);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, -2);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, -1);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "イ", actual);
+	}
+
+
+	function test_slice_ASCII_と_今までの2バイト文字(){
+		var actual;
+		var targetString = "いあbcAう";
+		
+		actual = ImCodePointUtil.slice(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "cAう", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2);
+		assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", "Aう", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "c", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "cA", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 0);
+		assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "b", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -2);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "bc", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "い", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "いあ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -6);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -5);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "い", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -4);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "いあ", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, -2, 3);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 4);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 5);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "A", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 6);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "Aう", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 7);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "Aう", actual);
+
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 0);
+		assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.slice(targetString, -2, -3);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, -2);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, -1);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "A", actual);
+	}
+
+
+	function test_slice_サロゲートペア文字_と_そのほかの文字の複合パターン(){
+		var actual;
+		var targetString = "𠀋" + "a" + "あ" + "逢" + "瘦" + "𡈽";
+
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+//		var targetString = "あ" + "い"+ "う" + "ア" + "イ" + "ウ";
+//		* ************ JIS2004対応後に、以下を削除。（∵テストが実行時エラーとなるため）************
+
+		actual = ImCodePointUtil.slice(targetString, 3);
+		assertEquals("startのみ指定する場合、startが正の場合、部分文字列が正しいこと", "逢瘦𡈽", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0);
+		assertEquals("startのみ指定する場合、startが0の場合、部分文字列が正しいこと", targetString, actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2);
+		assertEquals("startのみ指定する場合、startが負の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, 3, 3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "逢", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 5);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "逢瘦", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 3, 0);
+		assertEquals("startが正、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -4);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -3);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "あ", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 2, -2);
+		assertEquals("startが正、endが正の場合、部分文字列が正しいこと", "あ逢", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, 0, 1);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 2);
+		assertEquals("startが0、endが正の場合、部分文字列が正しいこと", "𠀋a", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, 0);
+		assertEquals("startが0、endが0の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -6);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -5);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "𠀋", actual);
+
+		actual = ImCodePointUtil.slice(targetString, 0, -4);
+		assertEquals("startが0、endが負の場合、部分文字列が正しいこと", "𠀋a", actual);
+
+
+		actual = ImCodePointUtil.slice(targetString, -2, 3);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 4);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 5);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "瘦", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 6);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, 7);
+		assertEquals("startが負、endが正の場合、部分文字列が正しいこと", "瘦𡈽", actual);
+
+		
+		actual = ImCodePointUtil.slice(targetString, -2, 0);
+		assertEquals("startが負、endが0の場合、部分文字列が正しいこと", "", actual);
+		
+
+		actual = ImCodePointUtil.slice(targetString, -2, -3);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+		
+		actual = ImCodePointUtil.slice(targetString, -2, -2);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "", actual);
+
+		actual = ImCodePointUtil.slice(targetString, -2, -1);
+		assertEquals("startが負、endが負の場合、部分文字列が正しいこと", "瘦", actual);
+	}
+
+
+	//================================================================================
+	// fromCharCode()
+	//================================================================================
+	function test_fromCharCode_サロゲートペア文字のみ(){
+		var expected = "𠀋𡈽𠮟";
+
+		var charCode_1 = 0x2000B; // 𠀋
+		var charCode_2 = 0x2123D; // 𡈽
+		var charCode_3 = 0x20B9F; // 𠮟 → 通常だと「String.fromCharCode(55362, 57247)」で一文字になる。
+
+		var actual = ImCodePointUtil.fromCharCode(charCode_1, charCode_2, charCode_3);
+		
+		assertEquals ("文字が生成されること(サロゲートペア文字のみ)", expected, actual);
+	}
+
+	function test_fromCharCode_ASCIIのみ(){
+		var expected = "abcABC123`*?";	
+		
+		var actual = ImCodePointUtil.fromCharCode(
+			//------------------abcABC123`*?------------------
+			0x61,
+			0x62,
+			0x63,
+			0x41,
+			0x42,
+			0x43,
+			0x31,
+			0x32,
+			0x33,
+			0x60,
+			0x2a,
+			0x3f
+			//------------------------------------
+		);
+		
+		assertEquals ("文字が生成されること(ASCIIのみ)", expected, actual);
+	}
+
+	function test_fromCharCode_今までの2バイト文字のみ(){
+		var expected = "あいうアイウ亜意卯";	
+		
+		var actual = ImCodePointUtil.fromCharCode(
+			//------------------あいうアイウ亜意卯------------------
+			0x3042,
+			0x3044,
+			0x3046,
+			0x30a2,
+			0x30a4,
+			0x30a6,
+			0x4e9c,
+			0x610f,
+			0x536f
+			//------------------------------------
+		);
+		
+		assertEquals ("文字が生成されること(今までの2バイト文字のみ)", expected, actual);
+	}
+
+	function test_fromCharCode_ASCII_と_今までの2バイト文字(){
+		var expected = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		
+		var actual = ImCodePointUtil.fromCharCode(
+			//------------------abcABC123`*?------------------
+			0x61,
+			0x62,
+			0x63,
+			0x41,
+			0x42,
+			0x43,
+			0x31,
+			0x32,
+			0x33,
+			0x60,
+			0x2a,
+			0x3f,
+			//------------------------------------
+			
+			//------------------あいうアイウ亜意卯------------------
+			0x3042,
+			0x3044,
+			0x3046,
+			0x30a2,
+			0x30a4,
+			0x30a6,
+			0x4e9c,
+			0x610f,
+			0x536f
+			//------------------------------------
+		);
+			
+		assertEquals ("文字が生成されること(ASCII_と_今までの2バイト文字)", expected, actual);
+	}
+
+	function test_fromCharCode_サロゲートペア文字_と_そのほかの文字の複合パターン(){
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+		var string4surrogate   = "𠀋𡈽𠮟";
+
+		var expected = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		
+		var actual = ImCodePointUtil.fromCharCode(
+			//------------------𠀋𡈽𠮟------------------
+			0x2000B, // 𠀋
+			0x2123D, // 𡈽
+			0x20B9F, // 𠮟
+			//------------------------------------
+
+			//------------------abcABC123`*?------------------
+			0x61,
+			0x62,
+			0x63,
+			0x41,
+			0x42,
+			0x43,
+			0x31,
+			0x32,
+			0x33,
+			0x60,
+			0x2a,
+			0x3f,
+			//------------------------------------
+			
+			//------------------あいうアイウ亜意卯------------------
+			0x3042,
+			0x3044,
+			0x3046,
+			0x30a2,
+			0x30a4,
+			0x30a6,
+			0x4e9c,
+			0x610f,
+			0x536f,
+			//------------------------------------
+			
+			//------------------逢餅祁------------------
+			0x9022,
+			0x9905,
+			0x7941,
+			//------------------------------------
+			
+			//------------------瘦俱剝吞------------------
+			0x7626,
+			0x4ff1,
+			0x525d,
+			0x541e,
+			//------------------------------------
+			
+			//------------------𠀋𡈽𠮟------------------
+			0x2000B, // 𠀋
+			0x2123D, // 𡈽
+			0x20B9F  // 𠮟
+			//------------------------------------
+		);
+		
+		assertEquals ("文字が生成されること(サロゲートペア文字とそのほかの文字の複合パターン)", expected, actual);
+	}
+
+
+	//================================================================================
+	// charAt()
+	//================================================================================
+	function test_charAt_サロゲートペア文字のみ(){
+		var targetString = "𠀋𡈽𠮟";
+
+		var actual = ImCodePointUtil.charAt(targetString, 1);
+		assertEquals("【𡈽】サロゲートペア文字が一文字としてカウントされていること" ,"𡈽",actual);
+
+	}
+
+	function test_charAt_ASCIIのみ(){
+		var targetString = "abcABC123`*?";	
+		var actual;
+
+		actual = ImCodePointUtil.charAt(targetString, 1);
+		assertEquals("【b】文字が正しく取得できること", "b", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 6);
+		assertEquals("【1】文字が正しく取得できること", "1", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 10);
+		assertEquals("【*】文字が正しく取得できること", "*", actual);
+	}
+
+
+	function test_charAt_今までの2バイト文字のみ(){
+		var targetString = "あいうアイウ亜意卯";	
+		var actual;
+
+		actual = ImCodePointUtil.charAt(targetString, 1);
+		assertEquals("【い】文字が正しく取得できること", "い", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 5);
+		assertEquals("【ウ】文字が正しく取得できること", "ウ", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 7);
+		assertEquals("【意】文字が正しく取得できること", "意", actual);
+	}
+
+	function test_charAt_ASCII_と_今までの2バイト文字(){
+		var targetString = "abcABC123`*?" + "あいうアイウ亜意卯";	
+		var actual;
+
+		actual = ImCodePointUtil.charAt(targetString, 1);
+		assertEquals("【b】文字が正しく取得できること", "b", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 6);
+		assertEquals("【1】文字が正しく取得できること", "1", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 10);
+		assertEquals("【*】文字が正しく取得できること", "*", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 13);
+		assertEquals("【い】文字が正しく取得できること", "い", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 17);
+		assertEquals("【ウ】文字が正しく取得できること", "ウ", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 19);
+		assertEquals("【意】文字が正しく取得できること", "意", actual);
+	}
+
+
+	function test_charAt_サロゲートペア文字とそのほかの文字の複合パターン(){
+		var string4oneByte     = "abcABC123`*?";
+		var string4twoByte     = "あいうアイウ亜意卯";
+		var string4jikeiHenkou = "逢餅祁";
+		var string4vistaTsuika = "瘦俱剝吞";
+		var string4surrogate   = "𠀋𡈽𠮟";
+
+		
+		var targetString = string4surrogate + string4oneByte + string4twoByte + string4jikeiHenkou + string4vistaTsuika + string4surrogate;	
+		var actual;
+
+		actual = ImCodePointUtil.charAt(targetString, 1);
+		assertEquals("【𡈽】サロゲートペア文字が正しく取得できること", "𡈽", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 6);
+		assertEquals("【A】ASCIIバイト文字が正しく取得できること", "A", actual);
+
+		actual = ImCodePointUtil.charAt(targetString, 21);
+		assertEquals("【亜】2バイト文字が正しく取得できること", "亜", actual);
+		
+		actual = ImCodePointUtil.charAt(targetString, 25);
+		assertEquals("【餅】字形変形文字が正しく取得できること", "餅", actual);
+		
+		actual = ImCodePointUtil.charAt(targetString, 29);
+		assertEquals("【剝】Vista追加文字が正しく取得できること", "剝", actual);
+		
+		actual = ImCodePointUtil.charAt(targetString, 31);
+		assertEquals("【𠀋】(再登場)サロゲートペア文字が正しく取得できること", "𠀋", actual);
+	}
+
+
+	//================================================================================
+	// search()
+	//================================================================================
+	function test_search_サロゲートペア文字のみ(){
+		var actual;
+		var targetString = "𠀋𡈽𠮟𠀋𡈽𠮟"; 
+		
+		actual = ImCodePointUtil.search(targetString, /𡈽/);
+		assertEquals("【𡈽】フラグを指定しない場合のインデックスが正しいこと", 1, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /𡈽/g);
+		assertEquals("【𡈽】gフラグを指定した場合のインデックスが正しいこと", 1, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /無関係/);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+
+	}
+
+
+	function test_search_ASCIIのみ(){
+		var actual;
+		var targetString = "abcABC123`*?"; 
+		
+		actual = ImCodePointUtil.search(targetString, /A/);
+		assertEquals("【A】フラグを指定しない場合のインデックスが正しいこと", 3, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /A/g);
+		assertEquals("【A】gフラグを指定した場合のインデックスが正しいこと", 3, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /A/i);
+		assertEquals("【A】iフラグを指定した場合のインデックスが正しいこと", 0, actual);
+
+		actual = ImCodePointUtil.search(targetString, /A/gi);
+		assertEquals("【A】giフラグを指定した場合のインデックスが正しいこと", 0, actual);
+
+		actual = ImCodePointUtil.search(targetString, /z/gi);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+
+		actual = ImCodePointUtil.search(targetString, /@/gi);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+	}
+
+
+
+	function test_search_今までの2バイト文字のみ(){
+		var actual;
+		var targetString = "あいうアイウ亜意卯あいうアイウ亜意卯"; 
+		
+		actual = ImCodePointUtil.search(targetString, /意/);
+		assertEquals("【意】フラグを指定しない場合のインデックスが正しいこと", 7, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /意/g);
+		assertEquals("【意】gフラグを指定した場合のインデックスが正しいこと", 7, actual);
+
+		actual = ImCodePointUtil.search(targetString, /無関係/);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+	}
+
+
+	function test_search_ASCII_と_今までの2バイト文字(){
+		var actual;
+		var targetString = "あいうアイウ亜意卯あいうアイウ亜意卯abcABC123`*?"; 
+		
+		actual = ImCodePointUtil.search(targetString, /A/);
+		assertEquals("【A】フラグを指定しない場合のインデックスが正しいこと", 21, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /A/g);
+		assertEquals("【A】gフラグを指定した場合のインデックスが正しいこと", 21, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /A/i);
+		assertEquals("【A】iフラグを指定した場合のインデックスが正しいこと", 18, actual);
+
+		actual = ImCodePointUtil.search(targetString, /A/gi);
+		assertEquals("【A】giフラグを指定した場合のインデックスが正しいこと", 18, actual);
+
+		actual = ImCodePointUtil.search(targetString, /z/gi);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+
+		actual = ImCodePointUtil.search(targetString, /@/gi);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+
+		actual = ImCodePointUtil.search(targetString, /意/);
+		assertEquals("【意】フラグを指定しない場合のインデックスが正しいこと", 7, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /意/g);
+		assertEquals("【意】gフラグを指定した場合のインデックスが正しいこと", 7, actual);
+
+		actual = ImCodePointUtil.search(targetString, /無関係/);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+	}
+
+
+	function test_search_サロゲートペア文字_と_そのほかの文字の複合パターン(){
+		var actual;
+		var targetString = "𠀋𡈽𠮟" + "abcABC123`*?" + "あいうアイウ亜意卯" + "逢餅祁" + "瘦俱剝吞" + "𠀋𡈽𠮟";
+
+		actual = ImCodePointUtil.search(targetString, /𡈽/);
+		assertEquals("【𡈽】フラグを指定しない場合のインデックスが正しいこと", 1, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /𡈽/g);
+		assertEquals("【𡈽】gフラグを指定した場合のインデックスが正しいこと", 1, actual);
+		
+		
+		actual = ImCodePointUtil.search(targetString, /餅/);
+		assertEquals("【餅】フラグを指定しない場合のインデックスが正しいこと", 25, actual);
+
+		
+		actual = ImCodePointUtil.search(targetString, /剝/);
+		assertEquals("【剝】フラグを指定しない場合のインデックスが正しいこと", 29, actual);
+		
+
+		actual = ImCodePointUtil.search(targetString, /A/);
+		assertEquals("【A】フラグを指定しない場合のインデックスが正しいこと", 6, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /A/g);
+		assertEquals("【A】gフラグを指定した場合のインデックスが正しいこと", 6, actual);
+		
+		actual = ImCodePointUtil.search(targetString, /A/i);
+		assertEquals("【A】iフラグを指定した場合のインデックスが正しいこと", 3, actual);
+
+		actual = ImCodePointUtil.search(targetString, /A/gi);
+		assertEquals("【A】giフラグを指定した場合のインデックスが正しいこと", 3, actual);
+
+
+		actual = ImCodePointUtil.search(targetString, /z/gi);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+
+		actual = ImCodePointUtil.search(targetString, /@/gi);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+
+		actual = ImCodePointUtil.search(targetString, /無関係/);
+		assertEquals("存在しない文字列が指定された場合のインデックスが正しいこと", -1, actual);
+	}
+
+	//================================================================================
+	// match()
+	//================================================================================
+	function test_match_サロゲートペア文字のみ(){
+		var actual;
+		var targetString = "𠀋𡈽𠮟𠀋𡈽𠮟"; 
+
+		actual = ImCodePointUtil.match(targetString, /𡈽/);
+		assertEquals("【𡈽】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【𡈽】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【𡈽】フラグを指定しない場合のindexプロパティが正しいこと", 1, actual.index);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", "𡈽", actual[0]);
+
+		actual = ImCodePointUtil.match(targetString, /𡈽/g);
+		assertEquals("【𡈽】gフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【𡈽】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【𡈽】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【𡈽】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【𡈽】gフラグを指定した場合のindexプロパティが正しいこと", 4, actual.index);
+		}
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", "𡈽", actual[0]);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", "𡈽", actual[1]);
+		
+	}
+
+
+	function test_match_ASCIIのみ(){
+		var actual;
+		var targetString = "AbcaBC123`*?"; 
+		
+		actual = ImCodePointUtil.match(targetString, /a/);
+		assertEquals("【a】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【a】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【a】フラグを指定しない場合のindexプロパティが正しいこと", 3, actual.index);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /a/g);
+		assertEquals("【a】gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("【a】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【a】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティが正しいこと", 3, actual.index);
+		}
+		
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /a/i);
+		assertEquals("【a】iフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【a】iフラグを指定した場合のフラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【a】iフラグを指定した場合のフラグを指定しない場合のindexプロパティが正しいこと", 0, actual.index);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "A", actual[0]);
+
+		actual = ImCodePointUtil.match(targetString, /a/gi);
+		assertEquals("【a】giフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【a】giフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【a】giフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【a】giフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【a】giフラグを指定した場合のindexプロパティが正しいこと", 3, actual.index);
+		}
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "A", actual[0]);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[1]);
+
+	}
+
+
+	function test_match_今までの2バイト文字のみ(){
+		var actual;
+		var targetString = "あいうアイウ亜意卯あいうアイウ亜意卯"; 
+		
+		actual = ImCodePointUtil.match(targetString, /意/);
+		assertEquals("【意】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【意】フラグを指定しない場合のフラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【意】フラグを指定しない場合のフラグを指定しない場合のindexプロパティが正しいこと", 7, actual.index);
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /意/g);
+		assertEquals("【意】gフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【意】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【意】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【意】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【意】gフラグを指定した場合のindexプロパティが正しいこと", 16, actual.index);
+		}
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[0]);
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[1]);
+
+		
+		actual = targetString.substring(7).match(/意/);
+		assertEquals("【意】フラグを指定しない、substirng後の場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【意】フラグを指定しない、substirng後の場合のフラグを指定しない場合のinputプロパティが正しいこと", targetString.substring(7), actual.input);
+		assertEquals("【意】フラグを指定しない、substirng後の場合のフラグを指定しない場合のindexプロパティが正しいこと", 0, actual.index); // ここは、期待値「ゼロ」です！
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[0]);
+		
+		actual = targetString.substring(8).match(/意/);
+		assertEquals("【意】フラグを指定しない、substirng後の場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【意】フラグを指定しない、substirng後の場合のフラグを指定しない場合のinputプロパティが正しいこと", targetString.substring(8), actual.input);
+		assertEquals("【意】フラグを指定しない、substirng後の場合のフラグを指定しない場合のindexプロパティが正しいこと", 8, actual.index); // ここは、期待値「8」です！
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[0]);
+
+	}
+
+
+	function test_match_ASCII_と_今までの2バイト文字(){
+		var actual;
+		var targetString = "あいうアイウ亜意卯あいうアイウ亜意卯AbcaBC123`*?"; 
+		
+		actual = ImCodePointUtil.match(targetString, /a/);
+		assertEquals("【a】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【a】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【a】フラグを指定しない場合のindexプロパティが正しいこと", 21, actual.index);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /a/g);
+		assertEquals("【a】gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("【a】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【a】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティが正しいこと", 21, actual.index);
+		}
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /a/i);
+		assertEquals("【a】iフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【a】iフラグを指定した場合のフラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【a】iフラグを指定した場合のフラグを指定しない場合のindexプロパティが正しいこと", 18, actual.index);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "A", actual[0]);
+
+		actual = ImCodePointUtil.match(targetString, /a/gi);
+		assertEquals("【a】giフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【a】giフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【a】giフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【a】giフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【a】giフラグを指定した場合のindexプロパティが正しいこと", 21, actual.index);
+		}
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "A", actual[0]);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[1]);
+
+		actual = ImCodePointUtil.match(targetString, /意/);
+		assertEquals("【意】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【意】フラグを指定しない場合のフラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【意】フラグを指定しない場合のフラグを指定しない場合のindexプロパティが正しいこと", 7, actual.index);
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /意/g);
+		assertEquals("【意】gフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【意】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【意】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【意】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【意】gフラグを指定した場合のindexプロパティが正しいこと", 16, actual.index);
+		}
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[0]);
+		assertEquals("【意】今までの2バイト文字のみ文字が検索対象になること", "意", actual[1]);
+	}
+
+
+	function test_match_サロゲートペア文字_と_そのほかの文字の複合パターン(){
+		var actual;
+		var targetString = "𠀋𡈽𠮟" + "abcABC123`*?" + "あいうアイウ亜意卯" + "逢餅祁" + "瘦俱剝吞" + "𠀋𡈽𠮟";
+
+		actual = ImCodePointUtil.match(targetString, /𡈽/);
+		assertEquals("【𡈽】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【𡈽】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【𡈽】フラグを指定しない場合のindexプロパティが正しいこと", 1, actual.index);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", "𡈽", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /𡈽/g);
+		assertEquals("【𡈽】gフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【𡈽】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【𡈽】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【𡈽】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【𡈽】gフラグを指定した場合のindexプロパティが正しいこと", 32, actual.index);
+		}
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", "𡈽", actual[0]);
+		assertEquals("【𡈽】サロゲートペア文字が検索対象になること", "𡈽", actual[1]);
+		
+		
+		actual = ImCodePointUtil.match(targetString, /餅/);
+		assertEquals("【餅】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【餅】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【餅】フラグを指定しない場合のindexプロパティが正しいこと", 25, actual.index);
+		assertEquals("【餅】字形変更文字が検索対象になること", "餅", actual[0]);
+
+		
+		actual = ImCodePointUtil.match(targetString, /剝/);
+		assertEquals("【剝】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【剝】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【剝】フラグを指定しない場合のindexプロパティが正しいこと", 29, actual.index);
+		assertEquals("【剝】Vista追加文字が検索対象になること", "剝", actual[0]);
+		
+
+		actual = ImCodePointUtil.match(targetString, /a/);
+		assertEquals("【a】フラグを指定しない場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【a】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【a】フラグを指定しない場合のindexプロパティが正しいこと", 3, actual.index);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /a/g);
+		assertEquals("【a】gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("【a】gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【a】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティが正しいこと", 3, actual.index);
+		}
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		
+		actual = ImCodePointUtil.match(targetString, /a/i);
+		assertEquals("【a】iフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		assertEquals("【a】フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("【a】フラグを指定しない場合のindexプロパティが正しいこと", 3, actual.index);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+
+		actual = ImCodePointUtil.match(targetString, /a/gi);
+		assertEquals("【a】giフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("【a】giフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("【a】giフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("【a】gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("【a】gフラグを指定した場合のindexプロパティが正しいこと", 6, actual.index);
+		}
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "a", actual[0]);
+		assertEquals("【a】ASCIIのみ文字が検索対象になること", "A", actual[1]);
+	}
+
+	function test_match_正規表現のcaptures配列長が複数の場合(){
+		var actual;
+		
+		var regexp_g_on = new RegExp(/(\d+):(\d+):(\d+)/g);
+		var regexp_g_off = new RegExp(/(\d+):(\d+):(\d+)/);
+
+		
+		//===========================================================
+		targetString = "aaa12:34:56";
+		//===========================================================
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_off);
+		assertEquals("フラグを指定しない場合の検索件数が正しいこと", 4, actual.length);
+		assertEquals("フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("フラグを指定しない場合のindexプロパティが正しいこと", 3, actual.index);
+		assertEquals("0 プロパティがマッチした部分文字列であること", "12:34:56", actual["0"]);
+		assertEquals("1 プロパティがcaptures 配列の 1 番目の要素であること", "12", actual["1"]);
+		assertEquals("2 プロパティがcaptures 配列の 2 番目の要素であること", "34", actual["2"]);
+		assertEquals("3 プロパティがcaptures 配列の 3 番目の要素であること", "56", actual["3"]);
+		
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+		
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_on);
+		assertEquals("gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティが正しいこと", 3, actual.index);
+		}
+		assertEquals("0番目の要素がマッチした部分文字列であること", "12:34:56", actual["0"]);
+		
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+		
+		
+		//===========================================================
+		targetString = "45:67:89aaa12:34:56";
+		//===========================================================	
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_off);
+		assertEquals("フラグを指定しない場合の検索件数が正しいこと", 4, actual.length);
+		assertEquals("フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("フラグを指定しない場合のindexプロパティが正しいこと", 0, actual.index);
+		assertEquals("0 プロパティがマッチした部分文字列であること", "45:67:89", actual["0"]);
+		assertEquals("1 プロパティがcaptures 配列の 1 番目の要素であること", "45", actual["1"]);
+		assertEquals("2 プロパティがcaptures 配列の 2 番目の要素であること", "67", actual["2"]);
+		assertEquals("3 プロパティがcaptures 配列の 3 番目の要素であること", "89", actual["3"]);
+
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "45", RegExp.$1);
+//		assertEquals("RegExp.$2", "67", RegExp.$2);
+//		assertEquals("RegExp.$3", "89", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"45:67:89", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"aaa12:34:56", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"89", RegExp.lastParen );	
+
+		
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_on);
+		assertEquals("gフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティが正しいこと", 11, actual.index);
+		}
+		assertEquals("0番目の要素がマッチした部分文字列であること", "45:67:89", actual["0"]);
+		assertEquals("1番目の要素がマッチした部分文字列であること", "12:34:56", actual["1"]);
+		
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"45:67:89aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+		
+		
+		//===========================================================
+		targetString = "45:67aaa12:34:56bbbb"; // 45:67はマッチしない
+		//===========================================================
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_off);
+		assertEquals("フラグを指定しない場合の検索件数が正しいこと", 4, actual.length);
+		assertEquals("フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("フラグを指定しない場合のindexプロパティが正しいこと", 8, actual.index);
+		assertEquals("0 プロパティがマッチした部分文字列であること", "12:34:56", actual["0"]);
+		assertEquals("1 プロパティがcaptures 配列の 1 番目の要素であること", "12", actual["1"]);
+		assertEquals("2 プロパティがcaptures 配列の 2 番目の要素であること", "34", actual["2"]);
+		assertEquals("3 プロパティがcaptures 配列の 3 番目の要素であること", "56", actual["3"]);
+
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"45:67aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"bbbb", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+		
+		
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_on);
+		assertEquals("gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティが正しいこと", 8, actual.index);
+		}
+		assertEquals("0番目の要素がマッチした部分文字列であること", "12:34:56", actual["0"]);
+
+// actualのテストだけでOK 
+//	/*
+//	    // サロゲートペア対応する前からsyntax errorでした。。。
+//		assertEquals("RegExp.$&", 111, RegExp.$&);
+//		assertEquals("RegExp.$`", 111, RegExp.$`);
+//		assertEquals("RegExp.$\"", 111, RegExp.$");
+//		assertEquals("RegExp.$+", 111, RegExp.$+);
+//		assertEquals("RegExp.$-", 111, RegExp.$-);
+//		assertEquals("RegExp.$*", 111, RegExp.$*);
+//	*/
+//		
+//		assertEquals("RegExp.$_", "", RegExp.$_); // サロゲートペア対応する前から空文字でした。。。
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.input: "         ,"", RegExp.input); // サロゲートペア対応する前から空文字でした。。。
+//		assertEquals("RegExp.index: "         ,undefined, RegExp.index); // サロゲートペア対応する前からundefinedでした。。。
+//		assertEquals("RegExp.lastIndex: "     ,undefined, RegExp.lastIndex); // サロゲートペア対応する前からundefinedでした。。。
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"45:67aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"bbbb", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );
+		
+		assertEquals("regexp_g_on.$_", undefined, regexp_g_on.$_); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$1", undefined, regexp_g_on.$1); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$2", undefined, regexp_g_on.$2); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$3", undefined, regexp_g_on.$3); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$4", undefined, regexp_g_on.$4); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on(RegExp.$4)", "undefined", typeof(regexp_g_on.$4)); // サロゲートペア対応する前からundefinedでした。。。
+
+		assertEquals("regexp_g_on.input: "         ,undefined, regexp_g_on.input); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.index: "         ,undefined, regexp_g_on.index); // サロゲートペア対応する前からundefinedでした。。。
+		if(!isIE){
+			assertEquals("regexp_g_on.lastIndex: "     ,0, regexp_g_on.lastIndex); // サロゲートペア対応する前から0でした。。。
+		}
+		else{
+			assertEquals("regexp_g_on.lastIndex: "     ,16, regexp_g_on.lastIndex);
+		}
+		assertEquals("regexp_g_on.lastMatch: "     ,undefined, regexp_g_on.lastMatch); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.leftContext : "  ,undefined, regexp_g_on.leftContext ); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.rightContext : " ,undefined, regexp_g_on.rightContext ); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.lastParen : "    ,undefined, regexp_g_on.lastParen ); // サロゲートペア対応する前からundefinedでした。。。
+		
+	}
+
+	function test_match_正規表現のcaptures配列長が複数_かつ_サロゲートペア文字が含まれる場合(){
+		var actual;
+		
+		var regexp_g_on = new RegExp(/(\d+):(\d+):(\d+)/g);
+		var regexp_g_off = new RegExp(/(\d+):(\d+):(\d+)/);
+
+		
+		//===========================================================
+		targetString = "𠀋𡈽𠮟" + "aaa12:34:56" + "𠀋𡈽𠮟";
+		//===========================================================
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_off);
+		assertEquals("フラグを指定しない場合の検索件数が正しいこと", 4, actual.length);
+		assertEquals("フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("フラグを指定しない場合のindexプロパティが正しいこと", 6, actual.index);   // ←「6」です！
+		assertEquals("0 プロパティがマッチした部分文字列であること", "12:34:56", actual["0"]);
+		assertEquals("1 プロパティがcaptures 配列の 1 番目の要素であること", "12", actual["1"]);
+		assertEquals("2 プロパティがcaptures 配列の 2 番目の要素であること", "34", actual["2"]);
+		assertEquals("3 プロパティがcaptures 配列の 3 番目の要素であること", "56", actual["3"]);
+
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"𠀋𡈽𠮟aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"𠀋𡈽𠮟", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+
+		
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_on);
+		assertEquals("gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティが正しいこと", 6, actual.index);
+		}
+		assertEquals("0番目の要素がマッチした部分文字列であること", "12:34:56", actual["0"]);
+		
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"𠀋𡈽𠮟aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"𠀋𡈽𠮟", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+
+		
+		//===========================================================
+		targetString = "𠀋𡈽𠮟" + "45:67:89aaa12:34:56" + "𠀋𡈽𠮟";
+		//===========================================================
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_off);
+		assertEquals("フラグを指定しない場合の検索件数が正しいこと", 4, actual.length);
+		assertEquals("フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("フラグを指定しない場合のindexプロパティが正しいこと", 3, actual.index); // ←「3」です！
+		assertEquals("0 プロパティがマッチした部分文字列であること", "45:67:89", actual["0"]);
+		assertEquals("1 プロパティがcaptures 配列の 1 番目の要素であること", "45", actual["1"]);
+		assertEquals("2 プロパティがcaptures 配列の 2 番目の要素であること", "67", actual["2"]);
+		assertEquals("3 プロパティがcaptures 配列の 3 番目の要素であること", "89", actual["3"]);
+
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "45", RegExp.$1);
+//		assertEquals("RegExp.$2", "67", RegExp.$2);
+//		assertEquals("RegExp.$3", "89", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"45:67:89", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"𠀋𡈽𠮟", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"aaa12:34:56𠀋𡈽𠮟", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"89", RegExp.lastParen );	
+
+		
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_on);
+		assertEquals("gフラグを指定した場合の検索件数が正しいこと", 2, actual.length);
+		if(!isIE){
+			assertEquals("gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティが正しいこと", 14, actual.index);
+		}
+		assertEquals("0番目の要素がマッチした部分文字列であること", "45:67:89", actual["0"]);
+		assertEquals("1番目の要素がマッチした部分文字列であること", "12:34:56", actual["1"]);
+
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"𠀋𡈽𠮟45:67:89aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"𠀋𡈽𠮟", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+
+		
+		//===========================================================
+		targetString = "𠀋𡈽𠮟" + "45:67aaa12:34:56bbbb" + "𠀋𡈽𠮟"; // 45:67はマッチしない
+		//===========================================================	
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_off);
+		assertEquals("フラグを指定しない場合の検索件数が正しいこと", 4, actual.length);
+		assertEquals("フラグを指定しない場合のinputプロパティが正しいこと", targetString, actual.input);
+		assertEquals("フラグを指定しない場合のindexプロパティが正しいこと", 11, actual.index); // ←「11」です！
+		assertEquals("0 プロパティがマッチした部分文字列であること", "12:34:56", actual["0"]);
+		assertEquals("1 プロパティがcaptures 配列の 1 番目の要素であること", "12", actual["1"]);
+		assertEquals("2 プロパティがcaptures 配列の 2 番目の要素であること", "34", actual["2"]);
+		assertEquals("3 プロパティがcaptures 配列の 3 番目の要素であること", "56", actual["3"]);
+
+// actualのテストだけでOK 
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"𠀋𡈽𠮟45:67aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"bbbb𠀋𡈽𠮟", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );	
+
+		
+		//---------------------------
+		actual = ImCodePointUtil.match(targetString, regexp_g_on);
+		assertEquals("gフラグを指定した場合の検索件数が正しいこと", 1, actual.length);
+		if(!isIE){
+			assertEquals("gフラグを指定した場合のinputプロパティがundefinedであること", undefined, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティがundefinedであること", undefined, actual.index);
+		}
+		else{
+			assertEquals("gフラグを指定した場合のinputプロパティが正しいこと", targetString, actual.input);
+			assertEquals("gフラグを指定した場合のindexプロパティが正しいこと", 11, actual.index);
+		}
+		assertEquals("0番目の要素がマッチした部分文字列であること", "12:34:56", actual["0"]);
+
+// actualのテストだけでOK 
+//		/*
+//	    // サロゲートペア対応する前からsyntax errorでした。。。
+//		assertEquals("RegExp.$&", 111, RegExp.$&);
+//		assertEquals("RegExp.$`", 111, RegExp.$`);
+//		assertEquals("RegExp.$\"", 111, RegExp.$");
+//		assertEquals("RegExp.$+", 111, RegExp.$+);
+//		assertEquals("RegExp.$-", 111, RegExp.$-);
+//		assertEquals("RegExp.$*", 111, RegExp.$*);
+//		*/
+//		
+//		assertEquals("RegExp.$_", "", RegExp.$_); // サロゲートペア対応する前から空文字でした。。。
+//		assertEquals("RegExp.$1", "12", RegExp.$1);
+//		assertEquals("RegExp.$2", "34", RegExp.$2);
+//		assertEquals("RegExp.$3", "56", RegExp.$3);
+//		assertEquals("RegExp.$4", "", RegExp.$4);
+//		assertEquals("typeof(RegExp.$4)", "string", typeof(RegExp.$4));
+//
+//		assertEquals("RegExp.input: "         ,"", RegExp.input); // サロゲートペア対応する前から空文字でした。。。
+//		assertEquals("RegExp.index: "         ,undefined, RegExp.index); // サロゲートペア対応する前からundefinedでした。。。
+//		assertEquals("RegExp.lastIndex: "     ,undefined, RegExp.lastIndex); // サロゲートペア対応する前からundefinedでした。。。
+//		assertEquals("RegExp.lastMatch: "     ,"12:34:56", RegExp.lastMatch);
+//		assertEquals("RegExp.leftContext : "  ,"𠀋𡈽𠮟45:67aaa", RegExp.leftContext );
+//		assertEquals("RegExp.rightContext : " ,"bbbb𠀋𡈽𠮟", RegExp.rightContext );
+//		assertEquals("RegExp.lastParen : "    ,"56", RegExp.lastParen );
+//		
+		assertEquals("regexp_g_on.$_", undefined, regexp_g_on.$_); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$1", undefined, regexp_g_on.$1); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$2", undefined, regexp_g_on.$2); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$3", undefined, regexp_g_on.$3); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.$4", undefined, regexp_g_on.$4); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on(RegExp.$4)", "undefined", typeof(regexp_g_on.$4)); // サロゲートペア対応する前からundefinedでした。。。
+
+		assertEquals("regexp_g_on.input: "         ,undefined, regexp_g_on.input); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.index: "         ,undefined, regexp_g_on.index); // サロゲートペア対応する前からundefinedでした。。。
+		if(!isIE){
+			assertEquals("regexp_g_on.lastIndex: "     ,0, regexp_g_on.lastIndex); // サロゲートペア対応する前から0でした。。。
+		}
+		else{
+			// regexp_g_on.lastIndexは未対応（サロゲートペア対応されていたら25になるのだが。。。）
+			assertEquals("regexp_g_on.lastIndex: "     ,22, regexp_g_on.lastIndex); 
+		}
+		assertEquals("regexp_g_on.lastMatch: "     ,undefined, regexp_g_on.lastMatch); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.leftContext : "  ,undefined, regexp_g_on.leftContext ); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.rightContext : " ,undefined, regexp_g_on.rightContext ); // サロゲートペア対応する前からundefinedでした。。。
+		assertEquals("regexp_g_on.lastParen : "    ,undefined, regexp_g_on.lastParen ); // サロゲートペア対応する前からundefinedでした。。。
+		
+	}
+
+	var isIE = !!(window.attachEvent && !window.opera);
+	</script>
+	
+</head>
+<body>
+	<div id="xmlTest"></div>
+	<a href="test1">test1</a>
+	<a href="test2">test2</a>
+</body>
+</html>

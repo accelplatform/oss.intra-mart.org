@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="project" default="default">
+
+    <!-- define properties. -->
+    <property name="version" value="0.1.0"/>
+    <property name="lib.dir" value="./lib"/>
+    <property name="jar.name" value="im-insert-generator-${version}.jar"/>
+    
+    <!-- define library filesets. -->
+    <fileset id="generate.jar" file="${lib.dir}/${jar.name}" />
+    
+    <!-- define library for Oracle drivers. -->
+    <fileset id="oracle.jar" dir="${lib.dir}">
+        <include name="ojdbc14.jar"/>
+    </fileset>
+
+    <!-- define library for MS SQLServer drivers. -->
+    <fileset id="ms-sql-server2000.jar" dir="${lib.dir}">
+        <include name="msbase.jar"/>
+        <include name="mssqlserver.jar"/>
+        <include name="msutil.jar"/>
+    </fileset>
+
+    <fileset id="ms-sql-server2005.jar" dir="${lib.dir}">
+        <include name="sqljdbc.jar"/>
+    </fileset>
+
+    <!-- define library for DB2 drivers. -->
+    <fileset id="db2.jar" dir="${lib.dir}">
+        <include name="db2jcc.jar"/>
+        <include name="db2jcc_javax.jar"/>
+        <include name="db2jcc_license_cu.jar"/>
+    </fileset>
+
+    <!-- define library for PostgreSQL drivers. -->
+    <fileset id="postgres.jar" dir="${lib.dir}">
+        <include name="postgresql-8.*-*.jdbc3.jar"/>
+    </fileset>
+
+    <!-- generate classpath. -->
+    <path id="generate.classpath">
+        <fileset refid="generate.jar"/>
+        <fileset refid="oracle.jar"/>
+        <fileset refid="db2.jar"/>
+        <fileset refid="ms-sql-server2000.jar"/>
+        <fileset refid="ms-sql-server2005.jar"/>
+        <fileset refid="postgres.jar"/>
+    </path>
+
+    <!-- execute generate task. -->
+    <target name="generate">
+        <java fork="true" maxmemory="128m" classname="org.intra_mart.data_migration.GeneratorMain">
+            <classpath refid="generate.classpath"/>
+            <jvmarg value="-Djava.util.logging.config.file=conf/logging.properties"/>
+            <arg value="${type}"/>
+            <arg value="${table_name}"/>
+            <arg value="${input_path}"/>
+            <arg value="${output_dir}"/>
+        </java>
+    </target>
+	
+    <!-- call for execute generate task. -->
+    <target name="default">
+
+        <antcall target="generate">
+            <param name="type" value="insertGenerator"/>
+            <param name="table_name" value="table"/>
+            <param name="input_path" value="input/jdbc.properties"/>
+            <param name="output_dir" value="output"/>
+        </antcall>
+
+    </target>
+
+</project>

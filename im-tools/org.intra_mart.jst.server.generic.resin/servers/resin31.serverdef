@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd "
+	name="Resin 3.1" version="v3.1">
+	<property id="serverRootDirectory"
+		label="%ApplicationServerDirectory"
+		type="directory"
+		context="runtime"
+		default="/resin_home" />
+	<property id="port"
+		label="%serverPort"
+		type="string"
+		context="server"
+		default="8080" />
+
+	<port>
+		<no>${port}</no>
+		<name>Http</name>
+		<protocol>http</protocol>
+	</port>
+
+	<module>
+		<type>jst.web</type>
+		<publishDir>${serverRootDirectory}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+	<module>
+		<type>jst.ejb</type>
+		<publishDir>${serverRootDirectory}/deploy</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+	<module>
+		<type>jst.ear</type>
+		<publishDir>${serverRootDirectory}/deploy</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<project>
+		<classpathReference>resin.project</classpathReference>
+	</project>
+	
+	<start>
+		<mainClass>com.caucho.server.resin.Resin</mainClass>
+		<workingDirectory>${serverRootDirectory}</workingDirectory>
+		<programArguments />
+		<vmParameters>-Djava.system.class.loader=com.caucho.loader.SystemClassLoader -Djava.util.logging.manager=com.caucho.log.LogManagerImpl -Declipse.jdt.http.port=${port} -Dresin.home=${serverRootDirectory} -Xms128m -Xmx512m  -XX:MaxPermSize=256m</vmParameters>
+		<classpathReference>resin</classpathReference>
+	</start>
+
+	<publisher id="org.eclipse.jst.server.generic.antpublisher">
+		<publisherdata>
+			<dataname>build.file</dataname>
+			<datavalue>/buildfiles/resin.xml</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.web</dataname>
+			<datavalue>deploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ejb</dataname>
+			<datavalue>deploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.web</dataname>
+			<datavalue>undeploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ejb</dataname>
+			<datavalue>undeploy.j2ee.ejb</datavalue>
+		</publisherdata>		
+		<publisherdata>
+			<dataname>target.publish.jst.ear</dataname>
+			<datavalue>deploy.j2ee.ear</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ear</dataname>
+			<datavalue>undeploy.j2ee.ear</datavalue>
+		</publisherdata>				
+	</publisher>
+
+	<classpath id="resin" >
+		<archive path="${serverRootDirectory}/lib/activation.jar" />
+		<archive path="${serverRootDirectory}/lib/ejb-15.jar" />
+		<archive path="${serverRootDirectory}/lib/hessian.jar" />
+		<archive path="${serverRootDirectory}/lib/j2ee-management-10.jar" />
+		<archive path="${serverRootDirectory}/lib/javamail-141.jar" />
+		<archive path="${serverRootDirectory}/lib/jaxrpc-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jaxws-api.jar" />
+		<archive path="${serverRootDirectory}/lib/jca-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jms-11.jar" />
+		<archive path="${serverRootDirectory}/lib/jpa-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jsdk-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jsf-12.jar" />
+		<archive path="${serverRootDirectory}/lib/jsr88.jar" />
+		<archive path="${serverRootDirectory}/lib/jstl-11.jar" />
+		<archive path="${serverRootDirectory}/lib/jta-101.jar" />
+		<archive path="${serverRootDirectory}/lib/jws-15.jar" />
+		<archive path="${serverRootDirectory}/lib/portlet-10.jar" />
+		<archive path="${serverRootDirectory}/lib/quercus.jar" />
+		<archive path="${serverRootDirectory}/lib/resin-deploy.jar" />
+		<archive path="${serverRootDirectory}/lib/resin-util.jar" />
+		<archive path="${serverRootDirectory}/lib/resin.jar" />
+		<archive path="${serverRootDirectory}/lib/saaj.jar" />
+		<archive path="${serverRootDirectory}/lib/script-10.jar" />
+		<archive path="${serverRootDirectory}/lib/webbeans-16.jar" />
+		<archive path="${serverRootDirectory}/lib/webutil.jar" />
+	</classpath>
+
+	<classpath id="resin.project" >
+		<archive path="${serverRootDirectory}/lib/activation.jar" />
+		<archive path="${serverRootDirectory}/lib/ejb-15.jar" />
+		<archive path="${serverRootDirectory}/lib/hessian.jar" />
+		<archive path="${serverRootDirectory}/lib/j2ee-management-10.jar" />
+		<archive path="${serverRootDirectory}/lib/javamail-141.jar" />
+		<archive path="${serverRootDirectory}/lib/jaxrpc-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jaxws-api.jar" />
+		<archive path="${serverRootDirectory}/lib/jca-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jms-11.jar" />
+		<archive path="${serverRootDirectory}/lib/jpa-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jsdk-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jsf-12.jar" />
+		<archive path="${serverRootDirectory}/lib/jsr88.jar" />
+		<archive path="${serverRootDirectory}/lib/jstl-11.jar" />
+		<archive path="${serverRootDirectory}/lib/jta-101.jar" />
+		<archive path="${serverRootDirectory}/lib/jws-15.jar" />
+		<archive path="${serverRootDirectory}/lib/portlet-10.jar" />
+		<archive path="${serverRootDirectory}/lib/quercus.jar" />
+		<archive path="${serverRootDirectory}/lib/resin-deploy.jar" />
+		<archive path="${serverRootDirectory}/lib/resin-util.jar" />
+		<archive path="${serverRootDirectory}/lib/resin.jar" />
+		<archive path="${serverRootDirectory}/lib/saaj.jar" />
+		<archive path="${serverRootDirectory}/lib/script-10.jar" />
+		<archive path="${serverRootDirectory}/lib/webbeans-16.jar" />
+		<archive path="${serverRootDirectory}/lib/webutil.jar" />
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>jnp://${serverAddress}:1099/hessian</providerUrl>
+		<initialContextFactory>com.caucho.hessian.HessianContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+</tns:ServerRuntime>

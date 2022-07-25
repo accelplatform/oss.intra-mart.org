@@ -1,0 +1,35 @@
+<HTML>
+	<HEAD>
+		<title>Pageオブジェクトを利用したサンプル</title>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<h1>Pageオブジェクトを利用したサンプル</h1>
+
+			<HR>
+
+			<H2>*** 「sample/script/page/execute/page_execute」ページの内容を挿入しました。 ***</H2>			
+			<IMART type="string" value=pageContents></IMART>
+
+			<BR><BR>
+
+			<HR>
+
+			<BR>
+			「sample/script/page/execute/page_execute」内に定義されている「sum()」関数を実行し、その結果を表示します。
+			<IMART type="form" action="callSumFunction">
+				<INPUT type="text" name="arg1" value="123">
+				＋
+				<INPUT type="text" name="arg2" value="456">
+				＋
+				<INPUT type="text" name="arg3" value="789">
+				<INPUT type="submit" value="＝">
+			</IMART>
+			
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

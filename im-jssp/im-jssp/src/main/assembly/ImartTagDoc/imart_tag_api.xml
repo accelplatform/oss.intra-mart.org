@@ -1,0 +1,1723 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<imart-tag-library>
+<description>
+
+	このページでは、プレゼンテーション・ページで利用する各ＡＰＩに関して、プログラム・インターフェースの詳細仕様を記載しています。<BR/>
+	<BR/>
+	<strong>&lt;IMART&gt; タグＡＰＩ仕様</strong>
+	<blockquote>
+	<TABLE border="0" width="100%" cellpadding="10">
+		<TR>
+			<TH align="right" valign="top" >1.</TH>
+			<TD>
+				&lt;IMART&gt; タグは、必ず &lt;/IMART&gt; と１対１の関係になるように記述しなければなりません（ &lt;/IMART&gt; を未記述時の動作は未定義）。
+			</TD>
+		</TR>
+		<TR>
+			<TH align="right" valign="top" >2.</TH>
+			<TD>
+				&lt;IMART&gt; タグ内に定義する属性名には、ＡＳＣＩＩ文字以外を用いてはいけません。
+			</TD>
+		</TR>
+		<TR>
+			<TH align="right" valign="top" >3.</TH>
+			<TD>
+				&lt;IMART&gt; タグ内に定義する各属性名、および属性値は、大文字・小文字を厳密に判定します。
+			</TD>
+		</TR>
+		<TR>
+			<TH align="right" valign="top" >4.</TH>
+			<TD>
+				&lt;IMART&gt; タグ内に定義する属性値は、" (ダブルクォート)で囲む事で定数値として扱われます。<br/>
+				(定数値バインド機能(JavaScriptAPI Imart.defineAttribute() を参照)を利用している場合には、定数値バインド機能で定義されている値への変換対象としてみなされます。)<br/>
+				<br/>
+				逆に、" (ダブルクォート)で囲まない場合には、対応するファンクション・コンテナ内に宣言された変数、または関数へのバインド対象として実行されます。<br/>
+			</TD>
+		</TR>
+		<TR>
+			<TH align="right" valign="top" >5.</TH>
+			<TD>
+				&lt;IMART&gt; タグ内に単一属性を定義した場合、その属性値は真値(true)として扱われます。<br/>
+			</TD>
+		</TR>
+		<TR>
+			<TH align="right" valign="top" >6.</TH>
+			<TD>
+				プレゼンテーション・ページ内では、 &lt;!-- と --&gt; で囲まれた範囲は、コメントとして扱われます。<br/>
+				(ランタイム時において、&lt;!-- と --&gt; に囲まれている範囲内の &lt;IMART&gt; は実行されません。)
+			</TD>
+		</TR>
+	</TABLE>
+	</blockquote>
+</description>
+<!-- condition タグ -->
+<imart-tag>
+	<id>condition</id>
+	<category>statement</category>
+	<tag-name>condition</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	<description>
+		&lt;IMART type=&quot;condition&quot;&gt; タグ。<br/>
+		<br/>
+		タグに挟まれた範囲内の部分の実行を制御します。<br/>
+		属性 validity に対して true 値を指定した場合は内部の処理を実行し、false 値を指定した場合は内部の処理を無視します。<br/>
+		属性 negative に対して true 値を指定した場合、 属性 validity に対して指定した値を逆解釈して処理します。<br/>
+	</description>
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;condition&quot; validity=flg&gt;
+    真値
+&lt;/IMART&gt;
+&lt;IMART type=&quot;condition&quot; validity=flg negative&gt;
+    偽値
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		ファンクション・コンテナ側から変数 flg によりバインドされた真偽値により表示文字を動的選択します。<br/>
+		変数 flg の値が true であった場合は「真値」と表示され、false であった場合には「偽値」と表示されます。<br/>
+		</blockquote>
+	</sample-code>
+
+	<attribute>
+	<attr-name>validity</attr-name>
+	<description>有効・無効フラグ</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>negative</attr-name>
+	<description>条件反転判定</description>
+	<required>false</required>
+	</attribute> 
+
+</imart-tag>
+
+<!-- date タグ -->
+<imart-tag>
+	<id>date</id>
+	<category>indication</category>
+	<tag-name>date</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type=&quot;date&quot;&gt; タグ。<br/>
+		<br/>
+		タグの指定された場所に、指定された日付データを文字列として挿入します。
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;date&quot; value=dNow format=&quot;yyyy/MM/dd&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		このタグの位置に「2000/11/26」という形式で日付情報を表示します。<br/>
+		表示値は、ファンクション・コンテナから変数のバインドによって動的に指定します(バインド変数 dNow に対して)。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>value</attr-name>
+	<description>挿入する日付データ(Date型)</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>format</attr-name>
+	<description>
+		表現フォーマット指定文字列<br/>
+		（<a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/text/SimpleDateFormat.html">java.text.SimpleDateFormat</a>の仕様に準じる）</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- decision タグ -->
+<imart-tag>
+	<id>decision</id>
+	<category>statement</category>
+	<tag-name>decision</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type=&quot;decision&quot;&gt; タグ。<br/>
+		<br/>
+		タグに挟まれた部分の実行の条件分岐を行います。<br/>
+		属性 value に与えられた値が、属性 case に与えられた値に等しい場合のみタグに挟まれた範囲内の実行を行います。<br/>
+		value または case 属性に対しては null および undefined 値以外の値を指定するようにして下さい。<br/>
+		上記の各属性に対して null および undefined 値を指定した場合の動作は保証外です。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;decision&quot; case=&quot;OK&quot; value=check&gt;
+    該当
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		ファンクション・コンテナ側から変数 value によりバインドされた値がcase 属性に指定された値(この場合は &quot;OK&quot; という文字列)と等しい場合に内容を処理します。<br/>
+		変数 check の値が &quot;OK&quot; であった場合「該当」と表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>value</attr-name>
+	<description>チェック対象の値</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>case</attr-name>
+	<description>チェック値</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- event タグ -->
+<imart-tag>
+	<id>event</id>
+	<category>statement</category>
+	<tag-name>event</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="event"&gt; タグ<br/>
+		<br/>
+		ページに対して、ブラウザ上で動作するイベント処理型ロジックを追加します。<br/>
+		このタグは、Client Side Java Script を利用して実現されています。<br/>
+		また、値のブリッジには、ブラウザのクッキーを利用しています。<br/>
+		(クッキーを利用しているので別ウィンドウ同士の通信にも利用できます)<br/>
+		そのため、クッキーの容量制限を越える量の値をやり取り(監視や受取)はできません。<br/>
+		また、このタグではクッキーを保存する際、クッキーの path 属性を 「/」として値を保存しています。<br/>
+		セキュリティ的に問題と なる場合には、この機能を利用しないで下さい。<br/>
+		<br/>
+		属性 name には、動作する際のイベント名称(キーコード)を指定します。 
+		この name 属性に指定したコードが等しい &lt;IMART type="event"&gt; 同士が連携して動作します。<br/>
+		<br/>
+		属性 focus には、監視対象となる Client Side Java Script の変数名称を文字列として指定して下さい。 
+		focus 属性で指定された変数の内容が送信される事になります。<br/>
+		<br/>
+		属性 receive には、監視対象値を受け取るための Client Side Java Script の変数名称を
+		文字列として指定して下さい。 
+		ここで指定した変数によって focus で監視している変数の値を受信する事ができます。<br/>
+		<br/>
+		属性 init には、動作前にクッキーを初期化する必要がある場合、 
+		その初期値を文字列として指定する事ができます。<br/>
+		<br/>
+		属性 onChange には、focus 属性で指定された変数内の値が変化した際に
+		実行される Client Side Java Script のソースコードを文字列として指定します。<br/>
+		<br/>
+		属性 time には、監視のタイミングをミリ秒で指定します。 
+		属性 focus で指定された変数やクッキー内の情報は、
+		タイマー機能を利用して一定時間毎の監視を行っています。
+		デフォルトでは 250 ミリ秒毎に監視していますが、
+		連動のタイミングをよりリアルタイムにしたい場合は、この値を小さく設定し、
+		ブラウザ処理の負荷が 高く動作が重い場合には、この値を大きく設定する事で任意に調整して下さい。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;FORM name=&quot;form_a&quot;&gt;
+    &lt;INPUT type=&quot;text&quot; name=&quot;a_text&quot;&gt;
+&lt;/FORM&gt;
+&lt;IMART type=&quot;event&quot; name=&quot;text_copy&quot; focus=&quot;document.form_a.a_text.value&quot;&gt;
+&lt;/IMART&gt;
+
+&lt;FORM name=&quot;form_b&quot;&gt;
+    &lt;INPUT type=&quot;text&quot; name=&quot;b_text&quot;&gt;
+&lt;/FORM&gt;
+&lt;IMART type=&quot;event&quot; name=&quot;text_copy&quot; receive=&quot;document.form_b.b_text.value&quot;&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面には二つのテキストフィールドが表示されます。<br/>
+		上のテキストフィールドに文字を記入すると、下のテキストフィールド内に上のテキストフィールドに入力した内容と同じものが表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>name </attr-name>
+	<description>カテゴリ名称</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>focus </attr-name>
+	<description>監視対象ＣＳＪＳ変数名称</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>receive </attr-name>
+	<description>監視変数内データの受け入れＣＳＪＳ変数名称</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>init </attr-name>
+	<description>クッキー内初期値</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>onChange</attr-name>
+	<description>データ変更時の実行スクリプト</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>time </attr-name>
+	<description>クッキー監視間隔時間（ミリ秒）</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- form タグ -->
+<imart-tag>
+	<id>form</id>
+	<category>request</category>
+	<tag-name>form</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="form"&gt; タグ。<br/>
+		<br/>
+		フォームタグ(&lt;FORM"&gt;)を生成します。<br/>
+		このタグを利用する事でJSSP実行環境のセッションを維持しながらプログラムを動作させる事ができます。<br/>
+		<br/>
+		属性 page に対して次に表示させたいページパス（拡張子なし）を指定することで、ページ遷移をさせることができます。<br/>
+		ここで指定するパスは、JSSPコンテンツのソースディレクトリからの相対パス形式になります。（デフォルトはコンテキストパスに対応する実際のパス）<br/>
+		<br/>
+		属性 label は、遷移先ページ内の任意のアンカータグ(&lt;A name="*"&gt;)の位置を初期表示位置として指定する事ができます。<br/>
+		（この指定はブラウザの機能を利用しているため、ブラウザ製品により期待通りに動作しない場合があります）<br/>
+		<br/>
+		属性 action は、このフォームを表示したページのファンクション・コンテナ内に定義されている関数をリクエスト時に起動します。<br/>
+		action 関数の実行は、遷移先ページの作成処理(該当ページのファンクション・コンテナ内 init() 関数)よりも先に動作します。<br/>
+		<br/>
+		遷移先ページ(属性 page に指定しているプログラム)に対して引き渡すＵＲＬ引数は、&lt;IMART type="hidden"&gt; または &lt;INPUT type="hidden"&gt; を利用して指定可能です。<br/>
+		属性 page に指定されたページのファンクション・コンテナ内 init() 関数または、属性 action で指定された関数では、関数引数として request を受け取る事ができます。<br/>
+		その際、属性名称が引数 request オブジェクトのプロパティ名となり、属性値が引数 request オブジェクトの該当プロパティに格納されます。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;form&quot; page=&quot;sample/next&quot; action=&quot;chkValue&quot;&gt;
+    &lt;INPUT type=&quot;submit&quot;&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面上にはサブミットボタンが表示されます。<br/>
+		このボタンをクリックしたら、このページのファンクション・コンテナ内に定義されているchkValue() 関数を起動した後に sample/next ページを読込＆実行して画面上には sample/next ページが表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>page</attr-name>
+	<description>表示ページパス</description>
+	<required>false</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>label</attr-name>
+	<description>リンクラベル</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>action</attr-name>
+	<description>コール時起動関数(同ページ js 内)</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- frame タグ -->
+<imart-tag>
+	<id>frame</id>
+	<category>indication</category>
+	<tag-name>frame</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="frame"&gt; タグ<br/>
+		<br/>
+		フレームタグ(&lt;FRAME&gt;)を生成します。<br/>
+		このタグを利用する事でJSSP実行環境のセッションを維持しながらプログラムを動作させる事が出来ます。<br/>
+		<br/>
+		属性 page に対して次に表示させたいページパス（拡張子なし）を指定することで、ページを表示させることができます。<br/>
+		ここで指定するパスは、JSSPコンテンツのソースディレクトリからの相対パス形式になります。（デフォルトはコンテキストパスに対応する実際のパス）<br/>
+		<br/>
+		属性 label は、表示ページ内の任意のアンカータグ(&lt;A name="*"&gt;)の位置を初期表示位置として指定する事ができます。<br/>
+		この指定はブラウザの機能を利用しているため、ブラウザ製品により期待通りに動作しない場合があります。<br/>
+		<br/>
+		属性 action に関数名称を指定すると、この&lt;IMART type="frame"&gt; タグを記述したページのファンクション・コンテナ内に定義されている関数をリクエスト時に起動します。<br/>
+		属性 action で指定された関数は、表示ページの作成処理(該当ページのファンクション・コンテナ内 init() 関数)よりも先に動作します。<br/>
+		<br/>
+		その他、表示ページ(属性 page に指定しているプログラム)に対して引き渡すＵＲＬ引数を、任意の個数だけ指定可能です。<br/>
+		属性 page に指定されたページのファンクション・コンテナ内 init() 関数、または、属性 action で指定された関数では、<br/>
+		指定されたＵＲＬ引数を関数引数 request で受け取る事ができます。<br/>
+		その際、属性名称が引数 request オブジェクトのプロパティ名となり、属性値が引数 request オブジェクトの該当プロパティに格納されます。<br/>
+		<br/>
+		また &lt;FRAME&gt; タグに指定可能なオプション属性を任意に指定する事が出来ます。<br/>
+		&lt;FRAME&gt; タグの動作仕様に関しては、市販の HTML リファレンスを参照してください。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;FRAMESET rows=&quot;50%,*&quot;&gt;
+    &lt;IMART type=&quot;frame&quot; page=&quot;sample/top&quot;&gt;&lt;/IMART&gt;
+    &lt;IMART type=&quot;frame&quot; page=&quot;sample/bottom&quot;&gt;&lt;/IMART&gt;
+&lt;/FRAMESET&gt;
+</pre>
+		<blockquote>
+		フレームを上下２つに分けて、それぞれ別なページをフレーム内に表示することができます（これはＨＴＭＬの機能です）。<br/>
+		この時、上のフレーム内にはページ sample/top が表示され、下のフレーム内にはページ sample/bottom が表示されます。<br/>
+		ページ sample/top と smple/bottom のリクエスト順と動作順は非同期であり保証される事はありません（ブラウザの制約です）。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>page</attr-name>
+	<description>表示ページパス</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>label</attr-name>
+	<description>リンクラベル</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>表示ページへ渡すＵＲＬ引数および &lt;FRAME&gt; タグの各オプション属性</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- hidden タグ -->
+<imart-tag>
+	<id>hidden</id>
+	<category>control</category>
+	<tag-name>hidden</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="hidden"&gt; タグ<br/>
+		<br/>
+		フォームサブミット時のリクエスト引数となる隠しフィールドを作成します。<br/>
+		属性名がＵＲＬ引数の名称となり、属性値がＵＲＬ引数名称にマップされる値となります。<br/>
+		<br/>
+		ブラウザからの受取時は、<pre><b>request.属性名</b></pre> で取得可能です。<br/>
+		(request は、ファンクション・コンテナ実行時の関数引数です)<br/>
+		<br/>
+		ここでの指定は、ＵＲＬ引数となるため、属性名および属性値には定数または文字列型の値を指定するようにしてください。<br/>
+		(文字列以外の値が指定された場合の動作に関しては保証外)<br/>
+		<br/>
+		属性名と属性値は、複数個の同時指定が可能です。<br/>
+		(指定する属性値が１組の場合は、 &lt;IMART type="input" style="hidden"&gt; を利用して指定することもできます)<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;form&quot; action=&quot;form_action&quot; page=&quot;sample/form_next&quot;&gt;
+    &lt;IMART type=&quot;hidden&quot; arg_a=&quot;A&quot; arg_b=&quot;B&quot;&gt;&lt;/IMART&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		このフォームをサブミットすると、該当するファンクション・コンテナ内に 定義されている form_action() 関数が起動されます。<br/>
+		この関数に引き渡される request オブジェクトを利用して hidden に指定した 値を受け取る事が出来ます。<br/>
+		また、この関数の実行終了後、sample/form_next ページの作成に入りますが、 この時、上記ページのファンクション・コンテナ内に定義されている init() 関数が起動されます。<br/>
+		この init() 関数でも request オブジェクトが引き渡されて、hidden の 値を受け取る事が出来ます。<br/>
+		受け取る request の構造は、以下のような形になります。<br/>
+		<pre>
+		request ┬ arg_a = &quot;A&quot;
+		        └ arg_b = &quot;B&quot;
+		</pre>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>hidden タグ名称と値</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- include タグ -->
+<imart-tag>
+	<id>include</id>
+	<category>indication</category>
+	<tag-name>include</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="include"&gt; タグ<br/>
+		<br/>
+		任意のJSSPコンテンツをコールして部分ページソースを挿入します。<br/>
+		属性 page に対して次に表示させたいページパス（拡張子なし）を指定する ことで、部分ページを表示させることができます。<br/>
+		ここで指定するパスは、JSSPコンテンツのソースディレクトリからの相対パス形式になります。（デフォルトはコンテキストパスに対応する実際のパス）<br/>
+		<br/>
+		その他、表示ページ(属性 page に指定しているプログラム)に対して引き渡す引数を、任意の個数だけ指定可能です。<br/>
+		page に指定されたページのファンクション・コンテナ内 init() 関数では、引数 argV で受け取る事ができます。<br/>
+		その際、属性名称が引数 argV オブジェクトのプロパティ名となり、属性値が引数 argV オブジェクトの該当プロパティに格納されます。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;include&quot; page=&quot;sample/sub&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		このタグの位置にページ sample/sub を実行した結果のソースを挿入します。<br/>
+		ページ sample/sub のファンクション・コンテナ内 init() 関数では、以下のように宣言する事で引数を受け取る事が出来ます。<br/>
+		function init(argV){ ・・・ }<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>page</attr-name>
+	<description>実行対象ページソースパス</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>実行ページへ渡す引数</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- input タグ -->
+<imart-tag>
+	<id>input</id>
+	<category>control</category>
+	<tag-name>input</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="input"&gt; タグ。<br/>
+		<br/>
+		任意のフォームコントロールを挿入します。<br/>
+		ＨＴＭＬの &lt;INPUT&gt; タグを生成します（ＨＴＭＬリファレンスを参照）。<br/>
+		属性 style に指定した文字列が &lt;INPUT&gt; タグの type 属性となります。<br/>
+		その他の属性と属性値は、そのまま &lt;INPUT&gt; タグの属性となります。<br/>
+		属性 style に対して有効な指定値には以下のものがあります。<br/>
+		<br/>
+		<table border="1">
+			<tr>
+				<th>text</th>
+				<td>テキストフィールド</td>
+			</tr>
+			<tr>
+				<th>password</th>
+				<td>パスワードフィールド</td>
+			</tr>
+			<tr>
+				<th>radio</th>
+				<td>ラジオボタン</td>
+			</tr>
+			<tr>
+				<th>checkbox</th>
+				<td>チェックボックス</td>
+			</tr>
+			<tr>
+				<th>hidden</th>
+				<td>隠しフィールド</td>
+			</tr>
+			<tr>
+				<th>button</th>
+				<td>ボタン</td>
+			</tr>
+		</table>
+		<br/>
+		&lt;INPUT&gt; タグの type 属性および各種設定可能な属性とその動作に関しては、ＨＴＭＬリファレンスをご参照下さい。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;input&quot; style=&quot;text&quot; name=&quot;test1&quot; value=&quot;default&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		フォームコントロールの一つであるテキストフィールドを表示します。<br/>
+		表示されたテキストフィールド内には「default」と初期表示されます。<br/>
+		出力されるＨＴＭＬソースは以下のようになります。<br/>
+		<pre>&lt;INPUT type=&quot;text&quot; name=&quot;test1&quot; value=&quot;default&quot;&gt;</pre>
+		属性 value などは、ファンクション・コンテナの変数をバインドする事によって動的な指定が可能です。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>style</attr-name>
+	<description>&lt;INPUT&gt; の type 属性名</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>タグ属性と属性値</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- link タグ -->
+<imart-tag>
+	<id>link</id>
+	<category>request</category>
+	<tag-name>link</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="link"&gt; タグ<br/>
+		<br/>
+		アンカータグ(&lt;A&gt;)を生成します。<br/>
+		このタグを利用する事で JSSP実行環境のセッションを維持しながらプログラムを動作させる事が出来ます。<br/>
+		<br/>
+		属性 page に対して次に表示させたいページパス（拡張子なし）を指定することで、ページ遷移をさせることができます。<br/>
+		ここで指定するパスは、JSSPコンテンツのソースディレクトリからの相対パス形式になります。（デフォルトはコンテキストパスに対応する実際のパス）<br/>
+		<br/>
+		属性 label は、遷移先ページ内の任意のアンカータグ(&lt;A name="*"&gt;)の位置を初期表示位置として指定する事ができます。<br/>
+		（この指定はブラウザの機能を利用しているため、ブラウザ製品により期待通りに動作しない場合があります）<br/>
+		<br/>
+		属性 action に関数名称を指定すると、このリンクを表示したページのファンクション・コンテナ内に定義されている関数をリクエスト時に起動します。<br/>
+		属性 action で指定された関数は、遷移先ページの作成処理(該当ページのファンクション・コンテナ内 init() 関数)よりも先に動作します。<br/>
+		<br/>
+		リンクの画面表示名称は、このタグに挟まれた範囲内の文字列になります。<br/>
+		<br/>
+		その他、遷移先ページ(属性 page に指定しているプログラム)に対して引き渡すＵＲＬ引数を、任意の個数だけ指定可能です。<br/>
+		属性 page に指定されたページのファンクション・コンテナ内 init() 関数または、属性 action で指定された関数では、関数引数として request を受け取る事ができます。<br/>
+		その際、属性名称が引数 request オブジェクトのプロパティ名となり、属性値が引数 request オブジェクトの該当プロパティに格納されます。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;link&quot; page=&quot;sample/next&quot; action=&quot;chkValue&quot;&gt;
+    次ページ
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面上には「次ページ」というリンクが表示されます。<br/>
+		このリンクをクリックしたら、このページのファンクション・コンテナ内に定義されている chkValue() 関数を起動した後に sample/next ページを読込＆実行して画面上には sample/next ページが表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>page</attr-name>
+	<description>表示ページパス</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>label</attr-name>
+	<description>リンクラベル</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>action</attr-name>
+	<description>コール時起動関数(同ページ js 内)</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>表示ページへ渡すＵＲＬ引数</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+
+<!-- loop タグ -->
+<imart-tag>
+	<id>loop</id>
+	<category>statement</category>
+	<tag-name>loop</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="loop"&gt; タグ<br/>
+		<br/>
+		タグに挟まれている範囲内のソースを繰り返し処理します。<br/>
+		繰り返し処理は、属性 count に指定されている回数だけ行います。 <br/>
+		(属性 count に、整数字列以外の指定がされた場合の動作は保証外)<br/>
+		<br/>
+		属性 index に、ファンクション・コンテナ内で定義してある変数名称を指定する事で、
+		何回目の繰り返しかを表す数値を受け取る事が出来ます。<br/>
+		(周回数は、0 から始まる整数値で、周回ごとに 1 ずつインクリメントされます。)<br/>
+		<br/>
+		属性 action に対して、対応するファンクション・コンテナ内に定義されている関数名称を文字列として指定すると、
+		繰り返し処理毎に実行されます。<br/>
+		実行タイミングは、繰り返し処理の最初(タグに挟まれた範囲内の実行前)です。<br/>
+		指定関数は、繰り返し処理の開始から終了までに、繰り返し回数に 等しい回数だけ実行されます。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;loop&quot; count=&quot;5&quot; index=&quot;loop_number&quot;&gt;
+    &lt;IMART type=&quot;string&quot; value=loop_number&gt;&lt;/IMART&gt; 回目&lt;BR&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面には、以下のように出力されます。<br/>
+		0 回目<br/>
+		1 回目<br/>
+		2 回目<br/>
+		3 回目<br/>
+		4 回目<br/>
+		この場合は、必ず５回の繰り返し処理が行われます。<br/>
+		繰り返し毎に、属性 index で指定したファンクション・コンテナ内の変数に対して、繰り返し回数 - 1 の値が設定されます。<br/>
+		上記例では、ファンクション・コンテナ内に定義されている loop_number という変数を通して &lt;IMART type=&quot;string&quot;&gt; タグを用いて、動的に回数を表示しています。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>count</attr-name>
+	<description>繰り返し回数</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>index</attr-name>
+	<description>周回番号の通知先変数名</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>action</attr-name>
+	<description>繰り返し毎に動作する関数</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- number タグ -->
+<imart-tag>
+	<id>number</id>
+	<category>indication</category>
+	<tag-name>number</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="number"&gt; タグ<br/>
+		<br/>
+		タグの指定されている個所に指定の数値データを文字列として挿入します。<br/>
+		（実際には、タグ部分が指定文字列で置換されるように動作します。）<br/>
+		フォーマット文字列は ###,### のように指定して下さい。<br/>
+		format 属性指定時の仕様に関しては、
+		<a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/text/DecimalFormat.html">java.text.DecimalFormat</a> に準拠します。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;number&quot; value=nMoney format=&quot;###,###&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		このタグの位置に「12,345」という形式で数値情報を表示します。<br/>
+		表示値は、ファンクション・コンテナから変数のバインドによって動的に指定します。<br/>
+		(バインド変数 nMoney に対して)<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>value</attr-name>
+	<description>挿入する数値データ</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>format</attr-name>
+	<description>表現フォーマット指定文字列</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+
+<!-- repeat タグ -->
+<imart-tag>
+	<id>repeat</id>
+	<category>statement</category>
+	<tag-name>repeat</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="repeat"&gt; タグ<br/>
+		<br/>
+		タグに挟まれた範囲内（ネスト部分）を指定の回数だけ繰り返し処理します。<br/>
+		属性 list に指定されたオブジェクト(or 配列)の要素数に 等しい回数だけ繰り返し処理を実行します。<br/>
+		属性 item に指定された変数名に該当する変数に対して、繰り返し毎に list から順次取得したデータを代入します。<br/>
+		属性 index に指定された変数名に該当する変数に対して、繰り返し毎に list から順次取得したプロパティ名称(or 要素番号)を代入します。<br/>
+		属性 min に動作開始インデックスを指定した場合、それ以前に取得できた値は 無視されて、指定インデックス以降のデータのみを繰り返し処理の対象とします。<br/>
+		属性 min を未指定にした場合のデフォルト動作は、0 を指定した場合と同様です。<br/>
+		属性 max に動作終了インデックスを指定した場合、それ以後に取得できた値は 無視されて、指定インデックス以前のデータのみを繰り返し処理の対象とします。<br/>
+		属性 max を未指定にした場合のデフォルト動作は、list に渡されたオブジェクト内に格納されているデータのうち、順次取得可能な最終データまでが処理対象となります。<br/>
+		属性 action に対して、対応するファンクション・コンテナ内に定義されている関数名称を文字列として指定すると、繰り返し処理毎に実行されます。<br/>
+		関数の実行タイミングは、繰り返し処理の最初(タグに挟まれた範囲内の実行前)です。<br/>
+		指定関数は、繰り返し処理の開始から終了までに、繰り返し回数に 等しい回数だけ実行されます。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;repeat&quot; list=listObject item=&quot;record&quot; index=&quot;idx&quot;&gt;
+    &lt;IMART type=&quot;string&quot; value=idx&gt;&lt;/IMART&gt; :
+    &lt;IMART type=&quot;string&quot; value=record&gt;&lt;/IMART&gt;&lt;BR&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		ファンクション・コンテナ側から変数 listObject によりバインドされたオブジェクトの中身を表示します。<br/>
+		画面上ではオブジェクト listObject の持つデータが『プロパティ名称 : 値』という組み合わせでオブジェクトの持つプロパティの数に等しい行数が表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>list</attr-name>
+	<description>繰り返し処理をする配列</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>item</attr-name>
+	<description>繰り返し処理中の配列内該当要素取得変数名</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>index</attr-name>
+	<description>繰り返し処理中の配列要素番号取得変数名</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>min</attr-name>
+	<description>繰り返し処理対象の最小要素番号</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>max</attr-name>
+	<description>繰り返し処理対象の最大要素番号</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>action</attr-name>
+	<description>繰り返し毎に動作する関数</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- select タグ -->
+<imart-tag>
+	<id>select</id>
+	<category>control</category>
+	<tag-name>select</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="select"&gt; タグ<br/>
+		<br/>
+		フォーム内にコンボボックス（またはリストボックス）を表示します。<br/>
+		<br/>
+		属性 list に対しては、オブジェクトを指定して下さい。<br/>
+		属性 list に指定したオブジェクトに格納されているすべての値が、
+		コンボボックス内の表示要素になります。<br/>
+		属性 list に指定されたオブジェクトのプロパティ名が
+		コンボボックス内の各要素(&lt;OPTION&gt; タグ)の value 値になり、
+		該当するプロパティに格納されている値がコンボボックス内の要素の画面上での表示名になります。<br/>
+		(オブジェクトに格納されている値が文字列以外の場合の動作は保証外。)<br/>
+		<br/>
+		属性 selected には、コンボボックスの初期選択(初期表示)値を指定します。<br/>
+		初期選択状態にする値のキー(属性 list に指定したオブジェクトの該当するプロパティ名)を指定することで、
+		初期選択状態にすることができます。<br/>
+		属性 select に指定した値に該当するキーが属性 list に指定したオブジェクトのプロパティとして存在しない場合は、
+		どの値も選択状態にはなりません。<br/>
+		(ただし、コンボボックスの初期選択指定が存在しない場合は、
+		ブラウザの仕様で自動的にコンボボックス内の先頭の要素が初期選択状態として表示されます)<br/>
+		<br/>
+		また、初期選択状態とするキーを同時に複数個指定する場合は、
+		属性 selected に対して配列を指定する事で可能になります。<br/>
+		その際、配列内の各要素の値として、
+		初期選択状態にするキー(属性 list に指定したオブジェクトの該当するプロパティ名)を格納してください。<br/>
+		<br/>
+		属性 blank は、コンボボックス内の任意の位置に空データを表示させるための属性指定になります。<br/>
+		値としてキーワード "top" を指定するとボックス内の先頭位置に空データが表示され、<br/>
+		キーワード "bottom" を指定するとボックス内の最後尾位置に空データが表示されます。<br/>
+		<br/>
+		上記以外の属性を指定した場合、それらは &lt;SELECT&gt; タグの各属性として出力されます。<br/>
+		(&lt;SELECT&gt; タグの仕様に関しては市販のＨＴＭＬリファレンスを参照して下さい)<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;form&quot;&gt;
+    &lt;IMART type=&quot;select&quot; list=list_object&gt;&lt;/IMART&gt;
+    &lt;IMART type=&quot;select&quot; list=list_object size=&quot;4&quot;&gt;&lt;/IMART&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面には、コンボボックスとリストボックスが表示されます。<br/>
+		ボックス内には、ファンクション・コンテナ内で作成された変数 list_objectオブジェクト内のデータが表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>list</attr-name>
+	<description>表示リストの配列</description>
+	<required>true</required>
+	</attribute>
+	
+
+	<attribute>
+	<attr-name>selected</attr-name>
+	<description>初期選択値の設定</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>blank</attr-name>
+	<description>キーワードの示す位置へブランクデータを挿入</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>&lt;SELECT&gt;タグ内に指定する各属性値</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- string タグ -->
+<imart-tag>
+	<id>string</id>
+	<category>indication</category>
+	<tag-name>string</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="string"&gt; タグ<br/>
+		<br/>
+		タグの指定されている個所に指定のデータを文字列として挿入します。<br/>
+		（実際には、タグ部分が指定文字列で置換されるように動作します）
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;string&quot; value=&quot;ABC&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		このタグの位置に「ABC」と表示します。<br/>
+		表示値は、ファンクション・コンテナから変数のバインドによって動的な指定も可能です。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>value</attr-name>
+	<description>挿入データ</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- submit タグ -->
+<imart-tag>
+	<id>submit</id>
+	<category>request</category>
+	<tag-name>submit</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="submit"&gt; タグ<br/>
+		<br/>
+		サブミットボタンを表示します。<br/>
+		属性 page に対して次に表示させたいページパス（拡張子なし）を指定することで、
+		ページを表示させることができます。<br/>
+		<br/>
+		ここで指定するパスは、JSSPコンテンツのソースディレクトリからの相対パス形式になります。（デフォルトはコンテキストパスに対応する実際のパス）<br/>
+		<br/>
+		また、&lt;IMART type="form"&gt; にて page 属性が指定されていて遷移ページ先の指定要求が重複した場合、
+		&lt;IMART type="submit"&gt; で指定した page 指定が 優先され、
+		&lt;IMART type="form"&gt; で指定した page 指定は無視されます。<br/>
+		<br/>
+		属性 action は、この&lt;IMART type="submit"&gt; タグを表示したページの
+		ファンクション・コンテナ内に定義されている関数をリクエスト時に起動するための指定で、
+		起動させたい関数名称を指定する事で可能になります。<br/>
+		action 関数の実行は、
+		遷移先ページの作成処理(該当ページのファンクション・コンテナ内 init() 関数)よりも先に動作します。<br/>
+		<br/>
+		また、&lt;IMART type="form"&gt; にて action 属性が指定されていて関数実行要求が重複した場合、
+		&lt;IMART type="submit"&gt; で指定した action 関数が優先的に 実行され、
+		&lt;IMART type="form"&gt; で指定した action 関数の実行要求は無視されます。<br/>
+		<br/>
+		この &lt;IMART type="submit"&gt; は、１つのフォーム内に複数の配置が可能であり、 
+		その際に指定した page および action 指定は、クリックされたサブミットボタンに対して個々に指定可能で、
+		独立した動作をします。<br/>
+		<br/>
+		なお、このタグは HTML の &lt;INPUT type="submit"&gt; の name 属性を利用して制御を行っています。
+		したがって、任意属性として name を記述した場合、 画面遷移や関数実行指定等が正常に動作しなくなります。<br/>
+		<br/> 
+		<!--
+		*****************************************************************************
+		<table border="1">
+			<tr>
+				<th colspan="2">&lt;IMART type="<font color="blue">form</font>"&gt; タグ</th>
+				<th colspan="2">&lt;IMART type="<font color="red">submit</font>"&gt; タグ</th>
+				<th rowspan="2">結果</th>
+			</tr>
+			<tr>
+				<th>属性 action</th>
+				<th>属性 page</th>
+				<th>属性 action</th>
+				<th>属性 page</th>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					この&lt;IMART type="submit"&gt; タグを表示したページを再表示します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+				この&lt;IMART type="submit"&gt; タグを表示したページを再表示します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="blue">form</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 action に指定された関数を実行後、<br/>
+					この&lt;IMART type="submit"&gt; タグを表示したページを再表示します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><b><u>指定あり</u></b></td>
+				<td align="left">
+					&lt;IMART type="<font color="red">submit</font>"&gt;の属性 page に指定されたページに遷移します。
+				</td>
+			</tr>
+			<tr align="center">
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td><i>指定なし</i></td>
+				<td align="left">
+					この&lt;IMART type="submit"&gt; タグを表示したページを再表示します。
+				</td>
+			</tr>
+		</table>
+		*****************************************************************************
+		-->
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;form&quot; action=&quot;form_action&quot; page=&quot;sample/form_next&quot;&gt;
+    &lt;INPUT type=&quot;submit&quot; value=&quot;submit_0&quot;&gt;
+    &lt;IMART type=&quot;submit&quot; value=&quot;submit_1&quot;&gt;&lt;/IMART&gt;
+    &lt;IMART type=&quot;submit&quot; value=&quot;submit_2&quot; action=&quot;sub_action_2&quot;&gt;&lt;/IMART&gt;
+    &lt;IMART type=&quot;submit&quot; value=&quot;submit_3&quot; action=&quot;sub_action_3&quot; page=&quot;sample/sub_next&quot;&gt;&lt;/IMART&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面には「submit_0」「submit_1」「submit_2」および「submit_3」という表示名称のサブミットボタンが４つ表示されます。<br/>
+		「submit_0」をクリックした場合は、ファンクション・コンテナ内のform_action() 関数を実行した後に sample/form_next というページを表示します。<br/>
+		「submit_1」をクリックした場合は、「submit_0」をクリックした場合と同様の動作をします。
+		「submit_2」をクリックした場合は、ファンクション・コンテナ内のsub_action_2() 関数を実行した後に sample/form_next というページを表示します。<br/>
+		「submit_3」をクリックした場合は、ファンクション・コンテナ内のsub_action_3() 関数を実行した後に sample/sub_next というページを表示します。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>page</attr-name>
+	<description>リクエスト後の遷移先ページパス</description>
+	<required>false</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>action</attr-name>
+	<description>リクエスト時の起動関数名</description>
+	<required>false</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>タグ属性と属性値</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- tag タグ -->
+<imart-tag>
+	<id>tag</id>
+	<category>indication</category>
+	<tag-name>tag</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="tag"&gt; タグ<br/>
+		<br/>
+		任意のタグを生成します。<br/>
+		属性 name には、目的のタグ名称を文字列として指定します。<br/>
+		(属性 name に対して、文字列型以外の値が指定された場合の動作は保証外)<br/>
+		<br/>
+		その他の属性は、そのまま、生成される任意タグの属性値となります。<br/>
+	</description>
+	
+	<sample-code>
+<pre>	
+&lt;IMART type=&quot;tag&quot; name=&quot;FONT&quot; color=&quot;red&quot;&gt;赤い文字&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面には「赤い文字」という文字列が赤色で表示されます。<br/>
+		上記スクリプトで生成されるＨＴＭＬソースは以下のようになります。<br/>
+		<pre>&lt;FONT color=&quot;red&quot;&gt;赤い文字&lt;/FONT&gt;</pre>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>name</attr-name>
+	<description>タグ名称</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>タグ属性と属性値</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+<!-- textarea タグ -->
+<imart-tag>
+	<id>textarea</id>
+	<category>control</category>
+	<tag-name>textarea</tag-name>
+	<body-content>IMARTタグおよびHTML</body-content>
+	
+	<description>
+		&lt;IMART type="textarea"&gt; タグ<br/>
+		<br/>
+		フォーム内にテキストエリアを表示します。 <br/>
+		<br/>
+		属性 value に対して指定した文字列を初期表示文字列とします。<br/>
+		(属性 value に対して文字列以外の値を指定した場合の動作は保証外)<br/>
+		<br/>
+		その他のタグ属性は、そのまま &lt;TEXTAREA&gt; タグの属性として指定されます。<br/>
+		(&lt;TEXTAREA&gt; タグの仕様に関しては、ＨＴＭＬリファレンスを参照下さい)<br/>
+		<br/>
+		タグに挟まれた範囲内に文字列を指定すると、テキストエリアの初期表示値とすることができます。<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;form&quot;&gt;
+    &lt;IMART type=&quot;textarea&quot; value=&quot;バインド値&quot;&gt;&lt;/IMART&gt;
+    &lt;IMART type=&quot;textarea&quot;&gt;定数値&lt;/IMART&gt;
+&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		画面には、２つのテキストエリアが表示されます。<br/>
+		一つは、テキストエリア内に「バインド値」という文字列が初期表示されます。<br/>
+		もう一つは、「定数値」という文字列が初期表示されます。<br/>
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>value</attr-name>
+	<description>テキストエリアに対する初期表示値(文字列)</description>
+	<required>true</required>
+	</attribute>
+	
+	<attribute>
+	<attr-name>その他</attr-name>
+	<description>タグ属性と属性値</description>
+	<required>false</required>
+	</attribute>
+</imart-tag>
+
+
+<!-- Content-Type タグ -->
+<imart-tag>
+	<id>Content-Type</id>
+	<category>response</category>
+	<tag-name>Content-Type</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type=&quot;Content-Type&quot;&gt; タグ。<br/>
+		<br/>
+		クライアントへ送信される応答のコンテンツ形式を設定します。<br/>
+		属性 value に指定したコンテンツ形式が、応答ヘッダ Content-type の値になります。<br/>
+		コンテンツ形式には、たとえば text/html; charset=Shift_JIS のように、<br/>
+		使用される文字エンコーディングのタイプを含めることができます。<br/>
+		<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;Content-Type&quot; value=&quot;text/html; charset=Shift_JIS&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		応答ヘッダ Content-type が text/html; charset=Shift_JIS に設定されます。<br/>
+		</blockquote>
+	</sample-code>
+
+	<attribute>
+	<attr-name>value</attr-name>
+	<description>コンテンツの MIME タイプを指定する文字列</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- HTTP-EQUIV タグ -->
+<imart-tag>
+	<id>HTTP-EQUIV</id>
+	<category>response</category>
+	<tag-name>HTTP-EQUIV</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type=&quot;HTTP-EQUIV&quot;&gt; タグ。<br/>
+		<br/>
+		指定された名前と値を持つ応答ヘッダを設定します。<br/>
+		属性 name にはヘッダの名前、属性 value にはヘッダの値を設定します。<br/>
+		ヘッダがすでに設定されていた場合は、新しい値が以前の値を上書きします。<br/>
+		<br/>
+	</description>
+	
+	<sample-code>
+<pre>
+&lt;IMART type=&quot;HTTP-EQUIV&quot; name=&quot;AAA&quot; value=&quot;BBB&quot;&gt;&lt;/IMART&gt;
+&lt;IMART type=&quot;HTTP-EQUIV&quot; name=&quot;CCC&quot; value=&quot;DDD&quot;&gt;&lt;/IMART&gt;
+</pre>
+		<blockquote>
+		 以下の応答ヘッダが設定されます。<br/>
+		 <br/>
+		 AAA: BBB<br/>
+		 CCC: DDD
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+	<attr-name>name</attr-name>
+	<description>ヘッダの名前</description>
+	<required>true</required>
+	</attribute>
+
+	<attribute>
+	<attr-name>value</attr-name>
+	<description> ヘッダの値</description>
+	<required>true</required>
+	</attribute>
+</imart-tag>
+
+<!-- jsspRpc タグ -->
+<imart-tag>
+	<id>jsspRpc</id>
+	<category>request</category>
+	<tag-name>jsspRpc</tag-name>
+	<body-content>なし</body-content>
+	
+	<description>
+		&lt;IMART type="jsspRpc"&gt; タグ。<br/>
+		<br/>
+		このタグを利用すると、JavaScriptで記述されたサーバサイドのロジックを、
+		クライアントサイドJavaScript（以下 CSJS）からシームレスに呼び出すことが可能となります。<br/>
+		<br/>
+		属性 name には、CSJS内でサーバロジックを参照する際のオブジェクト名を指定します。<br/>
+		<br/>
+		属性 page には、サーバロジックが記述されているページパス（拡張子なし）を指定します。<br/>
+		ここで指定するパスは、JSSPコンテンツのソースディレクトリからの相対パス形式になります。（デフォルトはコンテキストパスに対応する実際のパス）<br/>
+		<br/>
+		サーバサイドの処理結果を非同期で受け取りたい場合は、属性 callback を指定します。<br/>
+		属性 callback には、CSJS関数名を指定します。
+		属性 callback が指定されている場合、サーバサイドの処理結果が 属性 callback で指定されたCSJS関数の引数に渡されます。<br/>
+		<br/>
+		属性 onErrorCallback には、非同期通信時にエラーが発生した場合に呼び出される関数名を指定します。<br/>
+		属性 onErrorCallback で指定された関数の引数には、
+		<a href="#JsspRpcComErrorObject">JSSP-RPC 通信エラーオブジェクト</a>が渡されます。<br/>
+		
+		<br/>
+		<br/>
+
+		<strong><i>例：</i></strong>
+		<blockquote>
+		サーバサイドに「<b><font color="green">sample/test1</font></b>.js」が存在し、
+		そのJSファイル内に「<b><font color="red">testFunction</font></b>()」という関数が定義されている場合、
+		以下を行うことによって、CSJSから上記関数を実行することができます。
+		<ol>
+			<li>HTMLファイル内に&lt;IMART type="jsspRpc"&gt; タグを以下のように記述します。</li>
+<pre>
+&lt;IMART type="jsspRpc" name="<b><font color="blue">serverLogic</font></b>" page="<b><font color="green">sample/test1</font></b>" &gt;
+</pre>
+		
+			<li>CSJS内に以下を記述することで、サーバサイドのロジックを実行します。</li>
+<pre><b><font color="blue">serverLogic</font></b>.<b><font color="red">testFunction</font></b>();</pre>
+		</ol>
+		</blockquote>
+		
+		<br/>
+		<br/>
+
+		<strong><i>JSSP-RPC 通信エラーに関して</i></strong><br/>
+		&lt;IMART type="jsspRpc"&gt; タグを利用したサーバサイドとの通信でエラーが発生した際、
+		そのエラー内容を格納したオブジェクトが伝達されます。<br/>
+		<br/>
+		通信エラーが発生するのは以下の場合です。<br/>
+		<ul>
+			<li>レスポンスのHTTPステータスコードが「200」以外の場合
+				<font size="-1">（サーバサイドで実行時エラーが発生した場合を含みます）</font>
+			</li>
+			<!--
+				<li>セッションタイムアウトが発生した場合</li>
+			-->
+			<li>Debug.browse()を実行した場合</li>
+		</ul>
+		<br/>
+		JSSP-RPCの通信方式（同期通信 または 非同期通信）によって、エラーオブジェクトの伝達方法が異なります。<br/>
+		
+		<br/>
+		同期通信の場合（＝属性 callback が未指定の場合）、<br/>
+		通信エラーの内容が<b>例外として投げられます。</b><br/>
+		その為、同期通信を行う場合は、サーバサイドとの通信部分を try / catchで囲み、例外処理を記述してください。<br/>
+		投げられる例外オブジェクトの構成は、<a href="#JsspRpcComErrorObject">JSSP-RPC 通信エラーオブジェクト</a>と同一です。<br/>
+
+		<br/>
+		非同期通信の場合（＝属性 callback が指定されている場合）、<br/>
+		属性 onErrorCallback で指定された関数の引数に、
+		<a href="#JsspRpcComErrorObject">JSSP-RPC 通信エラーオブジェクト</a>が渡されます。<br/>
+		属性 onErrorCallback が未指定の場合は、関数「ImJsspRpc.defaultOnErrorCallback() 」が実行されます。<br/>
+
+		<br/>		
+		
+		<a name='JsspRpcComErrorObject'>
+			<strong>JSSP-RPC 通信エラー オブジェクト</strong>
+		</a>
+		<br/>
+		<table border="1" cellpadding="4" cellspacing="1">
+			<tr>
+				<td rowspan="5">
+					<div align="center">
+						JSSP-RPC 通信エラー<br/>オブジェクト (Object) 
+					</div>
+				</td>
+				<td>
+					<strong>httpStatus</strong>
+					HTTPステータスコード (Number)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<strong>code</strong>
+					エラーコード (String)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<strong>message</strong>
+					エラーメッセージ (String)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<strong>contentType</strong>
+					レスポンスデータのコンテントタイプ (String)<br/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<strong>data</strong>
+					レスポンスデータ（JavaScriptオブジェクト、XMLオブジェクト、または、テキスト）
+				</td>
+			</tr>
+		</table>
+
+		<br/>
+		<br/>
+		
+		<strong><i>注意事項：</i></strong>
+		<blockquote>
+		<ul>
+			<li>
+				&lt;IMART type="jsspRpc"&gt; タグでは、
+				ブラウザとサーバ間の通信に <a href="http://ja.wikipedia.org/wiki/XMLHttpRequest">XMLHttpRequest</a> を利用しています。
+			</li>
+			<li>
+				ブラウザとサーバ間通信のデータ形式は <a href="http://ja.wikipedia.org/wiki/JSON">JSON</a> です。
+			</li>
+			<li>
+				本タグで指定されたサーバロジック内では、以下の関数を利用することは出来ません。
+				<ul>
+					<li>forward()</li>
+					<li>redirect()</li>
+					<li>secureRedirect()</li>
+					<li>transmission()</li>
+					<li>HTTPResponse#sendMessageBody()</li>
+					<li>HTTPResponse#sendMessageBodyString()</li>
+				</ul>
+			</li>
+			<li>
+				&lt;IMART type="jsspRpc"&gt; タグでは、
+				プレゼンテーションページ(=HTMLファイル)とファンクションコンテナ(=JSファイル)が対になっている必要はありません。<br/>
+				任意のプレゼンテーションページ内で、任意のファンクションコンテナを呼び出すことが可能です。<br/>
+			</li>
+		</ul>
+		</blockquote>
+	</description>
+	
+	<sample-code>
+		<ul>
+			<li>
+				サーバサイドの「<b><font color="green">jssp_rpc_test/sample1</font></b>.js」に定義されている
+				「<b><font color="red">getNow</font></b>()」関数を実行後、<br/>
+				「Now = <i>（現在日付）</i>」をアラート表示します。
+			</li>
+		</ul>
+		
+		<blockquote>
+			<table border="1">
+				<tr>
+					<th>クライアントサイドのHTMLソース</th>
+				</tr>
+				<tr>
+					<td>
+<pre>
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;IMART type="jsspRpc"
+               name="<b><font color="blue">jsSample</font></b>"
+               page="<b><font color="green">jssp_rpc_test/sample1</font></b>"&gt;
+        &lt;/IMART&gt;
+        
+        &lt;script language="JavaScript"&gt;
+            /**
+             * 「<b><font color="green">jssp_rpc_test/sample1</font></b>.js」の関数「<b><font color="red">getNow</font></b>()」を実行します。
+             */
+            function execute(){
+                try{
+                    var result = <b><font color="blue">jsSample</font></b>.<b><font color="red">getNow</font></b>("Now = ");
+                    alert(result);
+                }
+                catch(ex){
+                    alert(ex.message);
+                    return;
+                }
+            }
+        &lt;/script&gt;
+    &lt;head&gt;
+
+    &lt;body&gt;
+        &lt;input type="button" value="実行（同期）" onclick="execute();"&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+					</td>
+				</tr>
+			</table>
+			<br/>
+			<table border="1">
+				<tr>
+					<th>サーバサイドの「<b><font color="green">jssp_rpc_test/sample1</font></b>.js」</th>
+				</tr>
+				<tr>
+					<td>
+<pre>
+function <b><font color="red">getNow</font></b>( args ){
+    return args + (new Date()).toString();
+}
+</pre>
+					</td>
+				</tr>
+			</table>
+
+		</blockquote>
+		<br/>
+		<br/>
+		<hr/>
+		<br/>
+		
+		<ul>
+			<li>
+				サーバサイドの「<b><font color="green">jssp_rpc_test/sample2</font></b>.js」に定義されている
+				「<b><font color="red">getObject</font></b>()」関数を実行し、<br/>
+				その結果オブジェクトをコールバック関数「<b><font color="orange">callBackFunction</font></b>」にて取得します。
+			</li>
+		</ul>
+
+		<blockquote>
+			<table border="1">
+				<tr>
+					<th>クライアントサイドのHTMLソース</th>
+				</tr>
+				<tr>
+					<td>
+<pre>
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;IMART type     = "jsspRpc"
+               name     = "<b><font color="blue">jsSample</font></b>"
+               page     = "<b><font color="green">jssp_rpc_test/sample2</font></b>"
+               callback = "<b><font color="orange">callBackFunction</font></b>"&gt;
+        &lt;/IMART&gt;
+        
+        &lt;script language="JavaScript"&gt;
+            /**
+             * 「<b><font color="green">jssp_rpc_test/sample2</font></b>.js」の関数「<b><font color="red">getObject</font></b>()」を実行します。
+             */
+            function execute(){
+                // 引数作成
+                var obj = new Object();
+                    obj.stringProp   = "value1";
+                    obj.booleanProp  = true;
+                    obj.numberProp   = -15;
+                    obj.arrayProp    = new Array();
+                    obj.arrayProp[0] = "ary0";
+                    obj.arrayProp[1] = "ary1";
+                    obj.arrayProp[2] = "ary2";
+                    obj.dateProp     = new Date();
+                
+                // 内容を確認
+                var str  = "";
+                    str += "コールバック関数を確認するために"       + "\n";
+                    str += "サーバサイドで５秒間スリープします。"   + "\n";
+                    str +=                                            "\n";
+                    str += "実行前"                                 + "\n";
+                    str += "--------------------------------------" + "\n";
+                    str += "obj.stringProp   = " + obj.stringProp   + "\n";
+                    str += "obj.booleanProp  = " + obj.booleanProp  + "\n";
+                    str += "obj.numberProp   = " + obj.numberProp   + "\n";
+                    str += "obj.arrayProp[0] = " + obj.arrayProp[0] + "\n";
+                    str += "obj.arrayProp[1] = " + obj.arrayProp[1] + "\n";
+                    str += "obj.arrayProp[2] = " + obj.arrayProp[2] + "\n";
+                    str += "obj.dateProp     = " + obj.dateProp     + "\n";
+                    str += "--------------------------------------" + "\n";
+                    
+                alert(str);
+
+                // サーバロジック実行
+                <b><font color="blue">jsSample</font></b>.<b><font color="red">getObject</font></b>(obj);
+            }
+            
+            
+            /**
+             * コールバック関数
+             */
+            function <b><font color="orange">callBackFunction</font></b>( result ){
+            
+                // 内容を確認
+                var str  = "";
+                    str += "実行後"                                       + "\n";
+                    str += "--------------------------------------------" + "\n";
+                    str += "result.stringProp   = " + result.stringProp   + "\n";
+                    str += "result.booleanProp  = " + result.booleanProp  + "\n";
+                    str += "result.numberProp   = " + result.numberProp   + "\n";
+                    str += "result.arrayProp[0] = " + result.arrayProp[0] + "\n";
+                    str += "result.arrayProp[1] = " + result.arrayProp[1] + "\n";
+                    str += "result.arrayProp[2] = " + result.arrayProp[2] + "\n";
+                    str += "result.dateProp     = " + result.dateProp     + "\n";
+                    str += "--------------------------------------------" + "\n";
+                    
+                alert(str);
+            }
+            
+        &lt;/script&gt;
+    &lt;head&gt;
+
+    &lt;body&gt;
+        &lt;input type="button" value="実行（非同期）" onclick="execute();"&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+					</td>
+				</tr>
+			</table>
+			<br/>
+			<table border="1">
+				<tr>
+					<th>サーバサイドの「<b><font color="green">jssp_rpc_test/sample2</font></b>.js」</th>
+				</tr>
+				<tr>
+					<td>
+<pre>
+function <b><font color="red">getObject</font></b>( args ){
+    
+    // 受け取ったオブジェクトの内容を表示
+    for(var prop in args){
+        if (args.hasOwnProperty(prop)) {
+            Debug.print(prop + " : " + args[prop] + " [" + typeof args[prop] + "]")
+        }
+    }
+    
+    // コールバック関数を確認するために遅延処理を入れています。（５秒間）
+    sleep(5 * 1000);
+    
+    // 受け取ったオブジェクトの内容を加工
+    args.stringProp   = args.stringProp + " (modified !)";
+    args.booleanProp  = false;
+    args.numberProp   = args.numberProp + 10000;
+    args.arrayProp[0] = args.arrayProp[0] + " (modified !)";
+    args.arrayProp[1] = args.arrayProp[1] + " (modified !)";
+    args.arrayProp[2] = args.arrayProp[2] + " (modified !)";
+    args.dateProp.setFullYear(2100);
+    args.dateProp     = args.dateProp;
+    
+    // 結果を返却
+    return args;
+}
+</pre>
+					</td>
+				</tr>
+			</table>
+
+		</blockquote>
+	</sample-code>
+	
+	<attribute>
+		<attr-name>name</attr-name>
+		<description>CSJS内でサーバロジックを参照する際のオブジェクト名</description>
+		<required>true</required>
+	</attribute>
+
+	<attribute>
+		<attr-name>page</attr-name>
+		<description>サーバロジックが記述されているページパス（拡張子なし）</description>
+		<required>true</required>
+	</attribute>
+	
+	<attribute>
+		<attr-name>callback</attr-name>
+		<description>
+			サーバサイドの処理結果を非同期で受け取る際のコールバック関数名（CSJS関数名）<br/>
+			省略した場合は、同期通信を行い、サーバサイドから結果が返却されるまで待ちます。
+		</description>
+		<required>false</required>
+	</attribute>
+
+	<attribute>
+		<attr-name>onErrorCallback</attr-name>
+		<description>
+			非同期通信時にエラーが発生した場合に呼び出される関数名（CSJS関数名）<br/>
+			省略した場合は、関数「ImJsspRpc#defaultOnErrorCallback() 」が実行されます。<br/>
+			(ImJsspRpc#defaultOnErrorCallback()は、csjs/im_jssp_rpc.js 内に定義されています)<br/>
+			なお、同期通信の場合（＝属性 callback が未指定の場合）は、<br/>
+			属性 onErrorCallback に指定された関数は無視されます。
+		</description>
+		<required>false</required>
+	</attribute>
+</imart-tag>
+
+</imart-tag-library>

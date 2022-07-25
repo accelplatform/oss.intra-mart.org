@@ -1,0 +1,21 @@
+<intra-mart>
+	<jssp-rpc>
+		<key>
+			<uri-suffix>.TEST_jssprpc</uri-suffix>
+		</key>					
+		<marshller>
+			<page-path>TEST_jssp_rpc/common/im_json</page-path>
+			<throw-unmarshall-exception>false</throw-unmarshall-exception>
+			<cache-marshaller-script>false</cache-marshaller-script>
+			<function-name>
+				<unmarshall>TEST_imJsonUnmarshall</unmarshall>													
+				<marshall>TEST_imJsonMarshall</marshall>
+			</function-name>
+		</marshller>
+		<csjs-path>
+			<im-json>/TEST_csjs/im_json.js</im-json>
+			<im-ajax-request>/TEST_csjs/im_ajax_request.js</im-ajax-request>
+			<im-jssp-rpc>/TEST_csjs/im_jssp_rpc.js</im-jssp-rpc>
+		</csjs-path>
+	</jssp-rpc>
+</intra-mart>

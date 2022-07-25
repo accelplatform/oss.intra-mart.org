@@ -1,0 +1,36 @@
+<html>
+<head>
+	<!-- 
+		【テストケースを実行する簡単な方法】
+		(1) im-jssp-sample をダウンロード＆デプロイ＆サーバ起動。
+		
+		(2) Antのビルドファイル「im-jssp/src/test/assembly/copy.xml」の「context.root」と「src.dir」を設定し、
+		Antを実行
+		
+		(3) 以下にアクセス！
+		http://localhost:8080/im-jssp-sample-x.x.x/jsunit/testRunner.html?testpage=localhost:8080/im-jssp-sample-x.x.x/csjs/im_json_test.html
+	-->
+	 
+	<title>ImJson Test Page</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	
+	<script type="text/javascript" src="../jsunit/app/jsUnitCore.js"></script>
+
+	<!-- テスト対象ソース -->
+	<script type="text/javascript" src="./im_json.js"></script>
+
+	<!-- テストケース -->
+	<!-- TODO : テストケースを外部JSとすると、IE,Safari,Chrome でテストが実行できません。。。-->
+	<script type="text/javascript" src="./im_json_test.js"></script>
+	
+</head>
+
+<body>
+	<!-- 以下は、テストケース内で利用しています -->
+	<div id="xmlTest"/>
+	<a href="test1">test1</a>
+	<a href="test2">test2</a>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<html>
+	<head>
+		<title>オブジェクトの送受信</title>
+	
+		<IMART type="jsspRpc" name="timeMachine" page="sample/jssp_rpc/send_object/server_side_logic/time_machine"></IMART>
+	
+		<script type="text/javascript">
+		
+			/**	
+			 * 「sample/jssp_rpc/send_object/server_side_logic/time_machine.js」の「travel()」関数を実行します。
+			 */
+			function xxYearsAfter(){
+	
+				//***********************
+				// 入力
+				//***********************
+				var years = parseInt(document.form_year.years.value, 10);
+
+				var now   = new Date();
+				document.form_now.date.value = now.getFullYear();
+	
+				var personObject = new Object();
+				personObject.lastName    = document.form_now.last_name.value;
+				personObject.firstName   = document.form_now.first_name.value;
+				personObject.age         = parseInt(document.form_now.age.value, 10);
+				personObject.nationality = document.form_now.nationality.value;
+				
+				
+				//***********************
+				// 実行
+				//***********************
+				personObject = timeMachine.travel(now, years, personObject);
+
+
+				//***********************
+				// 結果
+				//***********************
+				if(personObject.error == true){
+					alert(personObject.errorMessage);
+					return;
+				}
+				
+				document.form_result.last_name.value   = personObject.lastName;
+				document.form_result.first_name.value  = personObject.firstName;
+				document.form_result.age.value         = personObject.age;
+				document.form_result.nationality.value = personObject.nationality;
+				document.form_result.children.value    = personObject.children;
+				
+				if(personObject.married == true){
+					document.form_result.married[0].checked = true;
+				}
+				else{
+					document.form_result.married[1].checked = true;
+				}
+
+				document.form_result.date.value = personObject.resultDate.getFullYear();
+				
+			}
+			
+			function plusYears(val){
+				document.form_year.years.value = 
+						parseInt(document.form_year.years.value, 10)
+						+ 
+						parseInt(val, 10);
+			}
+			
+			/**	
+			 * 「sample/jssp_rpc/send_object/server_side_logic/time_machine.js」の「changeFuture()」関数を実行します。
+			 */
+			function changeFuture(){
+				// 未来を変更
+				timeMachine.changeFuture();
+			}			
+		</script>
+		
+	</head>
+	<body>
+		<center>
+			<h1>オブジェクトの送受信</h1>
+
+			<hr>
+			
+			<table><tr>
+				<td valign="top">
+					<form name="form_now" onSubmit="return false;">
+						<table border="1">
+							<tr>
+								<th colspan="2">
+									現在<br>
+									<font size="-1">
+										(<input type="text" name="date" value="" size="3" disabled>年)
+									</font>
+								</th>
+							</tr>
+							<tr>
+								<th>氏</th>
+								<td>
+									<input type="text" name="last_name" value="関根">
+								</td>
+							</tr>
+							<tr>
+								<th>名</th>
+								<td>
+									<input type="text" name="first_name" value="千香">
+								</td>
+							</tr>
+							<tr>
+								<th>年齢</th>
+								<td>
+									<input type="text" name="age" value="23">
+								</td>
+							</tr>
+							<tr>
+								<th>国籍</th>
+								<td>
+									<input type="text" name="nationality" value="United State">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</td>
+				<td align="center" nowrap>
+					<form name="form_year">
+						<input type="text" name="years" value="10" size="2">年後を
+						<input type="button" value="表示" onclick="xxYearsAfter();">
+						<br>
+						<br>
+						<input type="button" value="＋１年" onclick="plusYears(1);">
+						<br>
+						<input type="button" value="－１年" onclick="plusYears(-1);">
+					</form>
+				</td>
+				<td valign="top">
+					<form name="form_result" onSubmit="return false;">
+						<table border="1">
+							<tr>
+								<th colspan="2">
+									未来<br>
+									<font size="-1">
+										(<input type="text" name="date" value="" size="3" disabled>年)
+									</font>
+								</th>
+							</tr>
+							<tr>
+								<th>氏</th>
+								<td>
+									<input type="text" name="last_name" value="">
+								</td>
+							</tr>
+							<tr>
+								<th>名</th>
+								<td>
+									<input type="text" name="first_name" value="">
+								</td>
+							</tr>
+							<tr>
+								<th>年齢</th>
+								<td>
+									<input type="text" name="age" value="">
+								</td>
+							</tr>
+							<tr>
+								<th>国籍</th>
+								<td>
+									<input type="text" name="nationality" value="">
+								</td>
+							</tr>
+							<tr>
+								<th>配偶者の有無</th>
+								<td>
+									<input type="radio" name="married" value="true">有り
+									<input type="radio" name="married" value="false">無し
+								</td>
+							</tr>
+							<tr>
+								<th>子供の名前</th>
+								<td>
+									<input type="text" name="children" value="">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<input type="reset" onclick="changeFuture()"><br>
+									<font size="-3">※未来も少し変わります</font>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</td>
+			</tr></table>
+
+			<hr>
+			
+			以下のオブジェクトを送受信しています。
+			
+			<table>
+				<tr>
+					<td>
+<pre>
+person
+　├─ lastName    : 氏 (String)
+　├─ firstName   : 名 (String)
+　├─ age         : 年齢 (Number)
+　├─ nationality : 国籍  (String)
+　├─ married     : 配偶者の有無 (Boolean)
+　├─ children    : 子供の名前 (Array)
+　└─ resultDate  : 処理日 (Date)
+</pre>
+					</td>
+				</tr>
+			</table>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</center>
+	</body>
+</html>

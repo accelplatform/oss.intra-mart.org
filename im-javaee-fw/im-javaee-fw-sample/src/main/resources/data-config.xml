@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-config>
+
+    <connector>
+        <connector-name>sample</connector-name>
+        <connector-class>org.intra_mart.framework.base.data.DataSourceConnector</connector-class>
+        <resource-name>myResource</resource-name>
+    </connector>
+
+    <resource>
+        <resource-name>myResource</resource-name>
+        <init-param>
+            <param-name>jndi</param-name>
+            <param-value>java:comp/env/jdbc/sample</param-value>
+        </init-param>
+    </resource>
+
+</data-config>

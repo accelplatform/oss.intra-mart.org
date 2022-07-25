@@ -1,0 +1,30 @@
+﻿<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="repeat"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>&lt;IMART type="repeat"&gt; を利用した表示制御</H1>
+
+			<HR>
+
+			<H2>*** 関東の１都６県 ***</H2>
+			<TABLE border>
+				<IMART type="repeat" list=datas item="name" index="id">
+					<TR>
+						<TH>
+							<IMART type="string" value=id></IMART>
+						</TH>
+						<TD>
+							<IMART type="string" value=name></IMART>
+						</TD>
+					</TR>
+				</IMART>
+			</TABLE>
+
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

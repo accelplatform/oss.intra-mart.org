@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-config>
+
+    <connector>
+        <connector-name>logingroup_db</connector-name>
+        <connector-class>org.intra_mart.framework.base.data.LoginGroupDBConnector</connector-class>
+    </connector>
+
+    <connector>
+        <connector-name>system_db</connector-name>
+        <connector-class>org.intra_mart.framework.base.data.SystemDBConnector</connector-class>
+    </connector>
+
+    <connector>
+        <connector-name>intra_mart_db</connector-name>
+        <connector-class>org.intra_mart.framework.base.data.IntramartDBConnector</connector-class>
+    </connector>
+
+    <connector>
+        <connector-name>intra_mart_file_server</connector-name>
+        <connector-class>org.intra_mart.framework.base.data.IntramartFileServerConnector</connector-class>
+    </connector>
+
+</data-config>

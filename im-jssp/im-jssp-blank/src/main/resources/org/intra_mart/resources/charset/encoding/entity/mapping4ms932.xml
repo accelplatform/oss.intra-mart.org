@@ -1,0 +1,35 @@
+<!-- Charset encoding mapping for MS932 -->
+<encoding>
+	<mapping>
+		<source radix="16">2212</source>	// Minus Sign
+		<revise radix="16">FF0D</revise>	// Fullwidth Hyphen-Minus
+	</mapping>
+	<mapping>
+		<source radix="16">301C</source>	// Wave Dash
+		<revise radix="16">FF5E</revise>	// Fullwidth Tilde
+	</mapping>
+	<mapping>
+		<source radix="16">2016</source>	// Double Vertical Line
+		<revise radix="16">2225</revise>	// Parallel To
+	</mapping>
+	<mapping>
+		<source radix="16">00A2</source>	// Cent Sign
+		<revise radix="16">FFE0</revise>	// Fullwidth Cent Sign
+	</mapping>
+	<mapping>
+		<source radix="16">00A3</source>	// Pound Sign
+		<revise radix="16">FFE1</revise>	// Fullwidth Pond Sign
+	</mapping>
+	<mapping>
+		<source radix="16">00AC</source>	// Not Sign
+		<revise radix="16">FFE2</revise>	// Fullwidth Not Sign
+	</mapping>
+	<mapping>
+		<source radix="16">00A6</source>	// Broken Bar
+		<revise radix="16">FFE4</revise>	// Fullwidth Broken Bar
+	</mapping>
+	<mapping>
+		<source radix="16">2014</source>	// Em Dash
+		<revise radix="16">2015</revise>	// Horizontal Bar
+	</mapping>
+</encoding>

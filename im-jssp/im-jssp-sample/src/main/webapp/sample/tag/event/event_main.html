@@ -1,0 +1,40 @@
+﻿<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="event"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>&lt;IMART&nbsp;type="event"&gt; を利用した表示制御</H1>
+
+			<HR>
+
+			<FORM name="form_a">
+				監視対象：<INPUT type="text" name="a_text">
+			</FORM>
+			<IMART type="event" name="text_copy" focus="document.form_a.a_text.value"></IMART>
+
+			<HR size="8">
+
+			<FORM name="form_b">
+				受信側：<INPUT type="text" name="b_text">
+			</FORM>
+			<IMART type="event" name="text_copy" receive="document.form_b.b_text.value"></IMART>
+
+			<HR>
+			
+			&lt;IMART&nbsp;type="event"&gt; タグは、属性 name の値が
+			同一のものが連動する仕組になっています。
+			<BR>
+			このサンプルでは、便宜上、同一プログラム内で event タグの連動をしていますが、
+			&lt;IMART&nbsp;type="event"&gt; の name 属性を関連付けしておくことで、
+			別フレームまたは別ウィンドウのページ間でも連動する事ができます。
+
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>
+
+<!-- End of File -->

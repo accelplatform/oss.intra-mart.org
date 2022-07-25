@@ -1,0 +1,49 @@
+﻿<HTML>
+	<HEAD>
+		<TITLE>セッションを利用したサンプル</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>セッション変数を利用した表示回数計算</H1>
+
+			<HR>
+				このページのファンクションコンテナでは、<BR>
+				<FONT size="+1"><B><I>(void) Session.setAttribute(String name, Object value)</I></B></FONT><BR>
+				<FONT size="+1"><B><I>(Object) Session.getAttribute(String name)</I></B></FONT><BR>
+				というＡＰＩを利用して、ページを表示した回数を記憶します。
+				<P>
+				記憶した表示回数は、&lt;IMART&nbsp;type="string"&gt; を
+				利用して画面上に表示します。
+			<HR>
+
+			<BR><BR>
+
+			この画面を表示したのは、
+			<FONT size="+2">
+				<B>
+					<IMART type="string" value=count></IMART>
+				</B>
+			</FONT>
+			回目ですね。
+			<HR>
+
+			<BR>
+
+			<IMART type="link">
+				このページの再表示
+			</IMART>
+
+			<BR><BR>
+
+			<IMART type="link" action="invalidate">
+				セッションを無効にする
+			</IMART>
+			
+			
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

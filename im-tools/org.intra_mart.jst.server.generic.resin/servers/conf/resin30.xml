@@ -1,0 +1,94 @@
+<resin xmlns="http://caucho.com/ns/resin" xmlns:resin="http://caucho.com/ns/resin/core">
+
+  <log name="" path="stdout:" timestamp="[%H:%M:%S.%s] "/>
+  <logger name="com.caucho.java" level="config"/>
+  <logger name="com.caucho.loader" level="config"/>
+
+  <dependency-check-interval>2s</dependency-check-interval>
+
+  <javac compiler="internal" args=""/>
+
+  <thread-pool>
+    <thread-max>1024</thread-max>
+    <spare-thread-min>10</spare-thread-min>
+  </thread-pool>
+
+  <min-free-memory>1M</min-free-memory>
+
+  <server>
+    <class-loader>
+      <tree-loader path="${resin.home}/lib"/>
+      <tree-loader path="${server.root}/lib"/>
+    </class-loader>
+
+    <keepalive-max>500</keepalive-max>
+    <keepalive-timeout>120s</keepalive-timeout>
+
+    <resin:if test="${resin.isProfessional()}">
+      <select-manager enable="true"/>
+    </resin:if>
+
+    <bind-ports-after-start/>
+
+    <http server-id="" host="*" port="${eclipse.jdt.http.port}"/>
+
+    <cluster />
+
+    <resin:if test="${resin.isProfessional()}">
+      <persistent-store type="cluster">
+        <init path="session"/>
+      </persistent-store>
+    </resin:if>
+
+    <ignore-client-disconnect>true</ignore-client-disconnect>
+
+    <resin:if test="${isResinProfessional}">
+      <cache path="cache" memory-size="8M"/>
+    </resin:if>
+
+    <web-app-default>
+      <class-loader>
+        <tree-loader path="${server.root}/ext-webapp"/>
+      </class-loader>
+
+      <cache-mapping url-pattern="/" expires="5s"/>
+      <cache-mapping url-pattern="*.gif" expires="60s"/>
+      <cache-mapping url-pattern="*.jpg" expires="60s"/>
+
+      <servlet servlet-name="directory" servlet-class="com.caucho.servlets.DirectoryServlet"/>
+
+      <allow-servlet-el/>
+
+      <session-config>
+        <enable-url-rewriting>false</enable-url-rewriting>
+      </session-config>
+    </web-app-default>
+
+    <host-default>
+      <class-loader>
+        <compiling-loader path="webapps/WEB-INF/classes"/>
+        <library-loader path="webapps/WEB-INF/lib"/>
+      </class-loader>
+
+      <access-log path="logs/access.log" format='%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-Agent}i"' rollover-period="1W"/>
+
+      <web-app-deploy path="webapps"/>
+      <ear-deploy path="deploy">
+        <ear-default />
+      </ear-deploy>
+      <resource-deploy path="deploy"/>
+      <web-app-deploy path="deploy"/>
+    </host-default>
+
+    <resin:import path="${resin.home}/conf/app-default.xml"/>
+
+    <host-deploy path="hosts">
+      <host-default>
+        <resin:import path="host.xml" optional="true"/>
+      </host-default>
+    </host-deploy>
+
+    <host id="" root-directory="." />
+  </server>
+</resin>
+

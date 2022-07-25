@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event-config>
+    <event-group>
+        <event-key>delete_item</event-key>
+        <event-class>sample.shopping.model.event.DeleteItemEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.DeleteItemEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>get_all_items</event-key>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.GetAllItemsEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>get_item</event-key>
+        <event-class>sample.shopping.model.event.GetItemEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.GetItemEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>get_items</event-key>
+        <event-class>sample.shopping.model.event.GetSelectedItemsEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.GetSelectedItemsEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>get_sort_items</event-key>
+        <event-class>sample.presentation.template.shopping.seller.model.event.GetSortItemsEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.presentation.template.shopping.seller.model.event.GetSortItemsEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>insert_item</event-key>
+        <event-class>sample.shopping.model.event.InsertItemEvent</event-class>
+        <event-factory>
+        <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.InsertItemEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>update_item</event-key>
+        <event-class>sample.shopping.model.event.UpdateItemEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.UpdateItemEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+    <event-group>
+        <event-key>select_items</event-key>
+        <event-class>sample.presentation.template.shopping.seller.model.event.GetSelectedItemsEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.presentation.template.shopping.seller.model.event.GetSelectedItemsEventListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+
+</event-config>

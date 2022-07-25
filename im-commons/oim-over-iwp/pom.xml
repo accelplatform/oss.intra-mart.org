@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+	  <maven>2.0.10</maven>
+	</prerequisites>
+
+	<groupId>org.intra-mart.sandbox.common</groupId>
+	<artifactId>oim-over-iwp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<name>${artifactId}</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>jp.co.intra_mart</groupId>
+			<artifactId>im_jdk_assist</artifactId>
+			<version>7.1.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jp.co.intra_mart</groupId>
+			<artifactId>im_commons</artifactId>
+			<version>7.1.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Repository</name>
+			<url>http://oss.intra-mart.org/maven2</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jp.co.intra_mart</id>
+			<name>INTRA-MART Maven2 Repository</name>
+			<url>file:///Z:/maven2/repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	
+</project>

@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/js/jssp/script/api/im_json.js=UTF-8
+encoding//src/main/webapp/csjs/im_ajax_request.js=UTF-8
+encoding//src/main/webapp/csjs/im_json.js=UTF-8
+encoding//src/test/java=UTF-8
+encoding//src/test/js/jsspUnitTestSuite.html=UTF-8
+encoding//src/test/js/sample/web_service/invoke_sample.js=UTF-8
+encoding//src/test/resources/org/intra_mart/jssp/util/JavaScriptUtilityTestModel4PrimitiveAndWrapperProperty.js=UTF-8
+encoding//src/test/resources/org/intra_mart/jssp/util/JavaScriptUtilityTestModelA.js=UTF-8
+encoding//src/test/webapp/csjs/im_json_test.html=UTF-8

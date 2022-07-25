@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Copy dependencies JAR files to WEB-INF/lib Folder" default="help" basedir=".">
+
+	<target name="properties">
+		<property name="project-root-dir" value="../../.." />
+		<property name="web-inf-dir"      value="${project-root-dir}/src/main/webapp/WEB-INF" />
+		<property name="web-inf-lib-dir"  value="${web-inf-dir}/lib" />
+	</target>
+
+	<target name="copy" depends="properties, clean, mvn:package">
+		<copy todir="${web-inf-lib-dir}" flatten="true">
+			<fileset dir="${project-root-dir}/target">
+				<include name="**/WEB-INF/lib/*.jar" />
+				<include name="**/WEB-INF/lib/*.zip" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="mvn:package" depends="properties">
+		<!-- For UNIX -->
+		<!--
+		<exec executable="mvn" dir="${project-root-dir}">
+			<arg line="clean package" />
+		</exec>
+		-->
+		
+		<!-- For Windows -->
+		<exec executable="cmd.exe" dir="${project-root-dir}">
+			<arg line="/c mvn clean package" />
+		</exec>
+	</target>
+
+	<target name="clean" depends="properties">
+		<delete>
+			<fileset dir="${web-inf-lib-dir}">
+				<include name="*.jar" />
+			</fileset>
+		</delete>
+		
+		<delete dir="${web-inf-dir}/classes" />
+		<delete dir="${web-inf-dir}/work" />
+	</target>
+
+	<target name="help" depends="properties">
+<echo>The following targets are available with this build file:
+
+copy      Copy dependencies JAR files to im-jssp-sample/src/main/webapp/WEB-INF/lib folder.
+            (Execute copy task before creating "WAR file" by "Eclipse War file Expoter".)
+
+clean     Clean below folders.
+            - im-jssp-sample/src/main/webapp/WEB-INF/lib
+            - im-jssp-sample/src/main/webapp/WEB-INF/classes
+            - im-jssp-sample/src/main/webapp/WEB-INF/work
+
+help      Print this help.
+</echo>
+	</target>
+</project>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event-config>
+    <event-group>
+        <event-key>key</event-key>
+        <event-class>org.intra_mart.framework.base.event.DummyEvent</event-class>
+        <event-factory>
+            <factory-class>org.intra_mart.framework.base.event.StandardEventListenerFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>sample.shopping.model.event.DummyEventListener</param-value>
+            </init-param>
+        </event-factory>
+        <pre-trigger>
+            <trigger-class>org.intra_mart.framework.base.event.DummyMessageEventTrigger00</trigger-class>
+        </pre-trigger>
+        <pre-trigger>
+            <trigger-class>org.intra_mart.framework.base.event.DummyMessageEventTrigger01</trigger-class>
+        </pre-trigger>
+        <pre-trigger>
+            <trigger-class>org.intra_mart.framework.base.event.DummyMessageEventTrigger02</trigger-class>
+        </pre-trigger>
+        <post-trigger>
+            <trigger-class>org.intra_mart.framework.base.event.DummyMessageEventTrigger10</trigger-class>
+        </post-trigger>
+        <post-trigger>
+            <trigger-class>org.intra_mart.framework.base.event.DummyMessageEventTrigger11</trigger-class>
+        </post-trigger>
+        <post-trigger>
+            <trigger-class>org.intra_mart.framework.base.event.DummyMessageEventTrigger12</trigger-class>
+        </post-trigger>
+    </event-group>
+</event-config>

@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>ファイルの表示</title>
+		
+		<script language="JavaScript" src="csjs/im_jssp_rpc.js"></script>
+		<script language="JavaScript" src="csjs/json.js"></script>
+	
+		<IMART type     = "jsspRpc" 
+		       name     = "fileReader" 
+		       page     = "sample/jssp_rpc/display_file/server_side_logic/file_reader" 
+		       callback = "callBackTest">
+		</IMART>
+
+		<script language="JavaScript">
+		
+			/**	
+			 * 「sample/jssp_rpc/display_file/server_side_logic/file_reader.js」の「readFile()」関数を実行します。
+			 *  実行結果は、コールバック関数「callBackTest()」が受け取ります。
+			 */
+			function executeReadFile(){
+				var filePath  = document.form1.text1.value;
+				var readASCII = document.form1.radiobax[0].checked;
+				var delayTime = document.form1.text2.value;
+			
+				alert("実行結果は コールバック関数 「callBackTest()」 が受け取ります。\n（遅延時間：" + delayTime + "秒）");	
+				document.getElementById("div1").innerHTML = "<blink>処理中です。。。</blink>";
+
+				// 実行
+				fileReader.readFile(filePath, readASCII, delayTime);
+			}
+
+	
+			/**	
+			 * ＜IMART type="jsspRpc" name="fileReader"＞で指定したコールバック関数
+			 *
+			 *  引数 result には、
+			 *  「sample/jssp_rpc/display_file/server_side_logic/file_reader.js」の「readFile()」関数の
+			 *  結果オブジェクトが渡されます。結果オブジェクトの構成は以下の通りです。
+			 * 
+			 *    result
+			 *      ├─ error   : エラー有無
+			 *      ├─ massage : メッセージ
+			 *      ├─ path    : ファイルパス
+			 *      └─ data    : ファイルデータ
+			 */
+			function callBackTest(result){
+				if(result.error){
+					document.getElementById("div1").innerHTML = "エラーが発生しました。";
+					document.getElementById("div2").innerHTML 
+									= "<font color='red'>" + result.massage + "</font>(" + result.path + ")";
+				}
+				else{
+					document.getElementById("div1").innerHTML = result.massage + "(" + result.path + ")";
+					document.getElementById("div2").innerHTML = "<pre>" + result.data + "</pre>";
+				}
+			}
+	
+		</script>
+	</head>
+	<body>
+		<center>
+			<h1>ファイルの表示</h1>
+			<hr>
+
+			ファイルを取得＆表示します。非同期に動作します。
+			<form name="form1" onSubmit="return false;">
+				<table border="1">
+					<tr>
+						<td align="right">
+							ファイル：
+						</td>
+						<td>
+							<input type="text" name="text1" value="jssp_rpc/common/json.js" size="40">
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							読込形式：
+						</td>
+						<td>
+							<input type="radio" name="radiobax" value="true" checked>ASCIIモード
+							<input type="radio" name="radiobax" value="false">Binaryモード
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							遅延時間　<br>(コールバック関数確認用)：
+						</td>
+						<td>
+							<input type="text" name="text2" value="0">[s]
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<input type="button" value="実行" onclick="executeReadFile();">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<div id="div1"></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div id="div2"></div>
+						</td>
+					</tr>
+				</table>
+			</form>
+			
+			<font size="-1">※このプログラムはあくまでもサンプルです。JSSP-RPC は容量の大きいファイルデータの送受信には適していません。</font>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</center>
+	</body>
+</html>

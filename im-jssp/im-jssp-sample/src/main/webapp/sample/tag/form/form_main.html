@@ -1,0 +1,156 @@
+﻿<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="form"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>フォームを作成</H1>
+
+			<HR>
+
+			<IMART type="form" method="POST">
+			
+				<TABLE>
+					<TR>
+						<TD align="right">
+							テキストフィールド：
+						</TD>
+						<TD>
+							<IMART type  = "input" style = "text" 
+							       name  = "fc_text" 
+							       value = val_text>
+							</IMART>
+						</TD>
+					</TR>
+					<TR>
+						<TD align="right">
+							パスワードフィールド：
+						</TD>
+						<TD>
+							<IMART type  = "input" style="password" 
+							       name  = "fc_passwd" 
+							       value = val_passwd>
+							</IMART>
+						</TD>
+					</TR>
+					<TR>
+						<TD align="right">
+							チェックボックス：
+						</TD>
+						<TD>
+							<IMART type    = "input" style="checkbox" 
+							       name    = "fc_check" 
+							       value   = "check it out" 
+							       checked = val_check>
+							</IMART>
+						</TD>
+					</TR>
+					<TR>
+						<TD align="right">
+							ラジオボタン：
+						</TD>
+						<TD>
+							<IMART type    = "input" style="radio" 
+							       name    = "fc_radio" 
+							       value   = "radio1"
+							       checked = val_radio1>
+							</IMART>
+							ラジオ１
+
+							<BR>
+
+							<IMART type    = "input" style="radio" 
+							       name    = "fc_radio" 
+							       value   = "radio2"
+							       checked = val_radio2>
+							</IMART>
+							ラジオ２
+						</TD>
+					</TR>
+					<TR>
+						<TD align="right">
+							テキストエリア：
+						</TD>
+						<TD>
+							<IMART type  = "textarea"
+							       name  = "fc_textarea" 
+							       value = val_textarea
+							       rows  = "4"></IMART>
+						</TD>
+					</TR>
+					<TR>
+						<TD align="right">
+							セレクトボックス：
+						</TD>
+						<TD>
+							<IMART type     = "select" 
+							       name     = "fc_select" 
+							       list     = val_select
+							       selected = selectedValue
+							       blank    = "top">
+							</IMART>
+						</TD>
+					</TR>
+				</TABLE>
+				<BR>
+				
+				<!-- hidden項目 -->
+				<IMART type       = "hidden"
+				       fc_hidden1 = val_hidden1
+				       fc_hidden2 = val_hidden2>
+				</IMART>
+
+				<!-- INPUTタグを利用したsubmit -->
+				<INPUT type="submit" value="送信（デフォルト）">
+				<BR>
+				
+				<!-- 送信（デフォルト）と同様に動作します -->
+				<IMART type="submit" value="送信（その１）"></IMART>
+				<BR>
+
+				<!-- submitAction2()実行後、本ページを再度表示します -->
+				<IMART type="submit" value="送信（その２）" action="submitAction2"></IMART>
+				<BR>
+
+				<!-- "sample/tag/form/submit_next"に遷移します -->
+				<IMART type="submit" value="送信（その３）" page="sample/tag/form/submit_next"></IMART>
+				<BR>
+
+				<!-- submitAction4()実行後、"sample/tag/form/submit_next"に遷移します -->
+				<IMART type="submit" value="送信（その４）" action="submitAction4" page="sample/tag/form/submit_next"></IMART>
+				<BR>
+
+			</IMART>
+
+			<P>
+			<HR>
+			&lt;IMART type="form"&gt; タグを利用してフォームを作成します。<BR>
+			送信ボタンを押下すると、下に受信結果を表示します。
+			<HR>
+			<P>
+
+			<TABLE border="1">
+				<IMART type="repeat" list=result item="rec" index="name">
+					<TR>
+						<TH>
+							<IMART type="string" value=name></IMART>
+						</TH>
+						<TD>
+							<IMART type="string" value=rec></IMART>
+						</TD>
+					</TR>
+				</IMART>
+			</TABLE>
+			
+			<BR>
+			
+			<IMART type="condition" validity=isImSubmit>
+				以下は、&lt;IMART type="submit"&gt;で遷移した際のページ遷移情報です。<BR>
+				<IMART type="string" value=pageTransitionInfoOnImSubmit></IMART>
+			</IMART>
+
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

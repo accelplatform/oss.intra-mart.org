@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+	  <maven>2.0.4</maven>
+	</prerequisites>
+
+	<groupId>org.intra-mart.javaee-fw</groupId>
+	<artifactId>im-javaee-fw-projects</artifactId>
+	<version>0.1.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>im-javaee-fw-core</module>
+		<module>im-javaee-fw-seasar2</module>
+
+		<module>im-javaee-fw-sample</module>
+	</modules>
+
+	<name>${artifactId}</name>
+	<url>http://oss.intra-mart.org/projects/im-javaee-fw/maven/</url>
+	<inceptionYear>2006</inceptionYear>
+
+	<organization>
+		<name>OPEN INTRA-MART</name>
+		<url>http://oss.intra-mart.org/</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>maven.rectang.com</id>
+			<url>http://maven.rectang.com/repository</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<locales>ja</locales>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>surefire-report-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<configuration>
+					<inputEncoding>UTF-8</inputEncoding>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<charset>UTF-8</charset>
+					<links>
+						<link>http://java.sun.com/j2se/1.5.0/ja/docs/ja/api</link>
+						<link>http://java.sun.com/j2ee/1.4/docs/api</link>
+						<link>http://www.mozilla.org/rhino/apidocs</link>
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<issueManagement>
+		<system>trac</system>
+		<url><![CDATA[http://oss.intra-mart.org/projects/im-javaee-fw/report/]]></url>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:http://oss.intra-mart.org/projects/im-javaee-fw/svn/trunk/</connection>
+		<developerConnection>scm:http://oss.intra-mart.org/projects/im-javaee-fw/svn/trunk/</developerConnection>
+		<url><![CDATA[http://oss.intra-mart.org/projects/im-javaee-fw/browser/trunk/]]></url>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Repository</name>
+			<url>file:///usr/local/store/maven2/repository</url>
+		</repository>
+		<site>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Site</name>
+			<url>file:///usr/local/store/maven2/im-javaee-fw</url>
+		</site>
+	</distributionManagement>
+
+</project>

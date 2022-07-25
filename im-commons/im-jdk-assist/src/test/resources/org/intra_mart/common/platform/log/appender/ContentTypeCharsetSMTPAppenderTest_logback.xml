@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<jmxConfigurator/>
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				[%date] %level [%thread] %logger{10} %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="EMAIL" class="org.intra_mart.common.platform.log.appender.ContentTypeCharsetSMTPAppender">
+		<SMTPHosts>
+			<SMTPHost>host1</SMTPHost>
+			<SMTPHost>host2</SMTPHost>
+			<SMTPHost>host3</SMTPHost>
+		</SMTPHosts>	
+		<to>to_mailaddress</to>
+		<charset>ISO-2022-JP</charset>
+		<from>from_mailaddress</from>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%date %-5level %logger{255} - %message%n</Pattern>
+		</layout>
+	</appender>
+
+	<root>
+		<level value="TRACE" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="EMAIL" />
+	</root>
+
+<!--
+	<logger name="org.intra_mart.common.platform.log.appender">
+		<level value="info" />
+	</logger>
+-->
+
+</configuration>

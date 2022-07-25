@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+	  <maven>2.0.4</maven>
+	</prerequisites>
+
+	<parent>
+		<groupId>org.intra-mart.common</groupId>
+		<artifactId>im-common-libraries-projects</artifactId>
+		<version>0.1.2-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.intra-mart.common</groupId>
+	<artifactId>im-jdk-assist</artifactId>
+	<version>0.1.2-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<name>${artifactId}</name>
+	<url>http://oss.intra-mart.org/projects/im-commons/maven/${artifactId}/</url>
+
+	<repositories>
+		<repository>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Repository</name>
+			<url>http://oss.intra-mart.org/maven2</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>janino</groupId>
+			<artifactId>janino</artifactId>
+			<version>2.5.14</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.5.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl104-over-slf4j</artifactId>
+			<version>1.5.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.9</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>0.9.9</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

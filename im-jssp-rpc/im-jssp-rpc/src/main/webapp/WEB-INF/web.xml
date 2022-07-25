@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+  <context-param>
+    <param-name>org.intra_mart.jssp.config.file.path</param-name>
+    <param-value>/conf/jssp-config.xml</param-value>
+  </context-param>
+
+  <!--
+    <context-param>
+      <param-name>org.intra_mart.jssp.server.home.path</param-name>
+      <param-value></param-value>
+    </context-param>
+  -->
+
+  <filter>
+    <filter-name>JSSPRequestCharsetFilter</filter-name>
+    <!--display-name>JSSPRequestCharsetFilter</display-name-->
+    <filter-class>org.intra_mart.jssp.page.servlet.filter.JSSPRequestCharsetFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>JSSPResponseCharsetFilter</filter-name>
+    <!--display-name>JSSPResponseCharsetFilter</display-name-->
+    <filter-class>org.intra_mart.jssp.page.servlet.filter.JSSPResponseCharsetFilter</filter-class>
+    <init-param>
+      <param-name>default-mime-type</param-name>
+      <param-value>text/html</param-value>
+    </init-param>
+  </filter>
+
+  <filter>
+    <filter-name>HTTPContextHandlingFilter</filter-name>
+    <!--display-name>HTTPContextHandlingFilter</display-name-->
+    <filter-class>org.intra_mart.common.aid.jsdk.javax.servlet.filter.HTTPContextHandlingFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>RequestMessageBodyFilter</filter-name>
+    <!--display-name>RequestMessageBodyFilter</display-name-->
+    <filter-class>org.intra_mart.common.aid.jsdk.javax.servlet.filter.RequestMessageBodyFilter</filter-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>org.intra_mart.resources.common.aid.jsdk.javax.servlet.filter.requestBuilders</param-value>
+    </init-param>
+    <init-param>
+      <param-name>EmptyQueryException</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>tmp-directory</param-name>
+      <param-value>work_im_j2ee_assist/request</param-value>
+    </init-param>
+    <init-param>
+      <param-name>parse.query.string</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>TemporaryFileThreshold</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <param-name>TemporaryFileIOBufferSize</param-name>
+      <param-value>8192</param-value>
+    </init-param>
+  </filter>
+
+  <!-- Filter for JSSPServlet -->
+  <filter-mapping>
+    <filter-name>JSSPRequestCharsetFilter</filter-name>
+    <servlet-name>JSSPServlet</servlet-name>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>RequestMessageBodyFilter</filter-name>
+    <servlet-name>JSSPServlet</servlet-name>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>JSSPResponseCharsetFilter</filter-name>
+    <servlet-name>JSSPServlet</servlet-name>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>HTTPContextHandlingFilter</filter-name>
+    <servlet-name>JSSPServlet</servlet-name>
+  </filter-mapping>
+  <!-- Filter for JSSPServlet -->
+
+
+  <!-- Filter for JsspRpcServlet -->
+  <filter-mapping>
+    <filter-name>JSSPRequestCharsetFilter</filter-name>
+    <servlet-name>JsspRpcServlet</servlet-name>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>RequestMessageBodyFilter</filter-name>
+    <servlet-name>JsspRpcServlet</servlet-name>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>JSSPResponseCharsetFilter</filter-name>
+    <servlet-name>JsspRpcServlet</servlet-name>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>HTTPContextHandlingFilter</filter-name>
+    <servlet-name>JsspRpcServlet</servlet-name>
+  </filter-mapping>
+  <!-- Filter for JsspRpcServlet -->
+
+
+  <servlet>
+    <servlet-name>JSSPServlet</servlet-name>
+    <servlet-class>org.intra_mart.jssp.page.servlet.JSSPServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JSSPServlet</servlet-name>
+    <url-pattern>*.jssp</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>JsspRpcServlet</servlet-name>
+    <servlet-class>org.intra_mart.jssp.page.servlet.JsspRpcServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JsspRpcServlet</servlet-name>
+    <url-pattern>*.jssprpc</url-pattern>
+  </servlet-mapping>
+
+
+  <listener>
+    <listener-class>org.intra_mart.jssp.page.servlet.JSSPServletContextListener</listener-class>
+  </listener>
+
+</web-app>

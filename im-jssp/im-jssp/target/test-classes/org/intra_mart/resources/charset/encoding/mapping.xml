@@ -1,0 +1,114 @@
+<charset>
+	<!-- Encoding base set. Supported by java.nio API -->
+	<encoding name="US-ASCII">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="Cp1252">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="ISO-8859-1">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="ISO-8859-15">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="UTF-8">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UTF-16">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UTF-16BE">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UTF-16LE">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+
+
+	<!-- Encoding base set. Supported by java.io API & java.lang API -->
+	<encoding name="ASCII">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="Cp1252">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="ISO8859_1">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ascii.xml</mapping>
+	</encoding>
+	<encoding name="UnicodeBig">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UnicodeBigUnmarked">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UnicodeLittle">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UnicodeLittleUnmarked">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UTF8">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+	<encoding name="UTF-16">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4utf.xml</mapping>
+	</encoding>
+
+
+	<!-- Encoding optional set. Supported by java.nio API -->
+	<encoding name="ISO-2022-JP">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+	<encoding name="csISO2022JP">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+	<encoding name="Shift_JIS">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="MS_Kanji">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="csShiftJIS">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="Extended_UNIX_Code_Packed_Format_for_Japanese">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="EUC-JP">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="Windows-31J">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ms932.xml</mapping>
+	</encoding>
+	<encoding name="csWindows31J">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ms932.xml</mapping>
+	</encoding>
+
+
+	<!-- Encoding optional set. Supported by java.io API & java.lang API -->
+	<encoding name="MS932">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4ms932.xml</mapping>
+	</encoding>
+	<encoding name="SJIS">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="EUC_JP">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4euc_jp.xml</mapping>
+	</encoding>
+	<encoding name="JIS">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+	<encoding name="ISO2022JP">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+	<encoding name="JIS0201">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+	<encoding name="JIS0208">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+	<encoding name="JIS0212">
+		<mapping>org/intra_mart/resources/charset/encoding/entity/mapping4jis.xml</mapping>
+	</encoding>
+</charset>

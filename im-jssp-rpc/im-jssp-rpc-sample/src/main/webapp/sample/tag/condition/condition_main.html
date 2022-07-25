@@ -1,0 +1,27 @@
+<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="condition"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>&lt;IMART type="condition"&gt; を利用した表示制御</H1>
+
+			<HR>
+
+			<H2>*** 現在時間 ***</H2>
+			ただいま、
+			<IMART type="condition" validity=ampm>
+				<FONT size="+2"><B><I>午前</I></B></FONT>
+			</IMART>
+			<IMART type="condition" validity=ampm negative>
+				<FONT size="+2"><B><I>午後</I></B></FONT>
+			</IMART>
+			です。
+
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

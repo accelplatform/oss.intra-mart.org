@@ -1,0 +1,82 @@
+<resin xmlns="http://caucho.com/ns/resin" xmlns:resin="http://caucho.com/ns/resin/core">
+  <class-loader>
+    <tree-loader path="${resin.home}/ext-lib"/>
+    <tree-loader path="${resin.root}/ext-lib"/>
+    <tree-loader path="${resin.home}/lib"/>
+    <tree-loader path="${resin.root}/lib"/>
+  </class-loader>
+
+  <log-handler name="" level="all" path="stdout:" timestamp="[%H:%M:%S.%s] {%{thread}} "/>
+
+  <logger name="com.caucho" level="info"/>
+  <logger name="com.caucho.java" level="config"/>
+  <logger name="com.caucho.loader" level="config"/>
+
+  <dependency-check-interval>2s</dependency-check-interval>
+
+  <javac compiler="internal" args="-source 1.5"/>
+
+  <cluster id="app-tier">
+    <root-directory>.</root-directory>
+    <development-mode-error-page/>
+    <server-default>
+      <http address="*" port="${eclipse.jdt.http.port}"/>
+      <memory-free-min>1M</memory-free-min>
+      <thread-max>256</thread-max>
+      <socket-timeout>65s</socket-timeout>
+      <keepalive-timeout>15s</keepalive-timeout>
+    </server-default>
+
+    <server id="" />
+
+    <resin:if test="${resin.professional}">
+      <persistent-store type="cluster">
+        <init path="session"/>
+      </persistent-store>
+    </resin:if>
+
+    <resin:if test="${resin.professional}">
+      <cache path="cache" memory-size="64M">
+        <rewrite-vary-as-private/>
+      </cache>
+    </resin:if>
+
+    <web-app-default>
+      <prologue>
+        <allow-servlet-el/>
+      </prologue>
+      
+      <cache-mapping url-pattern="/" expires="5s"/>
+      <cache-mapping url-pattern="*.gif" expires="60s"/>
+      <cache-mapping url-pattern="*.jpg" expires="60s"/>
+      <cache-mapping url-pattern="*.png" expires="60s"/>
+
+      <session-config>
+        <enable-url-rewriting>false</enable-url-rewriting>
+      </session-config>
+
+      <jsp>
+        <validate-taglib-schema>true</validate-taglib-schema>
+        <fast-jstl>true</fast-jstl>
+      </jsp>
+      <jsf fast-jsf='false'/>
+    </web-app-default>
+
+    <resin:import path="${__DIR__}/app-default.xml"/>
+
+    <host-default>
+      <access-log path="log/access.log" format='%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-Agent}i"' rollover-period="1W"/>
+      <web-app-deploy path="webapps"/>
+      <ear-deploy path="deploy" />
+    </host-default>
+
+    <host-deploy path="hosts">
+      <host-default>
+        <resin:import path="host.xml" optional="true"/>
+      </host-default>
+    </host-deploy>
+
+    <host id="" root-directory="." />
+  </cluster>
+</resin>
+

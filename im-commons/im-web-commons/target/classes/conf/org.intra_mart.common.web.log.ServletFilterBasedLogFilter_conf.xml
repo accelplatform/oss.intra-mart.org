@@ -1,0 +1,7 @@
+<config>
+	<class-names>
+		<!-- <class-name>org.intra_mart.common.web.log.impl.ResponseCodeDetectedThreadDumper</class-name> -->
+		<!-- <class-name>org.intra_mart.common.web.log.impl.SimpleRequestResponseTraceLogHandler</class-name> -->
+	</class-names>
+</config>
+	

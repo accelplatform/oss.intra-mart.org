@@ -1,0 +1,70 @@
+<intra-mart>
+	<server-character-encoding>UTF-8</server-character-encoding>
+	<jssp-rpc>
+		<key>
+			<uri-suffix>.jssprpc</uri-suffix>
+		</key>					
+	</jssp-rpc>
+	<jssp>
+		<key>
+			<uri-suffix>.jssp</uri-suffix>
+		</key>
+		
+		<java-script-api>
+			<api-class name="org.intra_mart.jssp.view.tag.ImartObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.DebugObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.SessionObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.FileAccessObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.WebObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.DOMNodeObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.XMLParserObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.XMLDocumentObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.URLObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ConstantObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ProcedureObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.FormatObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.PageObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ImAjaxUtilObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.LoggerObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.LoggerMDCObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.JsUnit"/>
+			<api-class name="org.intra_mart.jssp.script.api.JsTestSuite"/>
+			<api-class name="org.intra_mart.jssp.script.api.SOAPClientObject">
+				<!-- <mode>Once</mode> -->
+				<!-- <helper>jssp/script/api/soap_client_helper</helper> -->
+				<!-- <work-dir>WEB-INF/work/jssp/_SOAPClient</work-dir> -->
+				<!-- <javac-encoding>UTF-8</javac-encoding> -->
+				<!-- <javac-verbose>false</javac-verbose> -->
+			</api-class>
+			<api-class name="org.intra_mart.jssp.script.api.ArchiverObject">
+				<!-- <work-dir>target/work/jssp/_Archiver</work-dir> -->
+			</api-class>
+
+			<api-script name="jssp/script/api/im_json#ImJson"/>
+		</java-script-api>
+		
+		<jssp-tag>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4String"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Number"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Date"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Repeat"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Condition"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Decision"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4ContentType"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4HttpEquiv"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Link"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Form"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Frame"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Include"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Submit"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Input"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Hidden"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Select"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Textarea"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Tag"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Loop"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Event"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4JsspRpc"/>
+		</jssp-tag>
+	</jssp>
+</intra-mart>

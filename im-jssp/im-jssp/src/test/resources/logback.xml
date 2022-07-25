@@ -1,0 +1,24 @@
+<configuration>
+	<jmxConfigurator/>
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<logger name="org.intra_mart.jssp.script.api.SOAPClientObject">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.apache.axis2.util.PrettyPrinter">
+		<level value="error"/>
+	</logger>
+	
+</configuration>

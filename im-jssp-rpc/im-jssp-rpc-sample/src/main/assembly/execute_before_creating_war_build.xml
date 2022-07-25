@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Download dependencies JAR files to WEB-INF/lib Folder" default="help" basedir=".">
+
+	<target name="properties">
+
+		<property name="dest-dir"     value="../webapp/WEB-INF/lib" />
+		<property name="im-ossc-site" value="http://oss.intra-mart.org/downloads" />
+
+		<property name="im-commons-version" value="0.1.1" />
+		<property name="im-commons-site" value="${im-ossc-site}/im-commons/jar_files_${im-commons-version}" />
+
+		<property name="im-jssp-version" value="0.1.1" />
+		<property name="im-jssp-site"    value="${im-ossc-site}/im-jssp/jar_files_${im-jssp-version}" />
+
+		<property name="im-jssp-rpc-version" value="0.1.0" />
+		<property name="im-jssp-rpc-site"    value="${im-ossc-site}/im-jssp-rpc/jar_files_${im-jssp-version}" />
+
+		<property name="rhino-version" value="1.6R5" />
+		<property name="rhino-site" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/rhino/js/${rhino-version}" />
+
+		
+		<!-- im-commons -->
+		<property name="name4im-jdk-assist" value="im-jdk-assist-${im-commons-version}.jar" />
+		<property name="url4im-jdk-assist"  value="${im-commons-site}/${name4im-jdk-assist}" />
+
+		<property name="name4im-javaee-assist" value="im-javaee-assist-${im-commons-version}.jar" />
+		<property name="url4im-javaee-assist"  value="${im-commons-site}/${name4im-javaee-assist}" />
+
+		<property name="name4im-javaee-assist-impl" value="im-javaee-assist-impl-${im-commons-version}.jar" />
+		<property name="url4im-javaee-assist-impl"  value="${im-commons-site}/${name4im-javaee-assist-impl}" />
+
+		<property name="name4im-commons" value="im-commons-${im-commons-version}.jar" />
+		<property name="url4im-commons"  value="${im-commons-site}/${name4im-commons}" />
+
+
+		<!-- im-jssp -->
+		<property name="name4im-jssp" value="im-jssp-${im-jssp-version}.jar" />
+		<property name="url4im-jssp"  value="${im-jssp-site}/${name4im-jssp}" />
+
+		<property name="name4im-jssp-extention" value="im-jssp-extention-${im-jssp-version}.jar" />
+		<property name="url4im-jssp-extention"  value="${im-jssp-site}/${name4im-jssp-extention}" />
+
+		
+		<!-- im-jssp-rpc -->
+		<property name="name4im-jssp-rpc" value="im-jssp-rpc-${im-jssp-rpc-version}.jar" />
+		<property name="url4im-jssp-rpc"  value="${im-jssp-rpc-site}/${name4im-jssp-rpc}" />
+
+		
+		<!-- rhino -->
+		<property name="name4rhino" value="js-${rhino-version}.jar" />
+		<property name="url4rhino"  value="${rhino-site}/${name4rhino}" />
+
+	</target>
+
+	<target name="download" depends="properties">
+		<get src="${url4im-jdk-assist}"         dest="${dest-dir}/${name4im-jdk-assist}" />
+		<get src="${url4im-javaee-assist}"      dest="${dest-dir}/${name4im-javaee-assist}" />
+		<get src="${url4im-javaee-assist-impl}" dest="${dest-dir}/${name4im-javaee-assist-impl}" />
+		<get src="${url4im-commons}"            dest="${dest-dir}/${name4im-commons}" />
+		<get src="${url4im-jssp}"               dest="${dest-dir}/${name4im-jssp}" />
+		<get src="${url4im-jssp-extention}"     dest="${dest-dir}/${name4im-jssp-extention}" />
+		<get src="${url4im-jssp-rpc}"           dest="${dest-dir}/${name4im-jssp-rpc}" />
+		<get src="${url4rhino}"                 dest="${dest-dir}/${name4rhino}" />
+	</target>
+
+	<target name="clean" depends="properties">
+		<delete>
+			<fileset dir="${dest-dir}">
+				<include name="*.jar" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="help" depends="properties">
+		<echo>
+			The following targets are available with this build file:
+
+			download    Download dependencies JAR files to im-jssp-sample/src/main/webapp/WEB-INF/lib folder.
+						(Execute download task before creating "WAR file" by "Eclipse War file Expoter".)
+			
+			clean       Clean im-jssp-sample/src/main/webapp/WEB-INF/lib Folder.
+					
+			help        Print this help.
+		</echo>
+	</target>
+</project>

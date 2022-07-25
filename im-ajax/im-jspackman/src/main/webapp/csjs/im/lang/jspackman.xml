@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE im-jspackman PUBLIC "-//OPEN INTRAMART//DTD im-JSPakman 0.5//EN"
+    "http://oss.intra-mart.org/projects/im-ajax/dtd/im-jspackman_0.5.dtd">
+<im-jspackman version="0.5.0 - Development Version">
+	<!-- Class Loader Settings -->
+	<class-loader>
+		<classpaths>
+			<!-- 
+				If the class name pattern matches, the JSPakman's ClassLoader try to load from its classpath.
+				The pattern match is executed in order of the definition.
+				[Note] 
+				  You can use a property of '$JSPACKMAN_HOME'.
+			 -->
+			<!-- add the Test class classpath -->
+			<!--
+			<classpath class-name-pattern="[a-zA-Z0-9]Test$|[a-zA-Z0-9]TestSuite$" ignore-case="false" charset="UTF-8">$JSPACKMAN_HOME/../../../test/webapp/csjs/</classpath>
+			-->
+			<!-- a sample -->
+			<!-- 
+			<classpath class-name-pattern="^im\.sample\." ignore-case="false" charset="UTF-8">$JSPACKMAN_CLASSPATH/../../../sample/webapp/csjs/</classpath>
+			<classpath class-name-pattern="^xyz\." ignore-case="false" charset="UTF-8">http://xxx.yyy.zz/csjs/</classpath>
+			-->
+		</classpaths>
+		<available-classes>
+			<class name="im.lang.ObjectWrapper"/>
+			<class name="im.lang.ArrayWrapper"/>
+			<class name="im.lang.BooleanWrapper"/>
+			<class name="im.lang.DateWrapper"/>
+			<class name="im.lang.FunctionWrapper"/>
+			<class name="im.lang.NumberWrapper"/>
+			<class name="im.lang.RegExpWrapper"/>
+			<class name="im.lang.StringWrapper"/>
+			<class name="im.lang.Throwable"/>
+			<class name="im.lang.Error"/>
+			<class name="im.lang.Exception"/>
+			<class name="im.lang.ClassNotFoundException"/>
+			<class name="im.lang.RuntimeException"/>
+			<class name="im.lang.IndexOutOfBoundsException"/>
+			<class name="im.lang.ArrayIndexOutOfBoundsException"/>
+			<class name="im.lang.IllegalArgumentException"/>
+			<class name="im.lang.IllegalStateException"/>
+			<class name="im.lang.NoSuchMethodException"/>
+			<class name="im.lang.JSPackmanError"/>
+			<class name="im.lang.AssertionError"/>
+			<class name="im.lang.reflect.Method"/>
+			<class name="im.lang.reflect.InvocationTargetException"/>
+		</available-classes>
+	</class-loader>
+	<!-- Contents Home Path Settings -->
+	<contents_home_paths>
+		<html_home_path>$JSPACKMAN_CLASSPATH/../html</html_home_path>
+		<css_home_path>$JSPACKMAN_CLASSPATH/../image</css_home_path>
+		<image_home_path>$JSPACKMAN_CLASSPATH/../image</image_home_path>
+	</contents_home_paths>
+</im-jspackman>

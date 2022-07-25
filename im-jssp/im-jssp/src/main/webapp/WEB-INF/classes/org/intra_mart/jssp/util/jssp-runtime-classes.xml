@@ -1,0 +1,3 @@
+<jssp-runtime-classes>
+	<charset-handler>org.intra_mart.jssp.util.charset.Utf8CharsetHandler</charset-handler>
+</jssp-runtime-classes>

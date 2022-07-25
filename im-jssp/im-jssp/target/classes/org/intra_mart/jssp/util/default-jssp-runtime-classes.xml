@@ -1,0 +1,22 @@
+<jssp-runtime-classes>
+
+	<jssp-config-handler>org.intra_mart.jssp.util.config.JsspRpcConfigHandlerImpl</jssp-config-handler>	
+
+	<locale-handler>org.intra_mart.jssp.util.locale.DefaultLocaleHandler</locale-handler>
+	<charset-handler>org.intra_mart.jssp.util.charset.Utf8CharsetHandler</charset-handler>
+
+	<jssp-query>org.intra_mart.jssp.page.JSSPQueryImpl</jssp-query>
+
+	<jssp-page-builder_default>org.intra_mart.jssp.page.provider.JSSPPageBuilderImpl</jssp-page-builder_default>
+	<jssp-page-builder_jssprpc>org.intra_mart.jssp.page.provider.JsspRpcPageBuilderImpl</jssp-page-builder_jssprpc>
+
+	<script-scope-builder>org.intra_mart.jssp.script.provider.ScriptScopeBuilderImpl</script-scope-builder>	
+	<view-scope-builder>org.intra_mart.jssp.view.provider.ViewScopeBuilderImpl</view-scope-builder>
+
+	<source-file-provider-container-builder-1st>org.intra_mart.jssp.source.provider.EmptySourceFileProviderContainerBuilder</source-file-provider-container-builder-1st>
+	<source-file-provider-container-builder-2nd>org.intra_mart.jssp.source.provider.SourceFileProviderContainerBuilderImpl</source-file-provider-container-builder-2nd>
+
+	<jssp-class-loader_i18n>org.intra_mart.jssp.script.provider.JSSPClassLoaderImpl</jssp-class-loader_i18n>
+	<jssp-class-loader_general>org.intra_mart.jssp.script.provider.JSSPClassLoaderImpl</jssp-class-loader_general>
+
+</jssp-runtime-classes>

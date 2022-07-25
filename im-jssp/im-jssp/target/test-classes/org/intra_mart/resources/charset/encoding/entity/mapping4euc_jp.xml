@@ -1,0 +1,35 @@
+<!-- Charset encoding mapping for EUC_JP & SJIS -->
+<encoding>
+	<mapping>
+		<source radix="16">FF0D</source>	// Fullwidth Hyphen-Minus
+		<revise radix="16">2212</revise>	// Minus Sign
+	</mapping>
+	<mapping>
+		<source radix="16">FF5E</source>	// Fullwidth Tilde
+		<revise radix="16">301C</revise>	// Wave Dash
+	</mapping>
+	<mapping>
+		<source radix="16">2225</source>	// Parallel To
+		<revise radix="16">2016</revise>	// Double Vertical Line
+	</mapping>
+	<mapping>
+		<source radix="16">FFE0</source>	// Fullwidth Cent Sign
+		<revise radix="16">00A2</revise>	// Cent Sign
+	</mapping>
+	<mapping>
+		<source radix="16">FFE1</source>	// Fullwidth Pond Sign
+		<revise radix="16">00A3</revise>	// Pound Sign
+	</mapping>
+	<mapping>
+		<source radix="16">FFE2</source>	// Fullwidth Not Sign
+		<revise radix="16">00AC</revise>	// Not Sign
+	</mapping>
+	<mapping>
+		<source radix="16">FFE4</source>	// Fullwidth Broken Bar
+		<revise radix="16">00A6</revise>	// Broken Bar
+	</mapping>
+	<mapping>
+		<source radix="16">2015</source>	// Horizontal Bar
+		<revise radix="16">2014</revise>	// Em Dash
+	</mapping>
+</encoding>

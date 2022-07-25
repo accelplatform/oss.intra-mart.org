@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="diffExport_and_diffFilePathExtract" default="diffExport" basedir=".">
+
+	<target name="init">
+		<!-- PLEASE SET DECOMPRESSED DIR PATH -->
+		<property name="decompressed_dir" value="." />
+		
+		<property name="svn_diff_exporter_jar" value="${decompressed_dir}/lib/im-svn-diff-exporter-0.1.0.jar" />
+		<property name="svnkit_jar"            value="${decompressed_dir}/../maven2_repository/org/tmatesoft/svnkit/1.1.2/svnkit-1.1.2.jar" />
+	</target>
+
+	<target name="export" depends="init">
+		
+		<taskdef name      = "export"
+				 classname = "org.intra_mart.svn.util.ExportTask"
+				 classpath = "${svn_diff_exporter_jar};${svnkit_jar}" />
+
+		<export
+			user     = "guest"
+			password = ""
+			url      = "http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter"
+			revision = "HEAD"
+			destDir  = "C:/temp/exportTemp"
+			ignoreEmptyDir = "false" />
+
+	</target>
+
+
+	<target name="diffExport" depends="init">
+		
+		<taskdef name      = "diffExport"
+				 classname = "org.intra_mart.svn.util.DiffExportTask"
+				 classpath = "${svn_diff_exporter_jar};${svnkit_jar}" />
+		
+		<diffExport
+			user           = "guest"
+			password       = ""
+			urlFrom        = "http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter"
+			revisionFrom   = "9"
+			urlTo          = "http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter"
+			revisionTo     = "HEAD"
+			recursive      = "true"
+			destDir        = "C:/temp/diffExportTemp"
+			diffResultFile = "C:/temp/diffExportTemp/diff.txt" />
+
+	</target>
+
+	
+	<target name="diffFilePathExtract" depends="init">
+		
+		<taskdef name      = "diffFilePathExtract"
+				 classname = "org.intra_mart.svn.util.DiffFilePathExtractTask"
+				 classpath = "${svn_diff_exporter_jar};${svnkit_jar}" />
+
+		<diffFilePathExtract
+			user         = "guest"
+			password     = ""
+			urlFrom      = "http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter"
+			revisionFrom = "9"
+			urlTo        = "http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter"
+			revisionTo   = "HEAD"
+			recursive    = "true"
+			diffFile     = "C:/temp/diffFilePathExtract/diff.txt"
+			resultFile   = "C:/temp/diffFilePathExtract/result.txt" />
+		
+	</target>
+
+
+</project>

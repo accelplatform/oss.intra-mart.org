@@ -1,0 +1,58 @@
+<intra-mart>
+	<server-character-encoding>UTF-8</server-character-encoding>
+	<jssp>
+		<java-script-api>
+			<api-class name="org.intra_mart.jssp.script.api.DebugObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.FileAccessObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.DOMNodeObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.XMLParserObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.XMLDocumentObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.URLObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ConstantObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ProcedureObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.FormatObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.LoggerObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.LoggerMDCObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.JsUnit"/>
+			<api-class name="org.intra_mart.jssp.script.api.JsTestSuite"/>
+			<api-class name="org.intra_mart.jssp.script.api.ArchiverObject"/>
+
+			<api-script name="jssp/script/api/im_json#ImJson"/>
+			
+			<api-class name="org.intra_mart.jssp.script.api.SOAPClientObject">
+				<mode>Once</mode>
+				<work-dir>target/work/jssp/_SOAPClient</work-dir>
+				<javac-encoding>UTF-8</javac-encoding>
+				<javac-verbose>false</javac-verbose>
+			</api-class>
+		</java-script-api>
+		
+		<jssp-tag>
+		</jssp-tag>
+		
+		<compile>
+			<output>
+				<script>target/work/jssp/_functioncontainer</script>
+				<view>target/work/jssp/_presentationpage</view>
+			</output>
+		</compile>
+		
+		<source-path>
+			<general>
+				<directory>src/test/js</directory>
+				<directory>src/main/js</directory>
+			</general>
+		</source-path>
+		
+		<initializer>
+			<application>
+				<initializer-script>setup</initializer-script>
+				<initializer-script>jsspUnitTestExecute</initializer-script>
+				<!--  
+				<initializer-script>sample/web_service/invoke_sample</initializer-script>
+				-->
+			</application>
+		</initializer>
+
+	</jssp>
+</intra-mart>

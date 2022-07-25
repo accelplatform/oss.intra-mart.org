@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<title>Fileオブジェクトを利用したサンプル</title>
+		<script langage="javascript">
+		
+			function deleteCheck(){
+				var deleteOk = confirm("削除しますか？");
+				if(!deleteOk){
+					return false;
+				}
+			}
+
+		</script>
+	</head>
+	<body>
+		<center>
+			<h1>ファイルのアップロード・ダウンロード</h1>
+			<hr>
+		</center>
+
+		<IMART type="form">
+			<IMART type="input" style="text" name="targetDirPath" value=currentDirPath size="70"></IMART>
+			<input type="submit" value="移動">
+		</IMART>
+
+		<hr>
+
+		<table border="1">
+			<tr>
+				<th>名前</th>
+				<th>サイズ</th>
+				<th>更新日時</th>
+				<th>操作</th>
+			</tr>
+			
+		<IMART type="condition" validity=existsParentDir>
+			<tr>
+				<td>
+					<IMART type="tag" name="img" src=backGif></IMART>
+					<IMART type="link" page="sample/script/file/file_main" targetDirPath=parentDirPath>
+						親ディレクトリへ移動
+					</IMART>
+				</td>
+				<td align="center"><br></td>
+				<td align="center"><br></td>
+				<td align="center"><br></td>
+			</tr>
+		</IMART>
+
+
+		<!-- ディレクトリ一覧 -->
+		<IMART type="repeat" list=childDirectories item="dir">
+			<tr>
+				<td>
+					<IMART type="tag" name="img" src=folderGif></IMART>
+					<IMART type="link" 
+					       page="sample/script/file/file_main"
+					       targetDirPath=dir.path>
+						<IMART type="string" value=dir.name></IMART>/
+					</IMART>
+				</td>
+				<td align="center">
+					<br>
+				</td>
+				<td>
+					<IMART type="date"
+						   value=dir.lastModified
+						   format="yyyy-MM-dd HH:mm:ss">
+					</IMART>
+				</td>
+				<td>
+					<IMART type="condition" validity=dir.canDelete>
+						<IMART type="link" 
+						       page="sample/script/file/file_main" action="deleteAction"
+						       targetFilePath=dir.path
+						       targetDirPath=currentDirPath
+						       onClick="return deleteCheck();">
+							削除
+						</IMART>
+					</IMART>
+					<IMART type="condition" validity=dir.canDelete negative>
+						<br>
+					</IMART>
+				</td>
+			</tr>				
+		</IMART type="repeat">
+
+		<!-- ファイル一覧 -->
+		<IMART type="repeat" list=childFiles item="file">
+			<tr>
+				<td>
+					<IMART type="tag" name="img" src=textGif></IMART>
+					<IMART type="link"
+					       page="sample/script/file/file_main" action="downloadAction"
+					       targetFilePath=file.path
+					       targetFileName=file.name>
+						<IMART type="string" value=file.name></IMART>
+					</IMART>
+				</td>
+				<td align="right">
+					<IMART type="number"
+						   value=file.size
+						   format="###,###">
+					</IMART> バイト
+				</td>
+				<td>
+					<IMART type="date"
+						   value=file.lastModified
+						   format="yyyy-MM-dd HH:mm:ss">
+					</IMART>
+				</td>
+				<td>
+					<IMART type="condition" validity=file.canDelete>
+						<IMART type="link" 
+						       page="sample/script/file/file_main" action="deleteAction"
+						       targetFilePath=file.path
+						       targetDirPath=currentDirPath
+						       onClick="return deleteCheck();">
+							削除
+						</IMART>
+					</IMART>
+					<IMART type="condition" validity=file.canDelete negative>
+						<br>
+					</IMART>
+				</td>
+			</tr>
+		</IMART type="repeat">
+
+		</table>
+
+
+		<hr>
+		ファイルアップロード
+		<IMART type="form" action="uploadAction" method="POST" enctype="multipart/form-data">
+			<input type="file" name="localFile">
+			<IMART type="hidden" targetDirPath=currentDirPath></IMART>
+			<input type="submit" value="アップロード">
+		</IMART>
+
+		<hr>
+		ディレクトリ新規作成
+		<IMART type="form" action="createDirAction">
+			<input type="text" name="dirName" value="">
+			<IMART type="hidden" targetDirPath=currentDirPath></IMART>
+			<input type="submit" value="作成">
+		</IMART>
+
+		<hr>
+		<center>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</center>
+	</body>
+</html>

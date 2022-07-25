@@ -1,0 +1,32 @@
+<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="submit"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>&lt;IMART type="submit"&gt;後の画面です</H1>
+			<HR>
+			受信結果
+			<TABLE border>
+				<IMART type="repeat" list=result item="rec" index="name">
+					<TR>
+						<TH>
+							<IMART type="string" value=name></IMART>
+						</TH>
+						<TD>
+							<IMART type="string" value=rec></IMART>
+						</TD>
+					</TR>
+				</IMART>
+			</TABLE>
+			
+			<BR>
+			
+			<IMART type="condition" validity=isImSubmit>
+				以下は、&lt;IMART type="submit"&gt;で遷移した際のページ遷移情報です。<BR>
+				<IMART type="string" value=pageTransitionInfoOnImSubmit></IMART>
+			</IMART>
+			
+		</CENTER>
+	</BODY>
+</HTML>

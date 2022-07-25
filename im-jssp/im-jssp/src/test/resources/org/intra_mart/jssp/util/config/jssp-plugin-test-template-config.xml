@@ -1,0 +1,158 @@
+<intra-mart>
+	<server-character-encoding>TestEncodingName</server-character-encoding>
+	<jssp>
+		<java-script-api>
+			<api-class name="org.intra_mart.jssp.script.api.test.Class1"/>
+			<api-class name="org.intra_mart.jssp.script.api.test.Class2"/>
+			<api-class name="org.intra_mart.jssp.script.api.test.Class3"/>
+			<api-class name="org.intra_mart.jssp.script.api.test.Class4"/>
+			<api-class name="org.intra_mart.jssp.script.api.test.Class5"/>
+			<api-class name="org.intra_mart.jssp.script.api.test.Class6">
+				<foo0>foo_api_0</foo0>
+				<foo1>foo_api_1</foo1>
+			</api-class>
+
+			<api-script name="script/api/test/Page1#func1"/>
+			<api-script name="script/api/test/Page1#func2"/>
+			<api-script name="script/api/test/Page2#func1"/>
+			<api-script name="script/api/test/Page2#func2"/>
+			<api-script name="script/api/test/Page3#func1">
+				<bar0>bar_api_0</bar0>
+				<bar1>bar_api_1</bar1>
+			</api-script>
+		</java-script-api>
+
+		<jssp-tag>
+			<tag-class name="org.intra_mart.jssp.view.tag.test.Class1"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.test.Class2"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.test.Class3"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.test.Class4"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.test.Class5"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.test.Class6">
+				<foo0>foo_tag_0</foo0>
+				<foo1>foo_tag_1</foo1>
+			</tag-class>
+
+			<tag-script name="view/tag/test/Tag1#tagName1"/>
+			<tag-script name="view/tag/test/Tag1#tagName2"/>
+			<tag-script name="view/tag/test/Tag2#tagName1"/>
+			<tag-script name="view/tag/test/Tag2#tagName2"/>
+			<tag-script name="view/tag/test/Tag3#tagName1">
+				<bar0>bar_tag_0</bar0>
+				<bar1>bar_tag_1</bar1>
+			</tag-script>
+		</jssp-tag>
+		
+		<listener>
+			<context-factory-listener>
+				<listener-class>org.intra_mart.jssp.script.listener.test.Class1</listener-class>
+				<listener-class>org.intra_mart.jssp.script.listener.test.Class2</listener-class>
+				<listener-class>org.intra_mart.jssp.script.listener.test.Class3</listener-class>
+			</context-factory-listener>
+		</listener>
+
+		<initializer>
+			<application>
+				<initializer-class>org.intra_mart.jssp.script.initialize.test.Class1</initializer-class>
+				<initializer-class>org.intra_mart.jssp.script.initialize.test.Class2</initializer-class>
+				<initializer-class>org.intra_mart.jssp.script.initialize.test.Class3</initializer-class>
+				<initializer-script>initialize/app/test/Page1</initializer-script>
+				<initializer-script>initialize/app/test/Page2</initializer-script>
+				<initializer-script>initialize/app/test/Page3</initializer-script>
+			</application>
+		</initializer>
+
+		<compile>
+			<output>
+				<script>test/work/jssp/testGetOutputDirectory4ComiledScript</script>
+				<view>test/work/jssp/testGetOutputDirectory4ComiledView</view>
+			</output>
+		</compile>
+		
+		<source-path>
+			<general>
+				<directory>pages/src</directory>
+				<directory>pages/product/src</directory>
+				<directory>pages/platform/src</directory>
+			</general>
+			<international>
+				<local>
+					<ja>
+						<directory>pages/i18n/ja</directory>
+					</ja>
+					<ja_JP>
+						<directory>pages/i18n/ja_JP</directory>
+					</ja_JP>
+				</local>
+				<directory>pages/product/i18n</directory>
+				<directory>pages/platform/i18n</directory>
+			</international>
+		</source-path>
+		
+		<class-path>
+			<general>
+				<classes>pages/bin1</classes>
+				<classes>pages/bin2</classes>
+				<classes>pages/bin3</classes>
+				<archive>pages/bin/test1.jar</archive>
+				<archive>pages/bin/test2.jar</archive>
+				<archive>pages/bin/test3.jar</archive>
+				<libraries>pages/bin/lib1</libraries>
+				<libraries>pages/bin/lib2</libraries>
+				<libraries>pages/bin/lib3</libraries>
+			</general>
+			<international>
+				<ja>
+					<classes>pages/bin/i18n/ja/dir1</classes>
+					<classes>pages/bin/i18n/ja/dir2</classes>
+					<classes>pages/bin/i18n/ja/dir3</classes>
+					<archive>pages/bin/i18n/ja/test1.jar</archive>
+					<archive>pages/bin/i18n/ja/test2.jar</archive>
+					<archive>pages/bin/i18n/ja/test3.jar</archive>
+					<libraries>pages/bin/i18n/lib/ja/dir1</libraries>
+					<libraries>pages/bin/i18n/lib/ja/dir2</libraries>
+					<libraries>pages/bin/i18n/lib/ja/dir3</libraries>
+				</ja>
+				<ja_JP>
+					<classes>pages/bin/i18n/ja_JP/dir1</classes>
+					<classes>pages/bin/i18n/ja_JP/dir2</classes>
+					<classes>pages/bin/i18n/ja_JP/dir3</classes>
+					<archive>pages/bin/i18n/ja_JP/test1.jar</archive>
+					<archive>pages/bin/i18n/ja_JP/test2.jar</archive>
+					<archive>pages/bin/i18n/ja_JP/test3.jar</archive>
+					<libraries>pages/bin/i18n/lib/ja_JP/dir1</libraries>
+					<libraries>pages/bin/i18n/lib/ja_JP/dir2</libraries>
+					<libraries>pages/bin/i18n/lib/ja_JP/dir3</libraries>
+				</ja_JP>
+			</international>
+		</class-path>
+
+		<script>
+			<request-process-script>test/request_process</request-process-script>
+			<initial-function-name>init_test</initial-function-name>
+			<finally-function-name>close_test</finally-function-name>
+		</script>
+
+		<debug>
+			<browse enable="false" />
+			<print enable="false" />
+			<write enable="false" path="test/debug_test.log" />
+			<console enable="false" />
+		</debug>
+		
+		<key>
+			<uri-prefix>prefix_test</uri-prefix>
+			<uri-suffix>.jssp_test</uri-suffix>
+
+			<from-page-path>im_from_test</from-page-path>
+			<next-event-name>im_func_test</next-event-name>
+			<next-event-page-path>im_next_test</next-event-page-path>
+			<action-event-name>im_action_test</action-event-name>
+			<action-event-page-path>im_event_test</action-event-page-path>
+
+			<mark>im_mark_test</mark>
+			<signature>org.intra_mart.jssp.signature.id_test</signature>
+		</key>
+		<language-version>1.6</language-version>
+	</jssp>
+</intra-mart>

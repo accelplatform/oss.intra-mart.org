@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!--
+	  - JMXServiceURL。
+	  - ホスト名とポート番号を指定します。
+	  - JVM を起動するときに JMX エージェント (MBean サーバ) を有効にし、かつ、
+	  - リモートの監視と管理が可能となるように設定を行ってください。
+	  - 
+	  - 例えば、以下のシステムプロパティを設定することでリモートの監視と管理が可能となります。
+	  - 「-Dcom.sun.management.jmxremote.port=ポート番号 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false」
+	  -
+	  - 詳しくは、以下のURLを参照してください。
+	  - http://java.sun.com/j2se/1.5.0/ja/docs/ja/guide/management/agent.html#remote
+	  -->
+	<jmx-service-hostname>localhost</jmx-service-hostname>
+	<jmx-service-port>9999</jmx-service-port>
+	<!-- <jmx-service-username></jmx-service-username> -->
+	<!-- <jmx-service-password></jmx-service-password> -->
+	
+	<!--
+	  - <detected-response-code> に設定したレスポンスコードが返却される際に、スレッドダンプの出力処理を開始します。
+	  -
+	  - スレッドダンプとは、現在実行中のすべてのスレッドに関する、
+	  - スレッドID、スレッド名、そのスレッドのスタックトレース等が出力されます。
+	  - （可能であれば、スレッド間のロック状況も出力します）
+	  - 
+	  - スレッドダンプ出力処理は、別スレッドにて行われます。
+	  - スレッドダンプは、<interval-seconds> 間隔で出力されます。
+	  - 出力処理開始から <process-until-seconds> が経過すると、スレッドダンプの出力を停止します。
+	  -
+	  - スレッドダンプ出力用のスレッド数は、1つ以下です。（2つ以上のスレッドが起動することはありません）
+	  -
+	  - スレッドダンプ出力用のスレッドが停止していて、かつ、
+	  - detected-response-code に設定したレスポンスコードが返却されると、再度、スレッドダンプ出力用のスレッドが生成されます。
+	  -->
+	<!-- <detected-response-code>503</detected-response-code> -->
+	<!-- <interval-seconds>30</interval-seconds> -->
+	<!-- <process-until-seconds>1800</process-until-seconds> -->	
+
+	<!--
+	  - 出力先ディレクトリのパス。
+	  - 絶対パスとして解決できなかった場合は、システムプロパティ「user.dir」からの相対パスとして解決します。 
+	  -->
+	<!-- <output-dir-path>target/temp/org.intra_mart.common.web.log.impl.ResponseCodeDetectedThreadDumper/</output-dir-path> -->
+
+	<!--
+	  - 出力先ファイル名。
+	  - SimpleDateFormat形式で指定します。
+	  -->
+	<!-- <file-name-format>yyyy-MM-dd_HHmmss'.tdump'</file-name-format> -->
+</config>

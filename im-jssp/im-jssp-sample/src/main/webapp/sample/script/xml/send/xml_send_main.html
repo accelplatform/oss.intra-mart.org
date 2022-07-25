@@ -1,0 +1,55 @@
+﻿<HTML>
+	<HEAD>
+		<TITLE>XML形式データの送信方法</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>XML形式データの送信方法</H1>
+
+			<HR>
+
+			一般的なWebブラウザは、受信したデータがどのような形式であるかを判定するために、<BR>
+			レスポンスの Content-Type エンティティヘッダフィールドを利用します。<BR>
+			サーバで作成したXML形式のデータをクライアントに送信するには、<BR>
+			レスポンスの Content-Type エンティティヘッダフィールドに"text/xml"を指定します。<BR>
+			<BR>
+
+			<TABLE border="1">
+				<TR>
+					<TD>
+<PRE>
+&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;account&gt;
+  &lt;user-id&gt;ueda&lt;/user-id&gt;
+  &lt;name&gt;上田&lt;/name&gt;
+  &lt;role&gt;
+    &lt;role-id sample-attr="サンプル属性"&gt;level1&lt;/role-id&gt;
+  &lt;/role&gt;
+&lt;/account&gt;</PRE>
+					</TD>
+				</TR>
+			</TABLE>
+			
+			<BR>
+			<BR>
+			以下のサンプルは、上記XML形式データをクライアントに送信するサンプルです。
+			<BR>
+			<BR>
+
+			<IMART type="link" page="sample/script/xml/send/xml_send_by_content_type_tag">
+				&lt;IMART type="Content-Type"&gt;タグを使用したXML形式データの送信方法
+			</IMART>
+
+			<BR>
+			<BR>
+
+			<IMART type="link" page="sample/script/xml/send/xml_send_by_http_response">
+				HTTPResponseオブジェクトを使用したXML形式データの送信方法<BR>
+			</IMART>
+
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

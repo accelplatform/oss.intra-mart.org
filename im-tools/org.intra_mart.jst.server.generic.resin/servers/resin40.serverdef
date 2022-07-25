@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd "
+	name="Resin 4.0" version="v4.0">
+	<property id="serverRootDirectory"
+		label="%ApplicationServerDirectory"
+		type="directory"
+		context="runtime"
+		default="/resin_home" />
+	<property id="port"
+		label="%serverPort"
+		type="string"
+		context="server"
+		default="8080" />
+
+	<port>
+		<no>${port}</no>
+		<name>Http</name>
+		<protocol>http</protocol>
+	</port>
+
+	<module>
+		<type>jst.web</type>
+		<publishDir>${serverRootDirectory}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+	<module>
+		<type>jst.ejb</type>
+		<publishDir>${serverRootDirectory}/deploy</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+	<module>
+		<type>jst.ear</type>
+		<publishDir>${serverRootDirectory}/deploy</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<project>
+		<classpathReference>resin.project</classpathReference>
+	</project>
+	
+	<start>
+		<mainClass>com.caucho.server.resin.Resin</mainClass>
+		<workingDirectory>${serverRootDirectory}</workingDirectory>
+		<programArguments />
+		<vmParameters>-Djava.system.class.loader=com.caucho.loader.SystemClassLoader -Djava.util.logging.manager=com.caucho.log.LogManagerImpl -Declipse.jdt.http.port=${port} -Dresin.home=${serverRootDirectory} -Xms128m -Xmx512m  -XX:MaxPermSize=256m</vmParameters>
+		<classpathReference>resin</classpathReference>
+	</start>
+
+	<publisher id="org.eclipse.jst.server.generic.antpublisher">
+		<publisherdata>
+			<dataname>build.file</dataname>
+			<datavalue>/buildfiles/resin.xml</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.web</dataname>
+			<datavalue>deploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ejb</dataname>
+			<datavalue>deploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.web</dataname>
+			<datavalue>undeploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ejb</dataname>
+			<datavalue>undeploy.j2ee.ejb</datavalue>
+		</publisherdata>		
+		<publisherdata>
+			<dataname>target.publish.jst.ear</dataname>
+			<datavalue>deploy.j2ee.ear</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ear</dataname>
+			<datavalue>undeploy.j2ee.ear</datavalue>
+		</publisherdata>				
+	</publisher>
+
+	<classpath id="resin" >
+		<archive path="${serverRootDirectory}/lib/activation.jar" />
+		<archive path="${serverRootDirectory}/lib/javaee-16.jar" />
+		<archive path="${serverRootDirectory}/lib/javamail-141.jar" />
+		<archive path="${serverRootDirectory}/lib/jaxstream-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jsf-12.jar" />
+		<archive path="${serverRootDirectory}/lib/osgi-14.jar" />
+		<archive path="${serverRootDirectory}/lib/resin.jar" />
+		<archive path="${serverRootDirectory}/lib/webutil.jar" />
+	</classpath>
+
+	<classpath id="resin.project" >
+		<archive path="${serverRootDirectory}/lib/activation.jar" />
+		<archive path="${serverRootDirectory}/lib/javaee-16.jar" />
+		<archive path="${serverRootDirectory}/lib/javamail-141.jar" />
+		<archive path="${serverRootDirectory}/lib/jaxstream-15.jar" />
+		<archive path="${serverRootDirectory}/lib/jsf-12.jar" />
+		<archive path="${serverRootDirectory}/lib/osgi-14.jar" />
+		<archive path="${serverRootDirectory}/lib/resin.jar" />
+		<archive path="${serverRootDirectory}/lib/webutil.jar" />
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>jnp://${serverAddress}:1099/hessian</providerUrl>
+		<initialContextFactory>com.caucho.hessian.HessianContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+</tns:ServerRuntime>

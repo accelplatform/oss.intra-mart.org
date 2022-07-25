@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<jmxConfigurator/>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>---------
+%date %level [%thread] %logger{36}
+メッセージは、、、「%msg」
+呼び出し元は、、、「%class.%method\(%file:%line\)」
+%caller{50}
+			</Pattern>
+		</layout>
+	</appender>
+
+	<logger name="org.intra_mart.common.platform.log.handler" additivity="true">
+		<level value="all" />
+	</logger>
+
+	<logger name="JDKLoggingOverIntramartLoggerHandler4DefaultPackageTest" additivity="true">
+		<level value="all" />
+	</logger>
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension point="org.eclipse.wst.server.core.runtimeTypes">
+	    <!-- Resin 3.0.x -->
+	    <runtimeType
+	       id="org.intra_mart.jst.server.generic.runtime.resin30"
+	       name="%resin30RuntimeTypeName"
+	       description="%resin30RuntimeTypeDescription"
+	       vendor="%resinCategory"
+	       version="3.0"
+	       class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+	      <moduleType
+	         types="jst.web"
+	         versions="2.2, 2.3, 2.4"/>
+	      <moduleType
+	         types="jst.ejb"
+	         versions="1.1, 2.0"/>
+	      <moduleType
+	         types="jst.ear"
+	         versions="1.2, 1.3, 1.4"/>
+	      <moduleType
+	         types="jst.connector"
+	         versions="1.0, 1.5"/>
+	       <moduleType
+	         types="jst.utility"
+	         versions="1.0"/>
+	    </runtimeType>
+
+	    <!-- Resin 3.1.x -->
+	    <runtimeType
+	       id="org.intra_mart.jst.server.generic.runtime.resin31"
+	       name="%resin31RuntimeTypeName"
+	       description="%resin31RuntimeTypeDescription"
+	       vendor="%resinCategory"
+	       version="3.1"
+	       class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+	      <moduleType
+	         types="jst.web"
+	         versions="2.2, 2.3, 2.4, 2.5"/>
+	      <moduleType
+	         types="jst.ejb"
+	         versions="1.1, 2.0, 2.1, 3.0"/>
+	      <moduleType
+	         types="jst.ear"
+	         versions="1.2, 1.3, 1.4, 5.0"/>
+	      <moduleType
+	         types="jst.connector"
+	         versions="1.0, 1.5"/>
+	       <moduleType
+	         types="jst.utility"
+	         versions="1.0"/>
+	    </runtimeType>
+
+	    <!-- Resin 3.2.x -->
+	    <runtimeType
+	       id="org.intra_mart.jst.server.generic.runtime.resin32"
+	       name="%resin32RuntimeTypeName"
+	       description="%resin32RuntimeTypeDescription"
+	       vendor="%resinCategory"
+	       version="3.2"
+	       class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+	      <moduleType
+	         types="jst.web"
+	         versions="2.2, 2.3, 2.4, 2.5"/>
+	      <moduleType
+	         types="jst.ejb"
+	         versions="1.1, 2.0, 2.1, 3.0"/>
+	      <moduleType
+	         types="jst.ear"
+	         versions="1.2, 1.3, 1.4, 5.0"/>
+	      <moduleType
+	         types="jst.connector"
+	         versions="1.0, 1.5"/>
+	       <moduleType
+	         types="jst.utility"
+	         versions="1.0"/>
+	    </runtimeType>
+
+	    <!-- Resin 4.0-SNAPSHOT -->
+	    <runtimeType
+	       id="org.intra_mart.jst.server.generic.runtime.resin40"
+	       name="%resin40RuntimeTypeName"
+	       description="%resin40RuntimeTypeDescription"
+	       vendor="%resinCategory"
+	       version="4.0"
+	       class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+	      <moduleType
+	         types="jst.web"
+	         versions="2.2, 2.3, 2.4, 2.5"/>
+	      <moduleType
+	         types="jst.ejb"
+	         versions="1.1, 2.0, 2.1, 3.0"/>
+	      <moduleType
+	         types="jst.ear"
+	         versions="1.2, 1.3, 1.4, 5.0"/>
+	      <moduleType
+	         types="jst.connector"
+	         versions="1.0, 1.5"/>
+	       <moduleType
+	         types="jst.utility"
+	         versions="1.0"/>
+	    </runtimeType>
+
+	</extension>
+
+	<extension point="org.eclipse.wst.server.core.serverTypes">
+	    <!-- Resin 3.0.x -->
+		<serverType
+	           runtime="true"
+	           class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	           id="org.intra_mart.jst.server.generic.resin30"
+	           initialState="stopped"
+	           supportsRemoteHosts="false"
+	           runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin30"
+	           description="%resin30ServerTypeDescription"
+	           launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	           behaviourClass="org.intra_mart.jst.server.generic.resin.ResinServerBehaviour"
+	           name="%resin30ServerTypeName"
+	           startTimeout="50000"
+		       stopTimeout="15000"
+	           hasConfiguration="false"
+	           launchModes="run,debug">        
+	     </serverType>
+
+	    <!-- Resin 3.1.x -->
+		<serverType
+	           runtime="true"
+	           class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	           id="org.intra_mart.jst.server.generic.resin31"
+	           initialState="stopped"
+	           supportsRemoteHosts="false"
+	           runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin31"
+	           description="%resin31ServerTypeDescription"
+	           launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	           behaviourClass="org.intra_mart.jst.server.generic.resin.ResinServerBehaviour"
+	           name="%resin31ServerTypeName"
+	           startTimeout="50000"
+		       stopTimeout="15000"
+	           hasConfiguration="false"
+	           launchModes="run,debug">        
+	     </serverType>
+
+	    <!-- Resin 3.2.x -->
+		<serverType
+	           runtime="true"
+	           class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	           id="org.intra_mart.jst.server.generic.resin32"
+	           initialState="stopped"
+	           supportsRemoteHosts="false"
+	           runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin32"
+	           description="%resin32ServerTypeDescription"
+	           launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	           behaviourClass="org.intra_mart.jst.server.generic.resin.ResinServerBehaviour"
+	           name="%resin32ServerTypeName"
+	           startTimeout="50000"
+		       stopTimeout="15000"
+	           hasConfiguration="false"
+	           launchModes="run,debug">        
+	     </serverType>
+
+	    <!-- Resin 4.0-SNAPSHOT -->
+		<serverType
+	           runtime="true"
+	           class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	           id="org.intra_mart.jst.server.generic.resin40"
+	           initialState="stopped"
+	           supportsRemoteHosts="false"
+	           runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin40"
+	           description="%resin40ServerTypeDescription"
+	           launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	           behaviourClass="org.intra_mart.jst.server.generic.resin.ResinServerBehaviour"
+	           name="%resin40ServerTypeName"
+	           startTimeout="50000"
+		       stopTimeout="15000"
+	           hasConfiguration="false"
+	           launchModes="run,debug">        
+	     </serverType>
+	</extension>
+
+    <extension point="org.eclipse.wst.server.ui.wizardFragments">
+	    <!-- Resin 3.0.x -->
+	     <fragment
+	        id="org.eclipse.jst.server.generic.runtime"
+	        typeIds="org.intra_mart.jst.server.generic.runtime.resin30"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+	     <fragment
+	        id="org.eclipse.jst.server.generic.server"
+	        typeIds="org.intra_mart.jst.server.generic.resin30"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+
+		<!-- Resin 3.1.x -->
+	     <fragment
+	        id="org.eclipse.jst.server.generic.runtime"
+	        typeIds="org.intra_mart.jst.server.generic.runtime.resin31"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+	     <fragment
+	        id="org.eclipse.jst.server.generic.server"
+	        typeIds="org.intra_mart.jst.server.generic.resin31"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+
+		<!-- Resin 3.2.x -->
+	     <fragment
+	        id="org.eclipse.jst.server.generic.runtime"
+	        typeIds="org.intra_mart.jst.server.generic.runtime.resin32"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+	     <fragment
+	        id="org.eclipse.jst.server.generic.server"
+	        typeIds="org.intra_mart.jst.server.generic.resin32"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+
+		<!-- Resin 4.0-SNAPSHOT -->
+	     <fragment
+	        id="org.eclipse.jst.server.generic.runtime"
+	        typeIds="org.intra_mart.jst.server.generic.runtime.resin40"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+	     <fragment
+	        id="org.eclipse.jst.server.generic.server"
+	        typeIds="org.intra_mart.jst.server.generic.resin40"
+	        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+	</extension>
+	
+	<extension point="org.eclipse.wst.server.ui.serverImages">
+		<!-- Resin 3.0.x -->
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.runtime.resin30"/>
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.resin30"/>
+
+		<!-- Resin 3.1.x -->
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.runtime.resin31"/>
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.resin31"/>
+
+		<!-- Resin 3.2.x -->
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.runtime.resin32"/>
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.resin32"/>
+
+		<!-- Resin 4.0-SNAPSHOT -->
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.runtime.resin40"/>
+	     <image
+	         id="org.eclipse.jst.server.generic.image"
+	         icon="icons/obj16/resin.png"
+	         typeIds="org.intra_mart.jst.server.generic.resin40"/>
+	</extension>
+
+   <extension point="org.eclipse.jst.server.core.runtimeClasspathProviders">
+     <runtimeClasspathProvider
+        id="org.eclipse.jst.server.generic.runtimeTarget"
+        runtimeTypeIds="org.intra_mart.jst.server.generic.runtime.resin*"
+        class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntimeTargetHandler"/>
+	</extension>
+	
+   <extension point="org.eclipse.jst.server.generic.core.serverdefinition">
+		<!-- Resin 3.0.x -->
+		<serverdefinition id="org.intra_mart.jst.server.generic.runtime.resin30" definitionfile="/servers/resin30.serverdef" />
+		<!-- Resin 3.1.x -->
+		<serverdefinition id="org.intra_mart.jst.server.generic.runtime.resin31" definitionfile="/servers/resin31.serverdef" />
+		<!-- Resin 3.2.x -->
+		<serverdefinition id="org.intra_mart.jst.server.generic.runtime.resin32" definitionfile="/servers/resin32.serverdef" />
+		<!-- Resin 4.0-SNAPSHOT -->
+		<serverdefinition id="org.intra_mart.jst.server.generic.runtime.resin40" definitionfile="/servers/resin40.serverdef" />
+   </extension>
+
+  <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
+
+     <runtime-component-type
+       id="org.intra_mart.jst.server.generic.runtime.resin"/>
+
+	<!-- Resin 3.0.x -->
+    <runtime-component-version
+       type="org.intra_mart.jst.server.generic.runtime.resin"
+       version="3.0"/>
+
+	<!-- Resin 3.1.x -->
+    <runtime-component-version
+       type="org.intra_mart.jst.server.generic.runtime.resin"
+       version="3.1"/>
+
+	<!-- Resin 3.2.x -->
+    <runtime-component-version
+       type="org.intra_mart.jst.server.generic.runtime.resin"
+       version="3.2"/>
+
+	<!-- Resin 4.0-SNAPSHOT -->
+    <runtime-component-version
+       type="org.intra_mart.jst.server.generic.runtime.resin"
+       version="4.0"/>
+
+    <adapter>
+      <runtime-component
+         id="org.intra_mart.jst.server.generic.runtime.resin"/>
+      <factory
+         class="org.eclipse.jst.server.core.internal.RuntimeClasspathProvider$Factory"/>
+      <type
+         class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+    </adapter>
+
+	<!-- Resin 3.0.x -->
+    <supported>
+      <runtime-component
+         id="org.intra_mart.jst.server.generic.runtime.resin"
+         version="3.0"/>
+      <facet
+         id="jst.web"
+         version="2.2,2.3,2.4"/>
+      <facet
+         id="jst.ejb"
+         version="1.1,2.0"/>
+      <facet
+         id="jst.ear"
+         version="1.2,1.3,1.4"/>
+      <facet
+         id="jst.connector"
+         version="1.0,1.5"/>
+      <facet
+         id="jst.appclient"
+         version="1.2,1.3,1.4"/>
+      <facet
+         id="jst.utility"
+         version="1.0"/>
+    </supported>
+
+	<!-- Resin 3.1.x -->
+    <supported>
+      <runtime-component
+         id="org.intra_mart.jst.server.generic.runtime.resin"
+         version="3.1"/>
+      <facet
+         id="jst.web"
+         version="2.2,2.3,2.4,2.5"/>
+      <facet
+         id="jst.ejb"
+         version="1.1,2.0,2.1,3.0"/>
+      <facet
+         id="jst.ear"
+         version="1.2,1.3,1.4,5.0"/>
+      <facet
+         id="jst.connector"
+         version="1.0,1.5"/>
+      <facet
+         id="jst.appclient"
+         version="1.2,1.3,1.4,5.0"/>
+      <facet
+         id="jst.utility"
+         version="1.0"/>
+    </supported>
+
+	<!-- Resin 3.2.x -->
+    <supported>
+      <runtime-component
+         id="org.intra_mart.jst.server.generic.runtime.resin"
+         version="3.2"/>
+      <facet
+         id="jst.web"
+         version="2.2,2.3,2.4,2.5"/>
+      <facet
+         id="jst.ejb"
+         version="1.1,2.0,2.1,3.0"/>
+      <facet
+         id="jst.ear"
+         version="1.2,1.3,1.4,5.0"/>
+      <facet
+         id="jst.connector"
+         version="1.0,1.5"/>
+      <facet
+         id="jst.appclient"
+         version="1.2,1.3,1.4,5.0"/>
+      <facet
+         id="jst.utility"
+         version="1.0"/>
+    </supported>
+
+	<!-- Resin 4.0-SNAPSHOT -->
+    <supported>
+      <runtime-component
+         id="org.intra_mart.jst.server.generic.runtime.resin"
+         version="4.0"/>
+      <facet
+         id="jst.web"
+         version="2.2,2.3,2.4,2.5"/>
+      <facet
+         id="jst.ejb"
+         version="1.1,2.0,2.1,3.0"/>
+      <facet
+         id="jst.ear"
+         version="1.2,1.3,1.4,5.0"/>
+      <facet
+         id="jst.connector"
+         version="1.0,1.5"/>
+      <facet
+         id="jst.appclient"
+         version="1.2,1.3,1.4,5.0"/>
+      <facet
+         id="jst.utility"
+         version="1.0"/>
+    </supported>
+  </extension>
+  
+  <extension point="org.eclipse.wst.common.project.facet.core.defaultFacets">
+    <default-facets>
+      <runtime-component id="org.intra_mart.jst.server.generic.runtime.resin"/>
+      <facet id="wst.jsdt.web" version="1.0"/>
+    </default-facets>
+  </extension>
+  
+  <extension point="org.eclipse.wst.common.project.facet.ui.images">
+    <image runtime-component-type="org.intra_mart.jst.server.generic.runtime.resin"
+      path="icons/obj16/resin.png"/>  
+  </extension>
+
+  <extension point="org.eclipse.wst.common.project.facet.core.runtimes">  
+    <adapter>
+      <runtime-component id="org.intra_mart.jst.server.generic.runtime.resin"/>
+      <factory class="org.eclipse.jst.server.ui.internal.RuntimeLabelProvider$Factory"/>
+      <type class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider"/>
+    </adapter>
+  </extension>
+
+  <extension point="org.eclipse.jst.server.core.runtimeFacetMappings">
+	<!-- Resin 3.0.x -->
+    <runtimeFacetMapping
+      runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin30"
+      runtime-component="org.intra_mart.jst.server.generic.runtime.resin"
+      version="3.0"/>
+
+	<!-- Resin 3.1.x -->
+    <runtimeFacetMapping
+      runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin31"
+      runtime-component="org.intra_mart.jst.server.generic.runtime.resin"
+      version="3.1"/>
+
+	<!-- Resin 3.2.x -->
+    <runtimeFacetMapping
+      runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin32"
+      runtime-component="org.intra_mart.jst.server.generic.runtime.resin"
+      version="3.2"/>
+
+	<!-- Resin 4.0-SNAPSHOT -->
+    <runtimeFacetMapping
+      runtimeTypeId="org.intra_mart.jst.server.generic.runtime.resin40"
+      runtime-component="org.intra_mart.jst.server.generic.runtime.resin"
+      version="4.0"/>
+  </extension>
+</plugin>

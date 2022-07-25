@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service-config>
+    <service>
+        <service-id>buyer_cart_back</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_cart_cancel</service-id>
+        <transition-class>sample.shopping.controller.service.CancelCartTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_cart.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_cart_detail_item</service-id>
+        <controller-class>sample.shopping.controller.service.DetailItemServiceController</controller-class>
+        <transition-class>sample.shopping.controller.service.DetailItemTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_detail_item.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_cart_order</service-id>
+        <controller-class>sample.shopping.controller.service.BuyerOrderServiceController</controller-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_order.jsp</page-path>
+        </next-page>
+        <input-error>
+            <page-key>sample.shopping.controller.service.CartEmptyException</page-key>
+            <page-path>/sample/shopping/common/error/cart_empty_error.jsp</page-path>
+        </input-error>
+        <service-error>
+            <page-key>sample.shopping.model.event.AlreadyDeletedException</page-key>
+            <page-path>/sample/shopping/common/error/already_deleted_error.jsp</page-path>
+        </service-error>
+    </service>
+
+    <service>
+        <service-id>buyer_confirm_back_to_list</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_confirm_submit</service-id>
+        <controller-class>sample.shopping.controller.service.ThankYouServiceController</controller-class>
+        <transition-class>sample.shopping.controller.service.ThankYouTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_thankyou.jsp</page-path>
+        </next-page>
+        <service-error>
+            <page-path>/sample/shopping/buyer/buyer_authority_err.jsp</page-path>
+        </service-error>
+        <service-error>
+            <page-key>sample.shopping.controller.service.ItemMissingException</page-key>
+            <page-path>/sample/shopping/common/error/no_item.jsp</page-path>
+        </service-error>
+    </service>
+
+    <service>
+        <service-id>buyer_detail_back</service-id>
+        <transition-class>sample.shopping.controller.service.DetailItemBackTransition</transition-class>
+        <next-page>
+            <page-key>buyer_list</page-key>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+        <next-page>
+            <page-key>cart</page-key>
+            <page-path>/sample/shopping/buyer/buyer_cart.jsp</page-path>
+        </next-page>
+        <next-page>
+            <page-key>seller_list</page-key>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_list_add_item</service-id>
+        <transition-class>sample.shopping.controller.service.AddItemTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_list_detail_cart</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_cart.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_list_detail_item</service-id>
+        <controller-class>sample.shopping.controller.service.DetailItemServiceController</controller-class>
+        <transition-class>sample.shopping.controller.service.DetailItemTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_detail_item.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_order_back</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_cart.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_order_submit</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_order_confirm.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>buyer_thankyou_next</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>cart_empty_back</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_cart.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>detail_error_next</service-id>
+        <transition-class>sample.shopping.controller.service.DetailItemBackTransition</transition-class>
+        <next-page>
+            <page-key>buyer_list</page-key>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+        <next-page>
+            <page-key>cart</page-key>
+            <page-path>/sample/shopping/buyer/buyer_cart.jsp</page-path>
+        </next-page>
+        <next-page>
+            <page-key>seller_list</page-key>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>menu_to_buyer_list</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>menu_to_seller_list</service-id>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_insert_back</service-id>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_insert_submit</service-id>
+        <controller-class>sample.shopping.controller.service.InsertItemServiceController</controller-class>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+        <input-error>
+            <page-key>sample.shopping.controller.service.ValueLengthException</page-key>
+            <page-path>/sample/shopping/common/error/value_length_error.jsp</page-path>
+        </input-error>
+        <service-error>
+            <page-key>sample.shopping.model.event.AlreadyExistException</page-key>
+            <page-path>/sample/shopping/common/error/already_exist_error.jsp</page-path>
+        </service-error>
+    </service>
+
+    <service>
+        <service-id>seller_list_delete_item</service-id>
+        <controller-class>sample.shopping.controller.service.DeleteItemServiceController</controller-class>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_list_detail_item</service-id>
+        <controller-class>sample.shopping.controller.service.DetailItemServiceController</controller-class>
+        <transition-class>sample.shopping.controller.service.DetailItemTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_detail_item.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_list_insert_item</service-id>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_insert_item.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_list_update_item</service-id>
+        <controller-class>sample.shopping.controller.service.GotoUpdateItemServiceController</controller-class>
+        <transition-class>sample.shopping.controller.service.GotoUpdateItemTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_update_item.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_update_back</service-id>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_update_reset</service-id>
+        <controller-class>sample.shopping.controller.service.GotoUpdateItemServiceController</controller-class>
+        <transition-class>sample.shopping.controller.service.GotoUpdateItemTransition</transition-class>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_update_item.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service>
+        <service-id>seller_update_submit</service-id>
+        <controller-class>sample.shopping.controller.service.UpdateItemServiceController</controller-class>
+        <next-page>
+            <page-path>/sample/shopping/seller/seller_list_items.jsp</page-path>
+        </next-page>
+        <input-error>
+            <page-key>sample.shopping.controller.service.ValueLengthException</page-key>
+            <page-path>/sample/shopping/common/error/value_length_error.jsp</page-path>
+        </input-error>
+        <service-error>
+            <page-key>sample.shopping.model.event.AlreadyDeletedException</page-key>
+            <page-path>/sample/shopping/common/error/already_deleted_error.jsp</page-path>
+        </service-error>
+    </service>
+
+    <service>
+        <service-id>buyer_confirm_back_to_order</service-id>
+        <next-page>
+            <page-path>/sample/shopping/buyer/buyer_order.jsp</page-path>
+        </next-page>
+    </service>
+
+    <service-error>
+        <page-path>/sample/shopping/buyer/buyer_authority_err.jsp</page-path>
+    </service-error>
+</service-config>

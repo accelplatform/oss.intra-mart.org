@@ -1,0 +1,53 @@
+<HTML>
+	<HEAD>
+		<TITLE>Sample &lt;IMART type="string"&gt;</TITLE>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<H1>&lt;IMART type="string"&gt; を利用した表示制御</H1>
+
+			<HR>
+
+			<H2>*** 現在の世界標準時間表記(文字列型) ***</H2>
+			<IMART type="string"
+			       value=gmt>
+			</IMART>
+
+			<HR>
+
+			<H2>*** 01/01,1970-00:00'00"000 からの経過ミリ秒(数値型) ***</H2>
+			<IMART type="string"
+			       value=time
+			       format="###,###">
+			</IMART>
+
+			<H3>（&lt;IMART type="number"&gt;も同様の結果を返却します）</H3>
+	 		<!-- formatは、java.text.DecimalFormat の仕様に準じる -->
+			<IMART type="number"
+			       value=time
+			       format="###,###">
+			</IMART>
+
+
+			<HR>
+
+			<H2>*** 現在時刻(ＤＡＴＥ型) ***</H2>
+			<IMART type="string"
+			       value=now
+			       format="yyyy年MM月dd日 HH時mm分ss秒">
+			</IMART>
+
+			<H3>（&lt;IMART type="date"&gt;も同様の結果を返却します）</H3>
+	 		<!-- formatは、java.text.SimpleDateFormat の仕様に準じる -->
+			<IMART type="date"
+			       value=time
+			       format="yyyy年MM月dd日 HH時mm分ss秒">
+			</IMART>
+
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</CENTER>
+	</BODY>
+</HTML>

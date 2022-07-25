@@ -1,0 +1,4 @@
+<jssp-runtime-classes>
+	<jssp-page-builder_jssprpc>org.intra_mart.jssp.page.provider.JsspRpcPageBuilderImpl</jssp-page-builder_jssprpc>
+	<jssp-config-handler>org.intra_mart.jssp.util.config.JsspRpcConfigHandlerImpl</jssp-config-handler>	
+</jssp-runtime-classes>

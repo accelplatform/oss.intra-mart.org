@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event-config>
+    <event-group>
+        <event-key>key2</event-key>
+        <event-class>org.intra_mart.framework.base.event.DummyEvent</event-class>
+        <event-factory>
+            <factory-class>test.dummyFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>test.dummyListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+    <event-group>
+        <event-key>key3</event-key>
+        <event-factory>
+            <factory-class>test.dummyFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>test.dummyListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+    <event-group>
+        <event-key>key4</event-key>
+        <event-factory>
+            <factory-class>test.dummyFactory</factory-class>
+            <init-param>
+                <param-name>listener</param-name>
+                <param-value>test.dummyListener</param-value>
+            </init-param>
+        </event-factory>
+    </event-group>
+</event-config>

@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>合計値の計算</title>
+	
+		<IMART type = "jsspRpc" 
+		       name = "sumObject" 
+		       page = "sample/jssp_rpc/sum/server_side_logic/sum" >
+		</IMART>
+
+		<script type="text/javascript">
+		
+			/**	
+			 * 「sample/jssp_rpc/sum/server_side_logic/sum.js」内に定義されている「sum()」関数を実行します。
+			 */
+			function execute(){
+				// Number型
+				var arg1 = parseFloat(document.form1.arg1.value);
+				var arg2 = parseFloat(document.form1.arg2.value);
+				var arg3 = parseFloat(document.form1.arg3.value);
+				
+				//	//String型
+				//	var arg1 = document.form1.arg1.value;
+				//	var arg2 = document.form1.arg2.value;
+				//	var arg3 = document.form1.arg3.value;
+
+				// 実行
+				var result = sumObject.sum(arg1, arg2, arg3);
+				
+				// 結果表示
+				document.getElementById("div1").innerHTML = result;
+			}
+			
+		</script>
+	</head>
+	<body>
+		<center>
+			<h1>合計値の計算</h1>
+			<hr>
+
+			「sample/jssp_rpc/sum/server_side_logic/sum.js」内に定義されている「sum()」関数を実行し、その結果を表示します。
+			<br>
+
+			<form name="form1" onsubmit="return false;">
+			
+				<input type="text" name="arg1" value="123">
+				＋
+				<input type="text" name="arg2" value="456">
+				＋
+				<input type="text" name="arg3" value="789">
+				<br>
+				<br>
+				<input type="button" value="↓↓↓ クリックすると以下に合計を表示します ↓↓↓" onclick="execute()">
+			</form>
+			
+			<br>
+
+			<div id="div1"></div>
+			
+			<br>
+			<br>
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</center>
+	</body>
+</html>

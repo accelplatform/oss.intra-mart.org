@@ -1,0 +1,47 @@
+//============================
+** JsUnitのテストケース保存用SVNディレクトリ
+//============================
+JSSPの JsUnit を利用したテストケースは以下のディレクトリ配下に格納してください。
+
+http://oss.intra-mart.org/projects/im-jssp/svn/XXXX/im-jssp/src/test/js
+ (XXXXは「trunk」や「branches/im-jssp_x.x.x」等を意味します)
+
+
+//============================
+** JsUnitのテスト実行前の注意点
+//============================
+現状では、ビルド時にユニットテストは自動実行されません。
+開発者がサーバ環境を作成し、テストを実行する必要があります。
+
+テスト実行時には、「im-jssp/src/test/js」ディレクトリをJSSPのソースディレクトリとして登録してください。
+
+上記ディレクトリを WEB-INF/classes/conf/jssp-config.xmlの
+「intra-mart/jssp/source-path/general/directory」タグに追加してください。
+
+- jssp-config-XXXX.xmlの設定例
+//----
+ <intra-mart>
+ 	<server-character-encoding>UTF-8</server-character-encoding>
+ 	<jssp>
+ 	 	・
+ 	 	・
+ 	 	・
+ 		<source-path>
+ 			<general>
+ 				<directory>src/test/js</directory>  <!-- ← 追加したソースディレクトリ -->
+ 				<directory>src/main/js</directory>
+ 			</general>
+ 		</source-path>
+ 	 	・
+ 	 	・
+ 	 	・
+//----
+
+//============================
+** pages/test/src/source-config.xml について
+//============================
+im-jssp/src/test/js/source-config.xmlは、
+ソースファイルの文字コードが「UTF-8」、インタプリタモードで動作する設定となっています。
+
+作成したテストケースが上記以外の場合、テストケースを格納したディレクトリ内に、
+別途 source-config.xmlを作成するか、FILE_LABEL.properties を作成してください。

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<property-config>
+
+    <service>
+        <handler-class>org.intra_mart.framework.base.service.XmlServicePropertyHandler</handler-class>
+        <init-param>
+            <param-name>dynamic</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </service>
+
+    <event>
+        <handler-class>org.intra_mart.framework.base.event.XmlEventPropertyHandler</handler-class>
+        <init-param>
+            <param-name>dynamic</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </event>
+
+    <data>
+        <handler-class>org.intra_mart.framework.base.data.XmlDataPropertyHandler</handler-class>
+        <init-param>
+            <param-name>dynamic</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </data>
+
+    <message>
+        <handler-class>org.intra_mart.framework.system.message.IntramartMessagePropertyHandler</handler-class>
+    </message>
+
+    <i18n_message>
+        <handler-class>org.intra_mart.framework.base.message.DefaultMessagePropertyHandler</handler-class>
+    </i18n_message>
+
+    <log>
+        <handler-class>org.intra_mart.framework.system.log.XmlLogPropertyHandler</handler-class>
+    </log>
+
+</property-config>

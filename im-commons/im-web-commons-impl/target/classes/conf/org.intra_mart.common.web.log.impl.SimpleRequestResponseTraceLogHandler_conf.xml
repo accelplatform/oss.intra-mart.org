@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<log-level>
+		<!-- <before>DEBUG</before> -->
+		<!-- <catched>DEBUG</catched> -->
+		<!-- <after>DEBUG</after> -->
+	</log-level>
+	<dispatchers>
+        <!-- <dispatcher>REQUEST</dispatcher> -->
+        <!-- <dispatcher>FORWARD</dispatcher> -->
+        <!-- <dispatcher>INCLUDE</dispatcher> -->
+	</dispatchers>
+</config>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-config>
+    <dao-group>
+        <dao-key>sample_shopping</dao-key>
+        <dao>
+            <dao-class>sample.shopping.model.data.SampleItemIntramartDBDAO</dao-class>
+            <connector-name>sample</connector-name>
+        </dao>
+    </dao-group>
+</data-config>

@@ -1,0 +1,173 @@
+<intra-mart>
+	<server-character-encoding>UTF-8</server-character-encoding>
+	<jssp-rpc>
+		<key>
+			<uri-suffix>.jssprpc</uri-suffix>
+		</key>
+		<marshller>
+			<page-path>jssp/script/api/im_json</page-path>
+			<throw-unmarshall-exception>true</throw-unmarshall-exception>
+			<cache-marshaller-script>true</cache-marshaller-script>
+			<function-name>
+				<unmarshall>imJsonUnmarshall</unmarshall>													
+				<marshall>imJsonMarshall</marshall>
+			</function-name>
+		</marshller>
+		<csjs-path>
+			<im-json>/csjs/im_json.js</im-json>
+			<im-ajax-request>/csjs/im_ajax_request.js</im-ajax-request>
+			<im-jssp-rpc>/csjs/im_jssp_rpc.js</im-jssp-rpc>
+		</csjs-path>
+	</jssp-rpc>
+	<jssp>
+		<key>
+			<uri-suffix>.jssp</uri-suffix>
+		</key>
+		
+		<java-script-api>
+			<api-class name="org.intra_mart.jssp.view.tag.ImartObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.DebugObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.SessionObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.FileAccessObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.WebObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.DOMNodeObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.XMLParserObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.dom.XMLDocumentObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.URLObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ConstantObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ProcedureObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.FormatObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.PageObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.ImAjaxUtilObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.LoggerObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.LoggerMDCObject"/>
+			<api-class name="org.intra_mart.jssp.script.api.JsUnit"/>
+			<api-class name="org.intra_mart.jssp.script.api.JsTestSuite"/>
+			<api-class name="org.intra_mart.jssp.script.api.SOAPClientObject">
+				<mode>Once</mode>
+				<helper>jssp/script/api/soap_client_helper</helper>
+				<work-dir>target/work/jssp/_SOAPClient</work-dir>
+				<javac-encoding>UTF-8</javac-encoding>
+				<javac-verbose>false</javac-verbose>
+			</api-class>
+
+			<api-script name="jssp/script/api/im_json#ImJson"/>
+		</java-script-api>
+		
+		<jssp-tag>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4String"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Number"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Date"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Repeat"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Condition"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Decision"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4ContentType"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4HttpEquiv"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Link"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Form"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Frame"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Include"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Submit"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Input"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Hidden"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Select"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Textarea"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Tag"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Loop"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4Event"/>
+			<tag-class name="org.intra_mart.jssp.view.tag.ImartTag4JsspRpc"/>
+			<tag-script><!-- DUMMY --></tag-script>
+		</jssp-tag>
+		
+		<listener>
+			<context-factory-listener>
+				<!--
+				<listener-class>org.intra_mart.jssp.script.listener.DefineLanguageVersionContextFactoryListener</listener-class>
+				<listener-class>org.intra_mart.jssp.script.listener.ScriptWarningReportListener</listener-class>
+				-->
+			</context-factory-listener>
+		</listener>
+
+		<initializer>
+			<application>
+				<initializer-class><!-- DUMMY --></initializer-class>
+				<initializer-script><!-- DUMMY --></initializer-script>
+			</application>
+		</initializer>
+
+		<compile>
+			<output>
+				<script>WEB-INF/work/jssp/_functioncontainer</script>
+				<view>WEB-INF/work/jssp/_presentationpage</view>
+			</output>
+		</compile>
+		
+		<source-path>
+			<general>
+				<directory>pages/src</directory>
+				<directory>pages/product/src</directory>
+				<directory>pages/platform/src</directory>
+			</general>
+			<international>
+				<local>
+					<ja>
+						<directory>pages/i18n/ja</directory>
+					</ja>
+					<ja_JP>
+						<directory>pages/i18n/ja_JP</directory>
+					</ja_JP>
+				</local>
+				<directory>pages/product/i18n</directory>
+				<directory>pages/platform/i18n</directory>
+			</international>
+		</source-path>
+		
+		<class-path>
+			<general>
+				<classes>pages/bin</classes>
+				<archive/>
+				<libraries>pages/bin/lib</libraries>
+			</general>
+			<international>
+				<ja>
+					<classes>pages/bin/i18n/ja</classes>
+					<archive/>
+					<libraries>pages/bin/i18n/lib/ja</libraries>
+				</ja>
+				<ja_JP>
+					<classes>pages/bin/i18n/ja_JP</classes>
+					<archive/>
+					<libraries>pages/bin/i18n/lib/ja_JP</libraries>
+				</ja_JP>
+			</international>
+		</class-path>
+
+		<script>
+			<request-process-script>request_process</request-process-script>
+			<initial-function-name>init</initial-function-name>
+			<finally-function-name>close</finally-function-name>
+		</script>
+
+		<debug>
+			<browse  enable="true" />
+			<print   enable="true" />
+			<write   enable="true" path="debug.log" />
+			<console enable="true" />
+		</debug>
+		
+		<key>
+			<uri-prefix></uri-prefix>
+			<uri-suffix>.jssp</uri-suffix>
+
+			<from-page-path>im_from</from-page-path>
+			<next-event-name>im_func</next-event-name>
+			<next-event-page-path></next-event-page-path>
+			<action-event-name>im_action</action-event-name>
+			<action-event-page-path>im_event</action-event-page-path>
+
+			<mark>im_mark</mark>
+			<signature>org.intra_mart.jssp.signature.id</signature>
+		</key>
+		<language-version>1.6</language-version>
+	</jssp>
+</intra-mart>

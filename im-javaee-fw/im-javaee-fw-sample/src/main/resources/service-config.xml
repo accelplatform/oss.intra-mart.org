@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service-config>
+
+    <client-encoding>UTF-8</client-encoding>
+
+    <client-locale>ja_JP</client-locale>
+
+    <input-error>
+        <page-path>/error/input_error.jsp</page-path>
+    </input-error>
+
+    <service-error>
+        <page-path>/error/service_error.jsp</page-path>
+    </service-error>
+
+    <system-error>
+        <page-path>/error/system_error.jsp</page-path>
+    </system-error>
+
+</service-config>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="pagebase">
+	
+	<target name="init">
+		<property environment="env" />
+		<tstamp>
+			<format property="ymd"  pattern="yyyy-MM-dd"/>
+			<format property="HHmm" pattern="HHmm"/>
+		</tstamp>
+		
+		<property name="workplace_dir" value="####### workplaceディレクトリを指定してください。#######" />
+		<property name="vendor_dir"    value="${workplace_dir}/_vendor" />
+		<property name="target_dir"    value="${env.TEMP}/${ymd}" />
+	</target>
+
+	<target name="pagebase" depends="init">
+		<property name="tld_file" value="${workplace_dir}/im-jssp/src/main/assembly/ImartTagDoc/imart_tag_api.xml" />
+		<property name="dest_dir" value="${target_dir}/imart_tag_api" />
+		
+    	<delete dir="${dest_dir}"/>
+    	<mkdir  dir="${dest_dir}"/>
+		
+		<java fork="true" jar="${vendor_dir}/intramartTools/imarttagdoc.jar">
+			<arg line="'${tld_file}' '${dest_dir}'" />
+		</java>
+	</target>
+
+	<target name="j2ee" depends="init">
+		<property name="tld_file" value="${workplace_dir}/javadoc_entire/src/main/resources/META-INF/tld/core/standard.tld" />
+		<property name="dest_dir" value="${target_dir}/tlddoc_imart_j2ee" />
+		
+		<property name="tlddoc_jar" value="${vendor_dir}/taglibrarydoc-1.1/tlddoc.jar" />
+		<property name="xslt_dir"   value="${vendor_dir}/taglibrarydoc-1.1/JspTagLibraryDoc/stylesheet" />
+		
+    	<delete dir="${dest_dir}"/>
+    	<mkdir  dir="${dest_dir}"/>
+		
+		<java fork="true" jar="${tlddoc_jar}">
+			<arg line="-d '${dest_dir}' -xslt ${xslt_dir}" />
+			<arg value="${tld_file}" />
+		</java>
+	</target>
+
+</project>

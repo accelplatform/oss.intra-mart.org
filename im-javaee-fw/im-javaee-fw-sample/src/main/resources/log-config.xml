@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log-config>
+    <agent-class>org.intra_mart.framework.system.log.DefaultLogAgent</agent-class>
+    <init-param>
+        <param-name>org.intra_mart.framework.base.data.DataSourceConnctor</param-name>
+        <param-value>DB</param-value>
+    </init-param>
+    <init-param>
+        <param-name>org.intra_mart.framework.base.data.JDBCConnctor</param-name>
+        <param-value>DB</param-value>
+    </init-param>
+</log-config>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+	  <maven>2.0.4</maven>
+	</prerequisites>
+
+	<parent>
+		<groupId>org.intra-mart.common</groupId>
+		<artifactId>im-common-libraries-projects</artifactId>
+		<version>0.1.2-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.intra-mart.common</groupId>
+	<artifactId>im-jdk-assist-impl</artifactId>
+	<version>0.1.2-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>${artifactId}</name>
+	<url>http://oss.intra-mart.org/projects/im-commons/maven/${artifactId}/</url>
+
+	<repositories>
+		<repository>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Repository</name>
+			<url>http://oss.intra-mart.org/maven2</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.intra-mart.common</groupId>
+			<artifactId>im-jdk-assist</artifactId>
+			<version>0.1.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+</project>

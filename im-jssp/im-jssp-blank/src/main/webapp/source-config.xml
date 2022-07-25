@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource-file>
+	<charset>UTF-8</charset>
+	<javascript>
+		<compiler enable="false" />
+		<!-- enable:true = Auto compiler to Java class -->
+		<!-- enable:false = Interpreter -->
+
+		<optimize level="0" />
+		<!-- level:0 to 9 = Optimize level of Compile -->
+	</javascript>
+	<view>
+		<compiler enable="false" />
+		<!-- enable:true = Auto compiler -->
+		<!-- enable:false = Interpreter -->
+	</view>
+</resource-file>

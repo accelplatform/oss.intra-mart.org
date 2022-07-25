@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+	  <maven>2.0.4</maven>
+	</prerequisites>
+
+	<groupId>org.intra-mart.tools</groupId>
+	<artifactId>im-svn-diff-exporter</artifactId>
+	<version>0.1.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>${artifactId}</name>
+	<url>http://oss.intra-mart.org/projects/im-tools/maven/${artifactId}/</url>
+	<inceptionYear>2007</inceptionYear>
+
+	<organization>
+		<name>OPEN INTRA-MART</name>
+		<url>http://oss.intra-mart.org/</url>
+	</organization>
+
+	<repositories>
+		<repository>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Repository</name>
+			<url>http://oss.intra-mart.org/maven2</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven.rectang.com</id>
+			<url>http://maven.rectang.com/repository</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.6.5</version>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.tmatesoft</groupId>
+			<artifactId>svnkit</artifactId>
+			<version>1.1.2</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>1.4</source>
+					<target>1.4</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<locales>ja</locales>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>surefire-report-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<configuration>
+					<inputEncoding>UTF-8</inputEncoding>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<charset>UTF-8</charset>
+					<links>
+						<link>http://java.sun.com/j2se/1.5.0/ja/docs/ja/api</link>
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<issueManagement>
+		<system>trac</system>
+		<url><![CDATA[http://oss.intra-mart.org/projects/im-tools/report/]]></url>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter/</connection>
+		<developerConnection>scm:http://oss.intra-mart.org/projects/im-tools/svn/trunk/im-svn-diff-exporter/</developerConnection>
+		<url><![CDATA[http://oss.intra-mart.org/projects/im-tools/browser/trunk/im-svn-diff-exporter/]]></url>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Repository</name>
+			<url>file:///usr/local/store/maven2/repository</url>
+			<!--url>scp://192.168.108.60/usr/local/store/maven2/repository</url-->
+		</repository>
+		<site>
+			<id>oss.intra-mart.org</id>
+			<name>OPEN INTRA-MART Maven2 Site</name>
+			<url>file:///usr/local/store/maven2/im-tools/im-svn-diff-exporter</url>
+			<!--url>scp://192.168.108.60/usr/local/store/maven2/im-tools/im-svn-diff-exporter</url-->
+		</site>
+	</distributionManagement>
+
+</project>

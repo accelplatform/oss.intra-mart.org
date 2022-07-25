@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="src-archive" name="build">
+
+	<property name="plugin.id" value="org.intra_mart.jst.server.generic.resin" />
+	<property name="plugin.version" value="0.1.8" />
+
+	<property name="target.dir" value="target" />
+	<property name="classes.dir" value="${target.dir}/classes" />
+
+	<property name="src.dir" value="src" />
+	<property name="ext.dir" value="lib" />
+	<property name="src.encoding" value="UTF-8" />
+	<property name="debug" value="yes" />
+
+	<target name="clean">
+		<delete dir="${target.dir}" />
+		<mkdir dir="${target.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" encoding="${src.encoding}" extdirs="${ext.dir}" debug="${debug}" />
+	</target>
+
+	<target name="binary-archive" depends="compile">
+		<jar destfile="${target.dir}/${plugin.id}-${plugin.version}.jar" manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${classes.dir}" />
+			<fileset dir="./">
+				<include name="buildfiles/**" />
+				<include name="icons/**" />
+				<include name="servers/**" />
+				<include name="plugin.xml" />
+				<include name="plugin.properties" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="src-archive" depends="binary-archive">
+		<jar destfile="${target.dir}/${plugin.id}-${plugin.version}-source.jar" manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${classes.dir}" />
+			<fileset dir="./">
+				<exclude name="target/**" />
+				<exclude name="bin/**" />
+				<exclude name="lib/**" />
+			</fileset>
+		</jar>
+	</target>
+</project>

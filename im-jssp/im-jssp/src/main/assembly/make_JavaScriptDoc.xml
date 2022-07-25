@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="javadoc">
+
+	<target name="init">
+		<property environment="env" />
+		<tstamp>
+			<format property="ymd"  pattern="yyyy-MM-dd"/>
+			<format property="HHmm" pattern="HHmm"/>
+		</tstamp>
+		
+		<property name="workplace_dir" value="####### workplaceディレクトリを指定してください。#######" />
+		<property name="vendor_dir"    value="${workplace_dir}/_vendor" />
+		<property name="target_dir"    value="${env.TEMP}/${ymd}" />
+	</target>
+	
+	<target name="javadoc" depends="init">
+    	<property name="src_dir1"  value="${workplace_dir}/im-jssp/src/main/java" />
+		<property name="dest_dir"  value="${target_dir}/javascript-apidocs" />
+
+    	<delete dir="${dest_dir}"/>
+    	<mkdir  dir="${dest_dir}"/>
+
+    	<javadoc author="false" access="public" additionalparam="-output '${dest_dir}' -src"
+				 encoding="UTF-8">
+    		
+			<doclet name="jp.co.intra_mart.javascriptdoc.JavaScriptDoclet" 
+					path="${vendor_dir}/intramartTools/javascriptdoc.jar" />									
+			
+			<package name="org.intra_mart.jssp.script.api.*" />
+			<package name="org.intra_mart.jssp.script.*" />
+			<package name="org.intra_mart.jssp.view.tag.*" />
+    		<package name="org.intra_mart.jssp.page.*" />
+    		<!--excludepackage name="org.intra_mart.jssp.script.api.dom.*" /-->
+
+			<sourcepath>
+				<path path="${src_dir1}" />
+			</sourcepath>
+			
+		</javadoc>
+    </target>
+	
+	<!--
+	  | JavaScriptのAPIリストを作成します。(JSDocを利用します)
+	  | 
+	  | 以下のプロパティを設定してください。
+	  | ====================================================
+	  | src_dir    : JSソースが格納されているディレクトリ
+	  | dest_dir   : APIリスト出力先ディレクトリ
+	  | ====================================================
+	  | 
+	  | ※このAntタスクを実行するには、JsDoc(http://jsdoc.sourceforge.net/)が実行可能である必要があります。
+	  -->
+    <target name="jsdoc" depends="init">
+    	<property name="src_dir"  value="${workplace_dir}/im-jssp/src/main/webapp/csjs" />
+		<property name="dest_dir" value="${target_dir}/csjs-apidocs" />
+
+    	<property name="jsdoc_home" value="${vendor_dir}/JSDoc-1.10.2" />
+    	<property name="javadoc-bland_and_vertion" value="OPEN INTRA-MART im-Jssp Framework" />
+
+    	<!-- 
+    	************************************
+    	 出力先ディレクトリ初期化
+    	************************************
+    	-->
+    	<delete dir="${dest_dir}"/>
+    	<mkdir  dir="${dest_dir}"/>
+
+    	<!-- 
+    	************************************
+    	 コピー（文字コード変換含む（UTF-8 → EUC-JP））
+    	************************************
+    	-->
+    	<copy todir="${dest_dir}/src" encoding="UTF-8" outputencoding="EUC-JP">
+			<fileset dir="${src_dir}">
+				<include name="**/*.js"/>
+			</fileset>
+    	</copy>
+
+    	<!-- 
+    	************************************
+    	 JSDoc実行
+    	************************************
+    	-->
+		<exec executable="perl" dir="${dest_dir}">
+			<arg value="${jsdoc_home}/jsdoc.pl" />
+
+			<arg value="-r" />
+			
+			<arg value="--project-name" />
+			<arg value="${javadoc-bland_and_vertion} Client Side JavaScript" />
+			
+			<arg value="--project-summary" />
+			<arg value="${jsdoc_home}/template_ja/im_project_summary.txt" />
+			
+			<arg value="--template-dir" />
+			<arg value="${jsdoc_home}/template_ja" />
+				
+			<arg value="-d" />
+			<arg value="${dest_dir}/temp" />
+			
+			<arg value="${dest_dir}/src" />
+		</exec>
+
+    	<!--
+    	************************************
+    	 文字コード変換（EUC-JP → Windows-31J） 
+		 （EUC-JP → UTF-8だと文字化けしてしまう。。。）
+    	************************************
+    	-->
+    	<copy todir="${dest_dir}" encoding="EUC-JP" outputencoding="Windows-31J">
+			<fileset dir="${dest_dir}/temp" />
+		</copy>
+
+    	<!--
+    	************************************
+    	 HTMLファイルの文字コード指定を変換
+    	************************************
+    	-->
+		<replaceregexp flags="i,g">
+			<regexp pattern="&quot;text/html;\s*charset=euc-jp&quot;" />
+			<substitution expression="&quot;text/html; charset=Windows-31J&quot;" />
+			<fileset dir="${dest_dir}" includes="**/*.html" />
+		</replaceregexp>
+
+    	<!--
+    	************************************
+    	 一時ディレクトリ削除 
+    	************************************
+    	-->
+    	<delete dir="${dest_dir}/temp"/>
+		<delete dir="${dest_dir}/src"/>
+    	
+    </target>
+	
+</project>

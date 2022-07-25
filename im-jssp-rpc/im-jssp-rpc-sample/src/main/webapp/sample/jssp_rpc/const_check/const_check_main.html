@@ -1,0 +1,135 @@
+<html>
+	<head>
+		<title>定数値の扱い</title>
+
+		<script language="JavaScript" src="csjs/im_jssp_rpc.js"></script>
+		<script language="JavaScript" src="csjs/json.js"></script>
+	
+		<IMART type     = "jsspRpc" 
+		       name     = "constChecker" 
+		       page     = "sample/jssp_rpc/const_check/server_side_logic/const" >
+		</IMART>
+
+		<script language="JavaScript">
+		
+			/**	
+			 * sample/jssp_rpc/const_check/server_side_logic/const.js#getConstant() を実行します。
+			 */
+			function getConstant(){
+				var obj = constChecker.getConstant();
+
+				// 結果表示
+				var idx = 0;
+				var objStr = "";
+				
+				for(var elem in obj){
+					if (obj.hasOwnProperty(elem)) {
+						objStr += idx++ + " : " + String(obj[elem]) + " [" + (typeof obj[elem]) + "]\n";
+					}
+				}
+				
+				alert(objStr);
+			}
+			
+			/**	
+			 * sample/jssp_rpc/const_check/server_side_logic/const.js#sendConstant() を実行します。
+			 */
+			function sendConstant(){
+
+				var ary = new Array();
+			
+				//Number定数
+				ary[0]=Number.MAX_VALUE;
+				ary[1]=Number.MIN_VALUE;
+				ary[2]=Number.POSITIVE_INFINITY;
+				ary[3]=Number.NEGATIVE_INFINITY;
+				ary[4]=Number.NaN;
+				ary[5]=Infinity;
+				ary[6]=-Infinity;
+				ary[7]=NaN;
+			
+				//Math定数
+				ary[8]=Math.PI;
+				ary[9]=Math.SQRT2;
+				ary[10]=Math.SQRT1_2;
+				ary[11]=Math.E;
+				ary[12]=Math.LN2;
+				ary[13]=Math.LN10;
+				ary[14]=Math.LOG2E;
+				ary[15]=Math.LOG10E;
+			
+				//論理値, null, undefined
+				ary[16]=true;
+				ary[17]=false;
+				ary[18]=null;
+				ary[19]=undefined;
+
+				constChecker.sendConstant(ary);
+
+			}
+		</script>
+	</head>
+	<body>
+		<center>
+			<h1>定数値の扱い</h1>
+			<hr>
+
+			サーバから渡された定数値を表示します。（結果をアラートウィンドウに表示します。）<br>
+			<input type="button" value="表示" onclick="getConstant()">
+			
+			<br>
+			<br>
+			
+			サーバへ定数値を送信します。(結果はサーバのコンソール上に表示されます)<br>
+			<input type="button" value="送信" onclick="sendConstant()">
+			
+			<br>
+			<br>
+
+			<table border="1">
+				<tr>
+					<td>
+						送受信されるデータは 以下の通りです<br>
+						（定数値を格納した配列です）
+					</td>
+				</tr>
+				<tr>
+					<td>
+<pre>
+var ary = new Array();
+
+//Number定数
+ary[0]=Number.MAX_VALUE;
+ary[1]=Number.MIN_VALUE;
+ary[2]=Number.POSITIVE_INFINITY;
+ary[3]=Number.NEGATIVE_INFINITY;
+ary[4]=Number.NaN;
+ary[5]=Infinity;
+ary[6]=-Infinity;
+ary[7]=NaN;
+
+//Math定数
+ary[8]=Math.PI;
+ary[9]=Math.SQRT2;
+ary[10]=Math.SQRT1_2;
+ary[11]=Math.E;
+ary[12]=Math.LN2;
+ary[13]=Math.LN10;
+ary[14]=Math.LOG2E;
+ary[15]=Math.LOG10E;
+
+//論理値, null, undefined
+ary[16]=true;
+ary[17]=false;
+ary[18]=null;
+ary[19]=undefined;
+</pre>
+					</td>
+				</tr>
+			</table>
+			
+			<hr>
+			<IMART type="link" page="sample">サンプル一覧へ戻る</IMART>
+		</center>
+	</body>
+</html>

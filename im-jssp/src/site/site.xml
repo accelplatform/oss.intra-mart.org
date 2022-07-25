@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="im-jssp-projects">
+
+  <skin>
+    <groupId>com.rectang.maventrac</groupId>
+    <artifactId>maventrac-skin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </skin>
+
+  <publishDate position="navigation-bottom" format="yyyy年MM月dd日"/>
+
+  <body>
+    <menu ref="parent" />
+    <menu ref="modules" />
+    ${reports}
+  </body>
+
+</project>
