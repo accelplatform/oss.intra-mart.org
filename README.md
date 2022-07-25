@@ -1,9 +1,8 @@
 # oss.intra-mart.org (Archived)
 
-***This repository has been archived***
-
 ## IMPORTANT
 
+***This repository has been archived***
 このリポジトリは oss.intra-mart.org にて公開されていたソースコードをアーカイブしています。
 
 ## im-Jssp Framework Project
